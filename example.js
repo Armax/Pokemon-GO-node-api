@@ -2,8 +2,8 @@ var Pokeio = require('./poke.io')
 
 var location = 'Stockflethsvej 39';
 
-var username = 'PokeScan';
-var password = 'ceezaq';
+var username = 'Arm4x';
+var password = 'OHSHITWADDUP';
 
 Pokeio.SetLocation(location, function(err, loc) {
     if (err) throw err;

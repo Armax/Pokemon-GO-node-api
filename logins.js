@@ -29,6 +29,14 @@ module.exports = {
             };
 
             self.request.post(options, function(e, r, body) {
+                //Parse body if any exists, callback with errors if any.
+                if (body) {
+                    var parsedBody = JSON.parse(body);
+                    if (parsedBody.errors && parsedBody.errors.length !== 0) {
+                        return callback(new Error('Error logging in: ' + parsedBody.errors[0]));
+                    }
+                }
+
                 var ticket = r.headers['location'].split("ticket=")[1]
 
                 options = {
@@ -48,8 +56,13 @@ module.exports = {
                 self.request.post(options, function(e, r, body) {
                     var token = body.split("token=")[1]
                     token = token.split("&")[0]
+
+                    if (!token) {
+                        return callback(new Error('Login failed'));
+                    }
+
                     self.DebugPrint("[i] Session token: " + token)
-                    callback(token)
+                    callback(null, token)
                 });
 
             });

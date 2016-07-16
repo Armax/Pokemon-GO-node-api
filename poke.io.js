@@ -79,7 +79,7 @@ function Pokeio() {
 
             if(r==undefined || r.body==undefined) {
                 console.log("[!] RPC Server offline")
-                return
+                return callback(new Error('RPC Server offline'));
             }
 
             try {
@@ -90,16 +90,21 @@ function Pokeio() {
                     f_ret = e.decoded; // Decoded message with missing required fields
                 }
             }
-            callback(f_ret)
+
+            return callback(null, f_ret)
         });
 
     }
 
     self.GetAccessToken = function(user,pass,callback) {
         self.DebugPrint("[i] Logging with user: " + user)
-        Logins.PokemonClub(user,pass,self, function(token) {
+        Logins.PokemonClub(user,pass,self, function(err, token) {
+            if (err) {
+                return callback(err);
+            }
+
             self.playerInfo.accessToken = token
-            callback(token)
+            callback(null, token)
         });
     }
 
@@ -114,21 +119,29 @@ function Pokeio() {
             new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3("4a2e9bc330dae60e7b74fc85b98868ab4700802e"))
         )
 
-        api_req(api_url, self.playerInfo.accessToken, req, function(f_ret) {
+        api_req(api_url, self.playerInfo.accessToken, req, function(err, f_ret) {
+            if (err) {
+                return callback(err);
+            }
+
             var api_endpoint = 'https://' + f_ret.api_url + '/rpc'
             self.playerInfo.apiEndpoint = api_endpoint
             self.DebugPrint("[i] Received API Endpoint: " + api_endpoint)
-            callback(api_endpoint)
+            callback(null, api_endpoint)
         })
     }
 
     self.GetProfile = function(callback) {
         var req = new RequestEnvelop.Requests(2)
-        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(f_ret) {
+        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(err, f_ret) {
+            if (err) {
+                return callback(err);
+            }
+
             if(f_ret.payload[0].profile) {
                 self.DebugPrint("[i] Logged in!")
             }
-            callback(f_ret.payload[0].profile)
+            callback(null, f_ret.payload[0].profile)
         });
     }
 
@@ -136,9 +149,10 @@ function Pokeio() {
         geocoder.reverseGeocode( self.playerInfo.latitude, self.playerInfo.longitude, function ( err, data ) {
             console.log("[i] lat/long/alt: " + self.playerInfo.latitude + " " + self.playerInfo.longitude + " " + self.playerInfo.altitude)
             if(data.status=="ZERO_RESULTS") {
-                callback("location not found")
+                return callback(new Error("location not found"));
             }
-            callback(data.results[0].formatted_address)
+
+            callback(null, data.results[0].formatted_address)
         });
     }
 }

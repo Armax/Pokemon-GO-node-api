@@ -29,7 +29,8 @@ function Pokeio() {
         'debug'             : true,
         'latitude'          : 0,
         'longitude'         : 0,
-        'altitude'          : 0
+        'altitude'          : 0,
+        'api_endpoint'      : ''
     }
 
     self.DebugPrint = function(str) {
@@ -39,7 +40,7 @@ function Pokeio() {
         }
     }
 
-    function api_req(api_endpoint, access_token, req) {
+    function api_req(api_endpoint, access_token, req, callback) {
         // Auth
         var auth = new RequestEnvelop.AuthInfo({
             "provider"  : "ptc",
@@ -78,17 +79,15 @@ function Pokeio() {
                 return
             }
 
-            console.log(r.body.toString())
-            console.log(r.body)
-
             try {
-                var msg = ResponseEnvelop.decode(r.body)
+                var f_ret = ResponseEnvelop.decode(r.body)
             } catch (e) {
                 if (e.decoded) { // Truncated
                     console.log(e)
-                    msg = e.decoded; // Decoded message with missing required fields
+                    f_ret = e.decoded; // Decoded message with missing required fields
                 }
             }
+            callback(f_ret)
         });
 
     }
@@ -109,7 +108,12 @@ function Pokeio() {
             new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3("4a2e9bc330dae60e7b74fc85b98868ab4700802e"))
         )
 
-        api_req(api_url, access_token, req)
+        api_req(api_url, access_token, req, function(f_ret) {
+            var api_endpoint = 'https://' + f_ret.api_url + '/rpc'
+            self.playerInfo.api_endpoint = api_endpoint
+            self.DebugPrint("[i] Received API Endpoint: " + api_endpoint)
+            callback(api_endpoint)
+        })
     }
 
     self.GetLocation = function(callback) {

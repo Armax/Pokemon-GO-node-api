@@ -39,7 +39,7 @@ message RequestEnvelop {
 }
 
 message ResponseEnvelop {
-  required int32 unknown1 = 1;
+  optional int32 unknown1 = 1;
   optional int64 unknown2 = 2;
   optional string api_url = 3;
   optional Unknown6 unknown6 = 6;
@@ -63,7 +63,7 @@ message ResponseEnvelop {
   }
 
   message Payload {
-    required int32 unknown1 = 1;
+    optional int32 unknown1 = 1;
     optional Profile profile = 2;
   }
 
@@ -71,8 +71,8 @@ message ResponseEnvelop {
     required int64 creation_time = 1;
     optional string username = 2;
     optional int32 team = 5;
-    optional bytes tutorial = 7; 
-    optional AvatarDetails avatar = 8; 
+    optional bytes tutorial = 7;
+    optional AvatarDetails avatar = 8;
     optional int32 poke_storage = 9;
     optional int32 item_storage = 10;
     optional DailyBonus daily_bonus = 11;

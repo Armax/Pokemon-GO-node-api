@@ -5,6 +5,8 @@
   "main": "poke.io.js",
   "dependencies": {
     "events": "^1.1.1",
+    "geocoder": "^0.2.2",
+    "protobufjs": "^5.0.1",
     "request": "^2.73.0"
   },
   "devDependencies": {},

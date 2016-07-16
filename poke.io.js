@@ -1,6 +1,8 @@
 var request = require('request')
 var j = request.jar()
 var request = request.defaults({jar:j})
+var geocoder = require('geocoder');
+
 
 var fs = require("fs");
 
@@ -21,13 +23,16 @@ function Pokeio() {
     var events;
     self.events = new EventEmitter()
 
-    var playerInfo = {
+    self.playerInfo = {
         'accessToken'       : '',
-        'debug'             : true
+        'debug'             : true,
+        'latitude'          : 0,
+        'longitude'         : 0,
+        'altitude'          : 0
     }
 
     function DebugPrint(str) {
-        if(playerInfo.debug==true) {
+        if(self.playerInfo.debug==true) {
             //self.events.emit('debug',str)
             console.log(str)
         }
@@ -46,9 +51,9 @@ function Pokeio() {
 
             'requests'  : req,
 
-            'latitude'  : 45,
-            'longitude' : 46,
-            'altitude'  : 0,
+            'latitude'  : self.playerInfo.latitude,
+            'longitude' : self.playerInfo.longitude,
+            'altitude'  : self.playerInfo.altitude,
 
             'auth'      : auth,
             'unknown12' : 989
@@ -66,7 +71,14 @@ function Pokeio() {
         };
 
         request.post(options, function(e, r, body) {
+
+            if(r==undefined || r.body==undefined) {
+                console.log("[!] RPC Server offline")
+                return
+            }
+
             console.log(r.body.toString())
+            console.log(r.body)
 
             try {
                 var msg = ResponseEnvelop.decode(r.body)
@@ -148,6 +160,16 @@ function Pokeio() {
         )
 
         api_req(api_url, access_token, req)
+    }
+
+    self.GetLocation = function(callback) {
+        geocoder.reverseGeocode( self.playerInfo.latitude, self.playerInfo.longitude, function ( err, data ) {
+            console.log("[i] lat/long/alt: " + self.playerInfo.latitude + " " + self.playerInfo.longitude + " " + self.playerInfo.altitude)
+            if(data.status=="ZERO_RESULTS") {
+                callback("location not found")
+            }
+            callback(data.results[0].formatted_address)
+        });
     }
 }
 

@@ -1,7 +1,9 @@
 {
-  "name": "pokeio",
-  "version": "1.0.0",
+  "name": "pokemon-go-node-api",
+  "version": "1.1.1",
   "description": "Pokemon GO node.js module",
+  "author": "Arm4x",
+  "license": "MIT",
   "main": "poke.io.js",
   "dependencies": {
     "events": "^1.1.1",
@@ -13,6 +15,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Arm4x",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Armax/Pokemon-GO-node-api"
+  },
+  "keywords": [
+      "pokemon",
+      "go",
+      "api",
+      "node"
+  ]
 }

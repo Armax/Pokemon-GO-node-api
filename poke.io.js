@@ -13,6 +13,9 @@ var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken'
 
 var ProtoBuf = require("protobufjs");
 var builder = ProtoBuf.loadProtoFile('pokemon.proto')
+if(builder == null) {
+    builder = ProtoBuf.loadProtoFile('./node_modules/pokemon-go-node-api/pokemon.proto')
+}
 var pokemonProto = builder.build()
 var RequestEnvelop = pokemonProto.RequestEnvelop
 var ResponseEnvelop = pokemonProto.ResponseEnvelop

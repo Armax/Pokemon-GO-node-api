@@ -1,8 +1,7 @@
 var request = require('request')
-var j = request.jar()
-var request = request.defaults({jar:j})
 var geocoder = require('geocoder');
 
+var Logins = require('./logins')
 
 var fs = require("fs");
 
@@ -22,6 +21,8 @@ function Pokeio() {
     var self = this
     var events;
     self.events = new EventEmitter()
+    self.j = request.jar()
+    self.request = request.defaults({jar:self.j})
 
     self.playerInfo = {
         'accessToken'       : '',
@@ -31,7 +32,7 @@ function Pokeio() {
         'altitude'          : 0
     }
 
-    function DebugPrint(str) {
+    self.DebugPrint = function(str) {
         if(self.playerInfo.debug==true) {
             //self.events.emit('debug',str)
             console.log(str)
@@ -70,7 +71,7 @@ function Pokeio() {
             }
         };
 
-        request.post(options, function(e, r, body) {
+        self.request.post(options, function(e, r, body) {
 
             if(r==undefined || r.body==undefined) {
                 console.log("[!] RPC Server offline")
@@ -93,59 +94,8 @@ function Pokeio() {
     }
 
     self.GetAccessToken = function(user,pass,callback) {
-        DebugPrint("[i] Logging with user: " + user)
-
-        var options = {
-          url: login_url,
-          headers: {
-            'User-Agent': 'niantic'
-          }
-        };
-
-        request.get(options, function(e, r, body) {
-            var data = JSON.parse(body)
-
-            options = {
-                url: login_url,
-                form: {
-                    'lt'        : data.lt,
-                    'execution' : data.execution,
-                    '_eventId'  : 'submit',
-                    'username'  : user,
-                    'password'  : pass
-                },
-                headers: {
-                    'User-Agent': 'niantic'
-                }
-            };
-
-            request.post(options, function(e, r, body) {
-                var ticket = r.headers['location'].split("ticket=")[1]
-
-                options = {
-                    url: login_oauth,
-                    form: {
-                        'client_id'         : 'mobile-app_pokemon-go',
-                        'redirect_uri'      : 'https://www.nianticlabs.com/pokemongo/error',
-                        'client_secret'     : 'w8ScCUXJQc6kXKw8FiOhd8Fixzht18Dq3PEVkUCP5ZPxtgyWsbTvWHFLm2wNY0JR',
-                        'grant_type'        : 'refresh_token',
-                        'code'              : ticket
-                    },
-                    headers: {
-                        'User-Agent': 'niantic'
-                    }
-                };
-
-                request.post(options, function(e, r, body) {
-                    var token = body.split("token=")[1]
-                    token = token.split("&")[0]
-                    DebugPrint("[i] Session token: " + token)
-                    callback(token)
-                });
-
-            });
-
-        });
+        self.DebugPrint("[i] Logging with user: " + user)
+        Logins.PokemonClub(user,pass,self,callback)
     }
 
 

@@ -12,7 +12,7 @@ var Pokeio = require('pokemon-go-node-api')
 Check example.js for the result showed in the demo
 
 ### Demo:
-![alt tag](http://cl.arm4x.net/poke.png)
+![alt tag](http://cl.arm4x.net/poke2.png)
 
 ### Thanks to:
 [Mila432](https://github.com/Mila432/Pokemon_Go_API) <br>

@@ -1,0 +1,16 @@
+{
+  "name": "pokeio",
+  "version": "1.0.0",
+  "description": "Pokemon GO node.js module",
+  "main": "poke.io.js",
+  "dependencies": {
+    "events": "^1.1.1",
+    "request": "^2.73.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Arm4x",
+  "license": "ISC"
+}

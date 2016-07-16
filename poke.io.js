@@ -30,7 +30,7 @@ function Pokeio() {
         'latitude'          : 0,
         'longitude'         : 0,
         'altitude'          : 0,
-        'api_endpoint'      : ''
+        'apiEndpoint'      : ''
     }
 
     self.DebugPrint = function(str) {
@@ -94,11 +94,14 @@ function Pokeio() {
 
     self.GetAccessToken = function(user,pass,callback) {
         self.DebugPrint("[i] Logging with user: " + user)
-        Logins.PokemonClub(user,pass,self,callback)
+        Logins.PokemonClub(user,pass,self, function(token) {
+            self.playerInfo.accessToken = token
+            callback(token)
+        });
     }
 
 
-    self.GetApiEndpoint = function(access_token, callback) {
+    self.GetApiEndpoint = function(callback) {
         var req = []
         req.push(
             new RequestEnvelop.Requests(2),
@@ -108,12 +111,22 @@ function Pokeio() {
             new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3("4a2e9bc330dae60e7b74fc85b98868ab4700802e"))
         )
 
-        api_req(api_url, access_token, req, function(f_ret) {
+        api_req(api_url, self.playerInfo.accessToken, req, function(f_ret) {
             var api_endpoint = 'https://' + f_ret.api_url + '/rpc'
-            self.playerInfo.api_endpoint = api_endpoint
+            self.playerInfo.apiEndpoint = api_endpoint
             self.DebugPrint("[i] Received API Endpoint: " + api_endpoint)
             callback(api_endpoint)
         })
+    }
+
+    self.GetProfile = function(callback) {
+        var req = new RequestEnvelop.Requests(2)
+        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(f_ret) {
+            if(f_ret.payload[0].profile) {
+                self.DebugPrint("[i] Logged in!")
+            }
+            callback(f_ret.payload[0].profile)
+        });
     }
 
     self.GetLocation = function(callback) {

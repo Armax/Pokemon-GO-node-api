@@ -1,5 +1,9 @@
 # Poke.io
-Pokemon GO api node.js library, still WIP
+Pokemon GO api node.js library, still WIP<br>
+Check main.js for examples
+
+### Demo:
+![alt tag](http://cl.arm4x.net/poke.png)
 
 ### Thanks to:
 [Mila432](https://github.com/Mila432/Pokemon_Go_API) <br>

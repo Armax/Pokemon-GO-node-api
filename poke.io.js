@@ -96,7 +96,29 @@ function Pokeio() {
 
     }
 
-    self.init = function(user, pass, location, provider, callback) {
+    self.init = function(username, password, location, provider, callback) {
+        if (provider != "ptc" && provider != "google") {
+            throw new Error('Invalid provider');
+        }
+        // Updating location
+        self.SetLocation(location, function(err, loc) {
+            if(err) {
+                return callback(err)
+            }
+            // Getting access token
+            self.GetAccessToken(username, password, function(err, token) {
+                if(err) {
+                    return callback(err)
+                }
+                // Getting api endpoint
+                self.GetApiEndpoint(function(err, api_endpoint) {
+                    if(err) {
+                        return callback(err)
+                    }
+                    callback(null)
+                });
+            });
+        });
         self.DebugPrint('[i] Logging with user: ' + user);
 
     }

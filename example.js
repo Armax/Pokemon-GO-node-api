@@ -6,6 +6,7 @@ var Pokeio = require('./poke.io');
 var location = process.env.PGO_LOCATION || {'type':'name','name':'Times Square'};
 var username = process.env.PGO_USERNAME || 'USER';
 var password = process.env.PGO_PASSWORD || 'PASS';
+var provider = process.env.PGO_PROVIDER || 'ptc';
 
 Pokeio.SetLocation(location, function(err, loc) {
     if (err) throw err;

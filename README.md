@@ -87,33 +87,24 @@ Reads current latitude and longitude and returns a human readable address using 
     * `longitude {Number}`
     * `altitude {Number}`
 
-### Pokeio.SetLocation(locationName, callback)
+### Pokeio.SetLocation(location, callback)
 
-Will save the cooridinates to the Pokeio internal state.
+Will save cooridinates to the Pokeio internal state.
+Accepts raw coordinates or location name based on the type property.
 
 **Parameters**
+  * `location {Object}`
+    * `type {String}` One of ['name', 'coords']
+    * `name {String}` Address for lookup using the google maps api.
+    * `latitude {Number}`
+    * `longitude {Number}`
+    * `altitude {Number}`
   * `callback {Function(error, coordinates)}`
     * `error {Error}`
     * `coordinates {Object}`
       * `latitude {Number}`
       * `longitude {Number}`
       * `altitude {Number}`
-
-### Pokeio.SetLocationCoords(coordinates)
-
-Will save the cooridinates to the Pokeio internal state.
-
-**Parameters**
-  * `coordinates {Object}`
-    * `latitude {Number}`
-    * `longitude {Number}`
-    * `altitude {Number}`
-
-**Returns**
-  * `coordinates {Object}`
-    * `latitude {Number}`
-    * `longitude {Number}`
-    * `altitude {Number}`
 
 ## Thanks to:
 Python demo: [tejado](https://github.com/tejado/pokemongo-api-demo) <br>

@@ -34,6 +34,7 @@ function Pokeio() {
         'latitude': 0,
         'longitude': 0,
         'altitude': 0,
+        'locationName': '',
         'apiEndpoint': ''
     };
 
@@ -119,7 +120,6 @@ function Pokeio() {
                 });
             });
         });
-        self.DebugPrint('[i] Logging with user: ' + user);
 
     }
 
@@ -210,6 +210,7 @@ function Pokeio() {
 
                 self.playerInfo.latitude = data.results[0].geometry.location.lat;
                 self.playerInfo.longitude = data.results[0].geometry.location.lng;
+                self.playerInfo.locationName = locationName;
 
                 var coords = {
                     latitude: self.playerInfo.latitude,
@@ -235,7 +236,12 @@ function Pokeio() {
                 altitude: self.playerInfo.altitude,
             };
 
-            callback(null, coords);
+            geocoder.reverseGeocode(self.playerInfo.latitude, self.playerInfo.longitude, function(err, data) {
+                if (data.status != 'ZERO_RESULTS') {
+                    self.playerInfo.locationName = data.results[0].formatted_address;
+                }
+                callback(null, coords);
+            });
         }
     };
 }

@@ -1,18 +1,20 @@
-var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc'
-var login_url = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize'
-var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken'
+'use strict';
+
+var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
+var login_url = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize';
+var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
 
 module.exports = {
     PokemonClub: function(user, pass, self, callback) {
         var options = {
-          url: login_url,
-          headers: {
-            'User-Agent': 'niantic'
-          }
+            url: login_url,
+            headers: {
+                'User-Agent': 'niantic'
+            }
         };
 
-        self.request.get(options, function(e, r, body) {
-            var data = JSON.parse(body)
+        self.request.get(options, function(err, response, body) {
+            var data = JSON.parse(body);
 
             options = {
                 url: login_url,
@@ -28,7 +30,7 @@ module.exports = {
                 }
             };
 
-            self.request.post(options, function(e, r, body) {
+            self.request.post(options, function(err, response, body) {
                 //Parse body if any exists, callback with errors if any.
                 if (body) {
                     var parsedBody = JSON.parse(body);
@@ -37,7 +39,7 @@ module.exports = {
                     }
                 }
 
-                var ticket = r.headers['location'].split("ticket=")[1]
+                var ticket = response.headers['location'].split('ticket=')[1];
 
                 options = {
                     url: login_oauth,
@@ -53,20 +55,20 @@ module.exports = {
                     }
                 };
 
-                self.request.post(options, function(e, r, body) {
-                    var token = body.split("token=")[1]
-                    token = token.split("&")[0]
+                self.request.post(options, function(err, response, body) {
+                    var token = body.split('token=')[1];
+                    token = token.split('&')[0];
 
                     if (!token) {
                         return callback(new Error('Login failed'));
                     }
 
-                    self.DebugPrint("[i] Session token: " + token)
-                    callback(null, token)
+                    self.DebugPrint('[i] Session token: ' + token);
+                    callback(null, token);
                 });
 
             });
 
         });
     }
-}
+};

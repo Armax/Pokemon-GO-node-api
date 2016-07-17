@@ -6,10 +6,10 @@ var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
 
 // Google Parts
 
-var android_id = '9774d56d682e549c'
-var oauth_service = 'audience:server:client_id:848232511240-7so421jotr2609rmqakceuu1luuq0ptb.apps.googleusercontent.com'
-var app = 'com.nianticlabs.pokemongo'
-var client_sig = '321187995bc7cdc2b5fc91b11a96e2baa8602c62'
+var android_id = '9774d56d682e549c';
+var oauth_service = 'audience:server:client_id:848232511240-7so421jotr2609rmqakceuu1luuq0ptb.apps.googleusercontent.com';
+var app = 'com.nianticlabs.pokemongo';
+var client_sig = '321187995bc7cdc2b5fc91b11a96e2baa8602c62';
 module.exports = {
     PokemonClub: function (user, pass, self, callback) {
         var options = {

@@ -107,28 +107,28 @@ function Pokeio() {
             throw new Error('Invalid provider');
         }
         // set provider
-        self.playerInfo.provider = provider
+        self.playerInfo.provider = provider;
         // Updating location
         self.SetLocation(location, function (err, loc) {
             if (err) {
-                return callback(err)
+                return callback(err);
             }
             // Getting access token
             self.GetAccessToken(username, password, function (err, token) {
                 if (err) {
-                    return callback(err)
+                    return callback(err);
                 }
                 // Getting api endpoint
                 self.GetApiEndpoint(function (err, api_endpoint) {
                     if (err) {
-                        return callback(err)
+                        return callback(err);
                     }
-                    callback(null)
+                    callback(null);
                 });
             });
         });
 
-    }
+    };
 
     self.GetAccessToken = function (user, pass, callback) {
         self.DebugPrint('[i] Logging with user: ' + user);

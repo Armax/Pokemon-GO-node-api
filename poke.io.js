@@ -101,7 +101,7 @@ function Pokeio() {
 
     self.init = function(username, password, location, provider, callback) {
         if (provider !== 'ptc' && provider !== 'google') {
-            throw new Error('Invalid provider');
+            return callback(new Error('Invalid provider'));
         }
         // set provider
         self.playerInfo.provider = provider;
@@ -181,12 +181,16 @@ function Pokeio() {
                 return callback(err);
             }
             var profile = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile
-            
+
             if (profile.username) {
                 self.DebugPrint('[i] Logged in!');
             }
             callback(null, profile);
         });
+    };
+
+    self.Heartbeat = function(callback) {
+
     };
 
     self.GetLocation = function(callback) {
@@ -212,12 +216,12 @@ function Pokeio() {
 
     self.SetLocation = function(location, callback) {
         if (location.type !== 'name' && location.type !== 'coords') {
-            throw new Error('Invalid location type');
+            return callback(new Error('Invalid location type'));
         }
 
         if (location.type === 'name') {
             if (!location.name) {
-                throw new Error('You should add a location name');
+                return callback(new Error('You should add a location name'));
             }
             var locationName = location.name;
             geocoder.geocode(locationName, function(err, data) {
@@ -239,12 +243,12 @@ function Pokeio() {
             });
         } else if (location.type === 'coords') {
             if (!location.coords) {
-                throw new Error('Coords object missing');
+                return callback(new Error('Coords object missing'));
             }
 
-            self.playerInfo.latitude = coords.latitude ? coords.latitude : self.playerInfo.latitude;
-            self.playerInfo.longitude = coords.longitude ? coords.longitude : self.playerInfo.longitude;
-            self.playerInfo.altitude = coords.altitude ? coords.altitude : self.playerInfo.altitude;
+            self.playerInfo.latitude = location.coords.latitude ? location.coords.latitude : self.playerInfo.latitude;
+            self.playerInfo.longitude = location.coords.longitude ? location.coords.longitude : self.playerInfo.longitude;
+            self.playerInfo.altitude = location.coords.altitude ? location.coords.altitude : self.playerInfo.altitude;
 
             var coords = {
                 latitude: self.playerInfo.latitude,

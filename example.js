@@ -3,7 +3,11 @@
 var Pokeio = require('./poke.io');
 
 //Set environment variables or replace placeholder text
-var location = process.env.PGO_LOCATION || {'type':'name','name':'Times Square'};
+var location = {
+    type: 'name',
+    name: process.env.PGO_LOCATION || 'Times Square'
+};
+
 var username = process.env.PGO_USERNAME || 'USER';
 var password = process.env.PGO_PASSWORD || 'PASS';
 var provider = process.env.PGO_PROVIDER || 'ptc';

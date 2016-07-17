@@ -1,9 +1,9 @@
 var Pokeio = require('./poke.io')
 
-var location = 'Stockflethsvej 39';
-
-var username = 'Arm4x';
-var password = 'OHSHITWADDUP';
+//Set environment variables or replace placeholder text
+var location = process.env.PGO_LOCATION || 'times squere';
+var username = process.env.PGO_USERNAME || 'USERNAME';
+var password = process.env.PGO_PASSWORD || 'PASSWORD';
 
 Pokeio.SetLocation(location, function(err, loc) {
     if (err) throw err;

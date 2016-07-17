@@ -37,7 +37,7 @@ module.exports = {
                     }
                 }
 
-                var ticket = r.headers['location'].split("ticket=")[1]
+                var ticket = r.headers['location'].split('ticket=')[1]
 
                 options = {
                     url: login_oauth,
@@ -54,14 +54,14 @@ module.exports = {
                 };
 
                 self.request.post(options, function(e, r, body) {
-                    var token = body.split("token=")[1]
-                    token = token.split("&")[0]
+                    var token = body.split('token=')[1]
+                    token = token.split('&')[0]
 
                     if (!token) {
                         return callback(new Error('Login failed'));
                     }
 
-                    self.DebugPrint("[i] Session token: " + token)
+                    self.DebugPrint('[i] Session token: ' + token)
                     callback(null, token)
                 });
 

@@ -3,7 +3,7 @@ var geocoder = require('geocoder');
 
 var Logins = require('./logins')
 
-var fs = require("fs");
+var fs = require('fs');
 
 var EventEmitter = require('events').EventEmitter
 
@@ -11,7 +11,7 @@ var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc'
 var login_url = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize'
 var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken'
 
-var ProtoBuf = require("protobufjs");
+var ProtoBuf = require('protobufjs');
 var builder = ProtoBuf.loadProtoFile('pokemon.proto')
 if (builder == null) {
     builder = ProtoBuf.loadProtoFile('./node_modules/pokemon-go-node-api/pokemon.proto')
@@ -46,8 +46,8 @@ function Pokeio() {
     function api_req(api_endpoint, access_token, req, callback) {
         // Auth
         var auth = new RequestEnvelop.AuthInfo({
-            "provider": "ptc",
-            "token": new RequestEnvelop.AuthInfo.JWT(access_token, 59)
+            'provider': 'ptc',
+            'token': new RequestEnvelop.AuthInfo.JWT(access_token, 59)
         })
 
         var f_req = new RequestEnvelop({
@@ -78,7 +78,7 @@ function Pokeio() {
         self.request.post(options, function(e, r, body) {
 
             if (r == undefined || r.body == undefined) {
-                console.log("[!] RPC Server offline")
+                console.log('[!] RPC Server offline')
                 return callback(new Error('RPC Server offline'));
             }
 
@@ -97,7 +97,7 @@ function Pokeio() {
     }
 
     self.GetAccessToken = function(user, pass, callback) {
-        self.DebugPrint("[i] Logging with user: " + user)
+        self.DebugPrint('[i] Logging with user: ' + user)
         Logins.PokemonClub(user, pass, self, function(err, token) {
             if (err) {
                 return callback(err);
@@ -116,7 +116,7 @@ function Pokeio() {
             new RequestEnvelop.Requests(126),
             new RequestEnvelop.Requests(4),
             new RequestEnvelop.Requests(129),
-            new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3("4a2e9bc330dae60e7b74fc85b98868ab4700802e"))
+            new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3('4a2e9bc330dae60e7b74fc85b98868ab4700802e'))
         )
 
         api_req(api_url, self.playerInfo.accessToken, req, function(err, f_ret) {
@@ -126,7 +126,7 @@ function Pokeio() {
 
             var api_endpoint = 'https://' + f_ret.api_url + '/rpc'
             self.playerInfo.apiEndpoint = api_endpoint
-            self.DebugPrint("[i] Received API Endpoint: " + api_endpoint)
+            self.DebugPrint('[i] Received API Endpoint: ' + api_endpoint)
             callback(null, api_endpoint)
         })
     }
@@ -139,7 +139,7 @@ function Pokeio() {
             }
 
             if (f_ret.payload[0].profile) {
-                self.DebugPrint("[i] Logged in!")
+                self.DebugPrint('[i] Logged in!')
             }
             callback(null, f_ret.payload[0].profile)
         });
@@ -147,9 +147,9 @@ function Pokeio() {
 
     self.GetLocation = function(callback) {
         geocoder.reverseGeocode(self.playerInfo.latitude, self.playerInfo.longitude, function(err, data) {
-            console.log("[i] lat/long/alt: " + self.playerInfo.latitude + " " + self.playerInfo.longitude + " " + self.playerInfo.altitude)
-            if (data.status == "ZERO_RESULTS") {
-                return callback(new Error("location not found"));
+            console.log('[i] lat/long/alt: ' + self.playerInfo.latitude + ' ' + self.playerInfo.longitude + ' ' + self.playerInfo.altitude)
+            if (data.status == 'ZERO_RESULTS') {
+                return callback(new Error('location not found'));
             }
 
             callback(null, data.results[0].formatted_address)
@@ -168,8 +168,8 @@ function Pokeio() {
 
     self.SetLocation = function(locationName, callback) {
         geocoder.geocode(locationName, function(err, data) {
-            if (err || data.status == "ZERO_RESULTS") {
-                return callback(new Error("location not found"));
+            if (err || data.status == 'ZERO_RESULTS') {
+                return callback(new Error('location not found'));
             }
 
             self.playerInfo.latitude = data.results[0].geometry.location.lat;

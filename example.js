@@ -1,3 +1,5 @@
+'use strict';
+
 var Pokeio = require('./poke.io');
 
 //Set environment variables or replace placeholder text

@@ -10,7 +10,7 @@ var Logins = require('./logins');
 var GoogleOAuth = require('gpsoauthnode');
 
 var builder = ProtoBuf.loadProtoFile('pokemon.proto');
-if (builder == null) {
+if (builder === null) {
     builder = ProtoBuf.loadProtoFile('./node_modules/pokemon-go-node-api/pokemon.proto');
 }
 
@@ -42,7 +42,7 @@ function Pokeio() {
     };
 
     self.DebugPrint = function(str) {
-        if (self.playerInfo.debug == true) {
+        if (self.playerInfo.debug === true) {
             //self.events.emit('debug',str)
             console.log(str);
         }
@@ -81,7 +81,7 @@ function Pokeio() {
         };
 
         self.request.post(options, function(err, response, body) {
-            if (response == undefined || body == undefined) {
+            if (response === undefined || body === undefined) {
                 console.error('[!] RPC Server offline');
                 return callback(new Error('RPC Server offline'));
             }
@@ -101,7 +101,7 @@ function Pokeio() {
     }
 
     self.init = function(username, password, location, provider, callback) {
-        if (provider != 'ptc' && provider != 'google') {
+        if (provider !== 'ptc' && provider !== 'google') {
             throw new Error('Invalid provider');
         }
         // set provider
@@ -130,7 +130,7 @@ function Pokeio() {
 
     self.GetAccessToken = function(user, pass, callback) {
         self.DebugPrint('[i] Logging with user: ' + user);
-        if (self.playerInfo.provider == 'ptc') {
+        if (self.playerInfo.provider === 'ptc') {
             Logins.PokemonClub(user, pass, self, function(err, token) {
                 if (err) {
                     return callback(err);
@@ -191,7 +191,7 @@ function Pokeio() {
     self.GetLocation = function(callback) {
         geocoder.reverseGeocode(self.playerInfo.latitude, self.playerInfo.longitude, function(err, data) {
             console.log('[i] lat/long/alt: ' + self.playerInfo.latitude + ' ' + self.playerInfo.longitude + ' ' + self.playerInfo.altitude);
-            if (data.status == 'ZERO_RESULTS') {
+            if (data.status === 'ZERO_RESULTS') {
                 return callback(new Error('location not found'));
             }
 
@@ -210,17 +210,17 @@ function Pokeio() {
     };
 
     self.SetLocation = function(location, callback) {
-        if (location.type != 'name' && location.type != 'coords') {
+        if (location.type !== 'name' && location.type !== 'coords') {
             throw new Error('Invalid location type');
         }
 
-        if (location.type == 'name') {
+        if (location.type === 'name') {
             if (!location.name) {
                 throw new Error('You should add a location name');
             }
             var locationName = location.name;
             geocoder.geocode(locationName, function(err, data) {
-                if (err || data.status == 'ZERO_RESULTS') {
+                if (err || data.status === 'ZERO_RESULTS') {
                     return callback(new Error('location not found'));
                 }
 
@@ -236,7 +236,7 @@ function Pokeio() {
 
                 callback(null, coords);
             });
-        } else if (location.type == 'coords') {
+        } else if (location.type === 'coords') {
             if (!location.coords) {
                 throw new Error('Coords object missing');
             }
@@ -252,7 +252,7 @@ function Pokeio() {
             };
 
             geocoder.reverseGeocode(self.playerInfo.latitude, self.playerInfo.longitude, function(err, data) {
-                if (data.status != 'ZERO_RESULTS') {
+                if (data.status !== 'ZERO_RESULTS') {
                     self.playerInfo.locationName = data.results[0].formatted_address;
                 }
                 callback(null, coords);

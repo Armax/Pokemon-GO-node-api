@@ -96,6 +96,11 @@ function Pokeio() {
 
     }
 
+    self.init = function(user, pass, location, provider, callback) {
+        self.DebugPrint('[i] Logging with user: ' + user);
+
+    }
+
     self.GetAccessToken = function(user, pass, callback) {
         self.DebugPrint('[i] Logging with user: ' + user);
         Logins.PokemonClub(user, pass, self, function(err, token) {
@@ -166,14 +171,41 @@ function Pokeio() {
         return coords;
     };
 
-    self.SetLocation = function(locationName, callback) {
-        geocoder.geocode(locationName, function(err, data) {
-            if (err || data.status == 'ZERO_RESULTS') {
-                return callback(new Error('location not found'));
+    self.SetLocation = function(location, callback) {
+        if (location.type != "name" && location.type != "coords") {
+            throw new Error('Invalid location type');
+        }
+
+        if(location.type == "name") {
+            if (!location.name) {
+                throw new Error('You should add a location name');
+            }
+            var locationName = location.name;
+            geocoder.geocode(locationName, function(err, data) {
+                if (err || data.status == 'ZERO_RESULTS') {
+                    return callback(new Error('location not found'));
+                }
+
+                self.playerInfo.latitude = data.results[0].geometry.location.lat;
+                self.playerInfo.longitude = data.results[0].geometry.location.lng;
+
+                var coords = {
+                    latitude: self.playerInfo.latitude,
+                    longitude: self.playerInfo.longitude,
+                    altitude: self.playerInfo.altitude,
+                };
+
+                callback(null, coords);
+            });
+        }
+        else if(location.type == "coords") {
+            if (!location.coords) {
+                throw new Error('Coords object missing');
             }
 
-            self.playerInfo.latitude = data.results[0].geometry.location.lat;
-            self.playerInfo.longitude = data.results[0].geometry.location.lng;
+            self.playerInfo.latitude = coords.latitude ? coords.latitude : self.playerInfo.latitude;
+            self.playerInfo.longitude = coords.longitude ? coords.longitude : self.playerInfo.longitude;
+            self.playerInfo.altitude = coords.altitude ? coords.altitude : self.playerInfo.altitude;
 
             var coords = {
                 latitude: self.playerInfo.latitude,
@@ -182,25 +214,7 @@ function Pokeio() {
             };
 
             callback(null, coords);
-        });
-    };
-
-    self.SetLocationCoords = function(coords) {
-        if (!coords) {
-            throw new Error('Coords object');
         }
-
-        self.playerInfo.latitude = coords.latitude ? coords.latitude : self.playerInfo.latitude;
-        self.playerInfo.longitude = coords.longitude ? coords.longitude : self.playerInfo.longitude;
-        self.playerInfo.altitude = coords.altitude ? coords.altitude : self.playerInfo.altitude;
-
-        var coordinates = {
-            latitude: self.playerInfo.latitude,
-            longitude: self.playerInfo.longitude,
-            altitude: self.playerInfo.altitude,
-        };
-
-        return coordinates;
     };
 }
 

@@ -3,14 +3,14 @@
 var Pokeio = require('./poke.io');
 
 //Set environment variables or replace placeholder text
-var location = process.env.PGO_LOCATION || 'times squere';
-var username = process.env.PGO_USERNAME || 'USERNAME';
-var password = process.env.PGO_PASSWORD || 'PASSWORD';
+var location = process.env.PGO_LOCATION || {'type':'name','name':'Times Square'};
+var username = process.env.PGO_USERNAME || 'USER';
+var password = process.env.PGO_PASSWORD || 'PASS';
 
 Pokeio.SetLocation(location, function(err, loc) {
     if (err) throw err;
 
-    console.log('[i] Current location: ' + location);
+    console.log('[i] Current location: ' + location.name);
     console.log('[i] lat/long/alt: : ' + loc.latitude + ' ' + loc.longitude + ' ' + loc.altitude);
 
     Pokeio.GetAccessToken(username, password, function(err, token) {

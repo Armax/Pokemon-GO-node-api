@@ -56,7 +56,7 @@ function Pokeio() {
 
         var f_req = new RequestEnvelop({
             'unknown1': 2,
-            'rpc_id': 8145806132888207460,
+            'rpc_id': 1469378659230941192,
 
             'requests': req,
 
@@ -136,6 +136,7 @@ function Pokeio() {
                 }
 
                 self.playerInfo.accessToken = token;
+                self.DebugPrint("[i] Received PTC access token!")
                 callback(null, token);
             });
         } else {
@@ -145,6 +146,7 @@ function Pokeio() {
                 }
 
                 self.playerInfo.accessToken = token;
+                self.DebugPrint("[i] Received Google access token!")
                 callback(null, token);
             });
         }
@@ -158,14 +160,13 @@ function Pokeio() {
             new RequestEnvelop.Requests(126),
             new RequestEnvelop.Requests(4),
             new RequestEnvelop.Requests(129),
-            new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3('4a2e9bc330dae60e7b74fc85b98868ab4700802e'))
+            new RequestEnvelop.Requests(5)
         );
 
         api_req(api_url, self.playerInfo.accessToken, req, function(err, f_ret) {
             if (err) {
                 return callback(err);
             }
-
             var api_endpoint = 'https://' + f_ret.api_url + '/rpc';
             self.playerInfo.apiEndpoint = api_endpoint;
             self.DebugPrint('[i] Received API Endpoint: ' + api_endpoint);
@@ -179,11 +180,12 @@ function Pokeio() {
             if (err) {
                 return callback(err);
             }
-
-            if (f_ret.payload[0].profile) {
+            var profile = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile
+            
+            if (profile.username) {
                 self.DebugPrint('[i] Logged in!');
             }
-            callback(null, f_ret.payload[0].profile);
+            callback(null, profile);
         });
     };
 
@@ -210,12 +212,12 @@ function Pokeio() {
 
     self.SetLocation = function(location, callback) {
         if (location.type !== 'name' && location.type !== 'coords') {
-            return callback(new Error('Invalid location type'));
+            throw new Error('Invalid location type');
         }
 
         if (location.type === 'name') {
             if (!location.name) {
-                return callback(new Error('You should add a location name'));
+                throw new Error('You should add a location name');
             }
             var locationName = location.name;
             geocoder.geocode(locationName, function(err, data) {
@@ -233,16 +235,16 @@ function Pokeio() {
                     altitude: self.playerInfo.altitude,
                 };
 
-                return callback(null, coords);
+                callback(null, coords);
             });
         } else if (location.type === 'coords') {
             if (!location.coords) {
-                return callback(new Error('Coords object missing'));
+                throw new Error('Coords object missing');
             }
 
-            self.playerInfo.latitude = location.coords.latitude ? location.coords.latitude : self.playerInfo.latitude;
-            self.playerInfo.longitude = location.coords.longitude ? location.coords.longitude : self.playerInfo.longitude;
-            self.playerInfo.altitude = location.coords.altitude ? location.coords.altitude : self.playerInfo.altitude;
+            self.playerInfo.latitude = coords.latitude ? coords.latitude : self.playerInfo.latitude;
+            self.playerInfo.longitude = coords.longitude ? coords.longitude : self.playerInfo.longitude;
+            self.playerInfo.altitude = coords.altitude ? coords.altitude : self.playerInfo.altitude;
 
             var coords = {
                 latitude: self.playerInfo.latitude,
@@ -254,7 +256,7 @@ function Pokeio() {
                 if (data.status !== 'ZERO_RESULTS') {
                     self.playerInfo.locationName = data.results[0].formatted_address;
                 }
-                return callback(null, coords);
+                callback(null, coords);
             });
         }
     };

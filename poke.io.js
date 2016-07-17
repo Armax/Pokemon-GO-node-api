@@ -66,7 +66,7 @@ function Pokeio() {
 
         var protobuf = f_req.encode().toBuffer();
 
-        options = {
+        var options = {
             url: api_endpoint,
             body: protobuf,
             encoding: null,

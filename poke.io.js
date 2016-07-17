@@ -101,7 +101,7 @@ function Pokeio() {
     }
 
     self.init = function(username, password, location, provider, callback) {
-        if (provider != "ptc" && provider != "google") {
+        if (provider != 'ptc' && provider != 'google') {
             throw new Error('Invalid provider');
         }
         // set provider
@@ -210,11 +210,11 @@ function Pokeio() {
     };
 
     self.SetLocation = function(location, callback) {
-        if (location.type != "name" && location.type != "coords") {
+        if (location.type != 'name' && location.type != 'coords') {
             throw new Error('Invalid location type');
         }
 
-        if (location.type == "name") {
+        if (location.type == 'name') {
             if (!location.name) {
                 throw new Error('You should add a location name');
             }
@@ -236,7 +236,7 @@ function Pokeio() {
 
                 callback(null, coords);
             });
-        } else if (location.type == "coords") {
+        } else if (location.type == 'coords') {
             if (!location.coords) {
                 throw new Error('Coords object missing');
             }

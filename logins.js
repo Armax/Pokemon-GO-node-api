@@ -1,17 +1,16 @@
 'use strict';
 
-var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
 var login_url = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize';
 var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
 
 // Google Parts
+var android_id = '9774d56d682e549c';
+var oauth_service = 'audience:server:client_id:848232511240-7so421jotr2609rmqakceuu1luuq0ptb.apps.googleusercontent.com';
+var app = 'com.nianticlabs.pokemongo';
+var client_sig = '321187995bc7cdc2b5fc91b11a96e2baa8602c62';
 
-var android_id = '9774d56d682e549c'
-var oauth_service = 'audience:server:client_id:848232511240-7so421jotr2609rmqakceuu1luuq0ptb.apps.googleusercontent.com'
-var app = 'com.nianticlabs.pokemongo'
-var client_sig = '321187995bc7cdc2b5fc91b11a96e2baa8602c62'
 module.exports = {
-    PokemonClub: function (user, pass, self, callback) {
+    PokemonClub: function(user, pass, self, callback) {
         var options = {
             url: login_url,
             headers: {
@@ -19,7 +18,7 @@ module.exports = {
             }
         };
 
-        self.request.get(options, function (err, response, body) {
+        self.request.get(options, function(err, response, body) {
             var data = JSON.parse(body);
 
             options = {
@@ -36,7 +35,7 @@ module.exports = {
                 }
             };
 
-            self.request.post(options, function (err, response, body) {
+            self.request.post(options, function(err, response, body) {
                 //Parse body if any exists, callback with errors if any.
                 if (body) {
                     var parsedBody = JSON.parse(body);
@@ -61,7 +60,7 @@ module.exports = {
                     }
                 };
 
-                self.request.post(options, function (err, response, body) {
+                self.request.post(options, function(err, response, body) {
                     var token = body.split('token=')[1];
                     token = token.split('&')[0];
 
@@ -77,10 +76,10 @@ module.exports = {
 
         });
     },
-    GoogleAccount: function (user, pass, self, callback) {
-        self.google.login(user, pass, android_id, function (err, data) {
+    GoogleAccount: function(user, pass, self, callback) {
+        self.google.login(user, pass, android_id, function(err, data) {
             if (data) {
-                self.google.oauth(user, data.masterToken, data.androidId, oauth_service, app, client_sig, function (err, data) {
+                self.google.oauth(user, data.masterToken, data.androidId, oauth_service, app, client_sig, function(err, data) {
                     if (err) {
                         return callback(err, null);
                     }

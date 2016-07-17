@@ -24,11 +24,11 @@ Pokeio.SetLocation(location, function(err, loc) {
                 console.log('[i] Poke Storage: ' + profile.poke_storage);
                 console.log('[i] Item Storage: ' + profile.item_storage);
 
-                if (profile.currency[0].amount == null) {
-                    var poke = 0;
-                } else {
-                    var poke = profile.currency[0].amount;
+                var poke = 0;
+                if (profile.currency[0].amount) {
+                    poke = profile.currency[0].amount;
                 }
+
                 console.log('[i] Pokecoin: ' + poke);
                 console.log('[i] Stardust: ' + profile.currency[1].amount);
             });

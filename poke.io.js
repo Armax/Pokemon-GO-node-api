@@ -13,7 +13,7 @@ var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken'
 
 var ProtoBuf = require("protobufjs");
 var builder = ProtoBuf.loadProtoFile('pokemon.proto')
-if(builder == null) {
+if (builder == null) {
     builder = ProtoBuf.loadProtoFile('./node_modules/pokemon-go-node-api/pokemon.proto')
 }
 var pokemonProto = builder.build()
@@ -25,19 +25,19 @@ function Pokeio() {
     var events;
     self.events = new EventEmitter()
     self.j = request.jar()
-    self.request = request.defaults({jar:self.j})
+    self.request = request.defaults({ jar: self.j })
 
     self.playerInfo = {
-        'accessToken'       : '',
-        'debug'             : true,
-        'latitude'          : 0,
-        'longitude'         : 0,
-        'altitude'          : 0,
-        'apiEndpoint'      : ''
+        'accessToken': '',
+        'debug': true,
+        'latitude': 0,
+        'longitude': 0,
+        'altitude': 0,
+        'apiEndpoint': ''
     }
 
     self.DebugPrint = function(str) {
-        if(self.playerInfo.debug==true) {
+        if (self.playerInfo.debug == true) {
             //self.events.emit('debug',str)
             console.log(str)
         }
@@ -46,22 +46,22 @@ function Pokeio() {
     function api_req(api_endpoint, access_token, req, callback) {
         // Auth
         var auth = new RequestEnvelop.AuthInfo({
-            "provider"  : "ptc",
-            "token"     : new RequestEnvelop.AuthInfo.JWT(access_token,59)
+            "provider": "ptc",
+            "token": new RequestEnvelop.AuthInfo.JWT(access_token, 59)
         })
 
         var f_req = new RequestEnvelop({
-            'unknown1'  : 2,
-            'rpc_id'    : 8145806132888207460,
+            'unknown1': 2,
+            'rpc_id': 8145806132888207460,
 
-            'requests'  : req,
+            'requests': req,
 
-            'latitude'  : self.playerInfo.latitude,
-            'longitude' : self.playerInfo.longitude,
-            'altitude'  : self.playerInfo.altitude,
+            'latitude': self.playerInfo.latitude,
+            'longitude': self.playerInfo.longitude,
+            'altitude': self.playerInfo.altitude,
 
-            'auth'      : auth,
-            'unknown12' : 989
+            'auth': auth,
+            'unknown12': 989
         })
 
         var protobuf = f_req.encode().toBuffer()
@@ -77,7 +77,7 @@ function Pokeio() {
 
         self.request.post(options, function(e, r, body) {
 
-            if(r==undefined || r.body==undefined) {
+            if (r == undefined || r.body == undefined) {
                 console.log("[!] RPC Server offline")
                 return callback(new Error('RPC Server offline'));
             }
@@ -96,9 +96,9 @@ function Pokeio() {
 
     }
 
-    self.GetAccessToken = function(user,pass,callback) {
+    self.GetAccessToken = function(user, pass, callback) {
         self.DebugPrint("[i] Logging with user: " + user)
-        Logins.PokemonClub(user,pass,self, function(err, token) {
+        Logins.PokemonClub(user, pass, self, function(err, token) {
             if (err) {
                 return callback(err);
             }
@@ -138,7 +138,7 @@ function Pokeio() {
                 return callback(err);
             }
 
-            if(f_ret.payload[0].profile) {
+            if (f_ret.payload[0].profile) {
                 self.DebugPrint("[i] Logged in!")
             }
             callback(null, f_ret.payload[0].profile)
@@ -146,9 +146,9 @@ function Pokeio() {
     }
 
     self.GetLocation = function(callback) {
-        geocoder.reverseGeocode( self.playerInfo.latitude, self.playerInfo.longitude, function ( err, data ) {
+        geocoder.reverseGeocode(self.playerInfo.latitude, self.playerInfo.longitude, function(err, data) {
             console.log("[i] lat/long/alt: " + self.playerInfo.latitude + " " + self.playerInfo.longitude + " " + self.playerInfo.altitude)
-            if(data.status=="ZERO_RESULTS") {
+            if (data.status == "ZERO_RESULTS") {
                 return callback(new Error("location not found"));
             }
 

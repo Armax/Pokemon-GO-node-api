@@ -1,0 +1,32 @@
+{
+  "rules": {
+    "indent": [
+      1,
+      4,
+      {"SwitchCase": 1}
+    ],
+    "quotes": [
+      2,
+      "single"
+    ],
+    "semi": [
+      2,
+      "always"
+    ],
+    "comma-dangle": [
+      0,
+      "always-multiline"
+    ],
+    "no-console": [
+      0,
+    ],
+    "no-unused-vars": [
+      1,
+    ]
+  },
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "extends": "eslint:recommended"
+}

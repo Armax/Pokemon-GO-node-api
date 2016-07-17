@@ -59,18 +59,18 @@ Will save the api endpoint to the Pokeio internal state.
   * `callback {Function(error, profile)}`
     * `error {Error}`
     * `profile {Object}`
-      * `creation_time {Numnber}`
+      * `creation_time {Number}`
       * `username {String}`
-      * `team {Numnber}`
-      * `tutorial {Numnber/Boolean}`
+      * `team {Number}`
+      * `tutorial {Number/Boolean}`
         * `poke_storage {String}`
         * `item_storage {String}`
         * `daily_bonus {Object}`
-          * `NextCollectTimestampMs {Numnber}`
-          * `NextDefenderBonusCollectTimestampMs {Numnber}`
+          * `NextCollectTimestampMs {Number}`
+          * `NextDefenderBonusCollectTimestampMs {Number}`
         * `currency {Object}`
           * `type {String}`
-          * `amount {Numnber}`
+          * `amount {Number}`
 
 ### Pokeio.GetLocation(callback)
 Reads current latitude and longitude and returns a human readable address using the google maps api.

@@ -76,17 +76,17 @@ function Pokeio() {
             }
         };
 
-        self.request.post(options, function(e, r, body) {
-            if (r == undefined || r.body == undefined) {
-                console.log('[!] RPC Server offline');
+        self.request.post(options, function(err, response, body) {
+            if (response == undefined || body == undefined) {
+                console.error('[!] RPC Server offline');
                 return callback(new Error('RPC Server offline'));
             }
 
             try {
-                var f_ret = ResponseEnvelop.decode(r.body);
+                var f_ret = ResponseEnvelop.decode(body);
             } catch (e) {
                 if (e.decoded) { // Truncated
-                    console.log(e);
+                    console.warn(e);
                     f_ret = e.decoded; // Decoded message with missing required fields
                 }
             }

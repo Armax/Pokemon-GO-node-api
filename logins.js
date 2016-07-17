@@ -13,7 +13,7 @@ module.exports = {
             }
         };
 
-        self.request.get(options, function(e, r, body) {
+        self.request.get(options, function(err, response, body) {
             var data = JSON.parse(body);
 
             options = {
@@ -30,7 +30,7 @@ module.exports = {
                 }
             };
 
-            self.request.post(options, function(e, r, body) {
+            self.request.post(options, function(err, response, body) {
                 //Parse body if any exists, callback with errors if any.
                 if (body) {
                     var parsedBody = JSON.parse(body);
@@ -39,7 +39,7 @@ module.exports = {
                     }
                 }
 
-                var ticket = r.headers['location'].split('ticket=')[1];
+                var ticket = response.headers['location'].split('ticket=')[1];
 
                 options = {
                     url: login_oauth,
@@ -55,7 +55,7 @@ module.exports = {
                     }
                 };
 
-                self.request.post(options, function(e, r, body) {
+                self.request.post(options, function(err, response, body) {
                     var token = body.split('token=')[1];
                     token = token.split('&')[0];
 

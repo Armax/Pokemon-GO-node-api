@@ -4,10 +4,9 @@ var request = require('request');
 var geocoder = require('geocoder');
 var events = require('events');
 var ProtoBuf = require('protobufjs');
+var GoogleOAuth = require('gpsoauthnode');
 
 var Logins = require('./logins');
-
-var GoogleOAuth = require('gpsoauthnode');
 
 var builder = ProtoBuf.loadProtoFile('pokemon.proto');
 if (builder === null) {

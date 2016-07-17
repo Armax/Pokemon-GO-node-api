@@ -1,15 +1,14 @@
 'use strict';
 
-var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
 var login_url = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize';
 var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
 
 // Google Parts
-
 var android_id = '9774d56d682e549c';
 var oauth_service = 'audience:server:client_id:848232511240-7so421jotr2609rmqakceuu1luuq0ptb.apps.googleusercontent.com';
 var app = 'com.nianticlabs.pokemongo';
 var client_sig = '321187995bc7cdc2b5fc91b11a96e2baa8602c62';
+
 module.exports = {
     PokemonClub: function (user, pass, self, callback) {
         var options = {

@@ -2,29 +2,28 @@
 
 var request = require('request');
 var geocoder = require('geocoder');
+var events = require('events');
+var ProtoBuf = require('protobufjs');
 
 var Logins = require('./logins');
 
-var fs = require('fs');
+var builder = ProtoBuf.loadProtoFile('pokemon.proto');
+if (builder == null) {
+    builder = ProtoBuf.loadProtoFile('./node_modules/pokemon-go-node-api/pokemon.proto');
+}
 
-var EventEmitter = require('events').EventEmitter;
+var pokemonProto = builder.build();
+var RequestEnvelop = pokemonProto.RequestEnvelop;
+var ResponseEnvelop = pokemonProto.ResponseEnvelop;
+
+var EventEmitter = events.EventEmitter;
 
 var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
 var login_url = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize';
 var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
 
-var ProtoBuf = require('protobufjs');
-var builder = ProtoBuf.loadProtoFile('pokemon.proto');
-if (builder == null) {
-    builder = ProtoBuf.loadProtoFile('./node_modules/pokemon-go-node-api/pokemon.proto');
-}
-var pokemonProto = builder.build();
-var RequestEnvelop = pokemonProto.RequestEnvelop;
-var ResponseEnvelop = pokemonProto.ResponseEnvelop;
-
 function Pokeio() {
     var self = this;
-    var events;
     self.events = new EventEmitter();
     self.j = request.jar();
     self.request = request.defaults({ jar: self.j });
@@ -78,7 +77,6 @@ function Pokeio() {
         };
 
         self.request.post(options, function(e, r, body) {
-
             if (r == undefined || r.body == undefined) {
                 console.log('[!] RPC Server offline');
                 return callback(new Error('RPC Server offline'));

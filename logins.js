@@ -5,10 +5,10 @@ var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
 module.exports = {
     PokemonClub: function(user, pass, self, callback) {
         var options = {
-          url: login_url,
-          headers: {
-            'User-Agent': 'niantic'
-          }
+            url: login_url,
+            headers: {
+                'User-Agent': 'niantic'
+            }
         };
 
         self.request.get(options, function(e, r, body) {

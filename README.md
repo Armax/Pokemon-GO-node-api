@@ -16,13 +16,23 @@ Check [example.js](./example.js) for the result showed in the demo or check the 
 
 ## Documentation:
 
-Initializing Pokeio requires 3 method calls:
-  1. Setting of geo location coords via SetLocation or SetLocationCoords
-  2. Getting of access token via GetAccessToken
-  3. Getting of api endpoint via GetApiEndpoint method
+### Pokeio.init(username, password, location, provider, callback)
 
-See the [example.js](./example.js).
+Initializes Pokeio with either pokemon trainer club credentials or google account.
+Accepts locations by name or coordinates
 
+**Parameters**
+  * `username {String}` Your pokemon trainer club or google username
+  * `password {String}` Your pokemon trainer club or google password
+  * `location {Object}` location accepts a combination of type = 'name' & name or type = 'coords' & latitude, longitude, altitude
+    * `type {String}` Must be one of ['name', 'coords']
+    * `name {String}` Address for lookup using the google maps api.
+    * `latitude {Number}`
+    * `longitude {Number}`
+    * `altitude {Number}`
+  * `provider {String}` Must be one of ['ptc', 'google']
+  * `callback {Function(error)}`
+    * `error {Error}`
 
 ### Pokeio.GetAccessToken(username, password, callback)
 

@@ -8,13 +8,15 @@
   "dependencies": {
     "events": "^1.1.1",
     "geocoder": "^0.2.2",
-    "protobufjs": "^5.0.1",
     "gpsoauthnode": "^0.0.5",
-    "request": "^2.73.0"
+    "istanbul": "^0.4.4",
+    "protobufjs": "^5.0.1",
+    "request": "^2.73.0",
+    "tape": "^4.6.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "istanbul cover node_modules/tape/bin/tape tests/**/*.js"
   },
   "repository": {
     "type": "git",

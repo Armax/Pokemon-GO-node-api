@@ -1,4 +1,4 @@
-var Pokeio = require('./poke.io')
+var Pokeio = require('./poke.io');
 
 //Set environment variables or replace placeholder text
 var location = process.env.PGO_LOCATION || 'times squere';
@@ -8,8 +8,8 @@ var password = process.env.PGO_PASSWORD || 'PASSWORD';
 Pokeio.SetLocation(location, function(err, loc) {
     if (err) throw err;
 
-    console.log('[i] Current location: ' + location)
-    console.log('[i] lat/long/alt: : ' + loc.latitude + ' ' + loc.longitude + ' ' + loc.altitude)
+    console.log('[i] Current location: ' + location);
+    console.log('[i] lat/long/alt: : ' + loc.latitude + ' ' + loc.longitude + ' ' + loc.altitude);
 
     Pokeio.GetAccessToken(username, password, function(err, token) {
         if (err) throw err;
@@ -20,17 +20,18 @@ Pokeio.SetLocation(location, function(err, loc) {
             Pokeio.GetProfile(function(err, profile) {
                 if (err) throw err;
 
-                console.log('[i] Username: ' + profile.username)
-                console.log('[i] Poke Storage: ' + profile.poke_storage)
-                console.log('[i] Item Storage: ' + profile.item_storage)
+                console.log('[i] Username: ' + profile.username);
+                console.log('[i] Poke Storage: ' + profile.poke_storage);
+                console.log('[i] Item Storage: ' + profile.item_storage);
+
                 if (profile.currency[0].amount == null) {
-                    var poke = 0
+                    var poke = 0;
                 } else {
-                    var poke = profile.currency[0].amount
+                    var poke = profile.currency[0].amount;
                 }
-                console.log('[i] Pokecoin: ' + poke)
-                console.log('[i] Stardust: ' + profile.currency[1].amount)
-            })
+                console.log('[i] Pokecoin: ' + poke);
+                console.log('[i] Stardust: ' + profile.currency[1].amount);
+            });
         });
-    })
+    });
 });

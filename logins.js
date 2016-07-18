@@ -10,7 +10,7 @@ var app = 'com.nianticlabs.pokemongo';
 var client_sig = '321187995bc7cdc2b5fc91b11a96e2baa8602c62';
 
 module.exports = {
-    PokemonClub: function(user, pass, self, callback) {
+    PokemonClub: function (user, pass, self, callback) {
         var options = {
             url: login_url,
             headers: {
@@ -18,8 +18,13 @@ module.exports = {
             }
         };
 
-        self.request.get(options, function(err, response, body) {
-            var data = JSON.parse(body);
+        self.request.get(options, function (err, response, body) {
+            var data;
+
+            if (err) {
+                return callback(err, null);
+            }
+            data = JSON.parse(body);
 
             options = {
                 url: login_url,
@@ -35,12 +40,16 @@ module.exports = {
                 }
             };
 
-            self.request.post(options, function(err, response, body) {
+            self.request.post(options, function (err, response, body) {
                 //Parse body if any exists, callback with errors if any.
+                if(err) {
+                    return callback(err, null);
+                }
+
                 if (body) {
                     var parsedBody = JSON.parse(body);
                     if (parsedBody.errors && parsedBody.errors.length !== 0) {
-                        return callback(new Error('Error logging in: ' + parsedBody.errors[0]));
+                        return callback(new Error('Error logging in: ' + parsedBody.errors[0]), null);
                     }
                 }
 
@@ -60,12 +69,18 @@ module.exports = {
                     }
                 };
 
-                self.request.post(options, function(err, response, body) {
-                    var token = body.split('token=')[1];
+                self.request.post(options, function (err, response, body) {
+                    var token;
+
+                    if(err) {
+                        return callback(err, null);
+                    }
+
+                    token = body.split('token=')[1];
                     token = token.split('&')[0];
 
                     if (!token) {
-                        return callback(new Error('Login failed'));
+                        return callback(new Error('Login failed'), null);
                     }
 
                     self.DebugPrint('[i] Session token: ' + token);
@@ -76,15 +91,18 @@ module.exports = {
 
         });
     },
-    GoogleAccount: function(user, pass, self, callback) {
-        self.google.login(user, pass, android_id, function(err, data) {
+    GoogleAccount: function (user, pass, self, callback) {
+        self.google.login(user, pass, android_id, function (err, data) {
             if (data) {
-                self.google.oauth(user, data.masterToken, data.androidId, oauth_service, app, client_sig, function(err, data) {
+                self.google.oauth(user, data.masterToken, data.androidId, oauth_service, app, client_sig, function (err, data) {
                     if (err) {
                         return callback(err, null);
                     }
                     callback(null, data.Auth);
                 });
+            }
+            else {
+                return callback(err, null);
             }
         });
     }

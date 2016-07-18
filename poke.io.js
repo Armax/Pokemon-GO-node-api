@@ -189,8 +189,54 @@ function Pokeio() {
         });
     };
 
-    self.Heartbeat = function(callback) {
+    self.GetPokemons = function(callback) {
+        var nullbytes = new Buffer(21);
+        nullbytes.fill(0);
 
+        var mquad = new RequestEnvelop.MessageQuad(
+                0,
+                nullbytes,
+                self.playerInfo.latitude,
+                self.playerInfo.longitude
+        );
+
+        var req = new RequestEnvelop.Requests(106, mquad);
+
+        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(err, f_ret) {
+            if(err) {
+                return callback(err);
+            }
+            console.log(f_ret);
+            var pokemon = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
+            console.log(pokemon);
+            callback(null, pokemon)
+        });
+    };
+
+    self.Heartbeat = function(callback) {
+        var nullbytes = new Buffer(21);
+        nullbytes.fill(0);
+
+        var mquad = new RequestEnvelop.MessageQuad(0,nullbytes,self.playerInfo.latitude,self.playerInfo.longitude);
+
+        var req = [];
+        req.push(
+            new RequestEnvelop.Requests(106,mquad),
+            new RequestEnvelop.Requests(126),
+            new RequestEnvelop.Requests(4,Date.now()),
+            new RequestEnvelop.Requests(129),
+            new RequestEnvelop.Requests(5,"05daf51635c82611d1aac95c0b051d3ec088a930")
+        );
+
+        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(err, f_ret) {
+            if(err) {
+                return callback(err);
+            }
+            console.log(f_ret);
+            var pokemon = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
+            console.log(pokemon);
+            callback(null, pokemon)
+        });
     };
 
     self.GetLocation = function(callback) {

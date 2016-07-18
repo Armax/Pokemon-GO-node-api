@@ -10,7 +10,7 @@ var location = {
 
 var username = process.env.PGO_USERNAME || 'USER';
 var password = process.env.PGO_PASSWORD || 'PASS';
-var provider = process.env.PGO_PROVIDER || 'ptc';
+var provider = process.env.PGO_PROVIDER || 'google';
 
 Pokeio.init(username, password, location, provider, function(err) {
     if (err) throw err;
@@ -32,5 +32,6 @@ Pokeio.init(username, password, location, provider, function(err) {
 
         console.log('[i] Pokecoin: ' + poke);
         console.log('[i] Stardust: ' + profile.currency[1].amount);
+
     });
 });

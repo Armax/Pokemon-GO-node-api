@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "poke.io.js",
   "dependencies": {
+    "bignum": "^0.12.5",
     "events": "^1.1.1",
     "geocoder": "^0.2.2",
     "gpsoauthnode": "^0.0.5",

@@ -33,5 +33,6 @@ Pokeio.init(username, password, location, provider, function(err) {
         console.log('[i] Pokecoin: ' + poke);
         console.log('[i] Stardust: ' + profile.currency[1].amount);
 
+
     });
 });

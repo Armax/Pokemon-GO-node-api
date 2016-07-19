@@ -5,7 +5,11 @@ const geocoder = require('geocoder');
 const events = require('events');
 const ProtoBuf = require('protobufjs');
 const GoogleOAuth = require('gpsoauthnode');
+const Long = require('Long');
+const ByteBuffer = require('bytebuffer');
+const bignum = require('bignum');
 
+const s2 = require('./s2.js');
 const Logins = require('./logins');
 
 let builder = ProtoBuf.loadProtoFile('pokemon.proto');
@@ -24,6 +28,26 @@ function GetCoords(self) {
 	let {latitude, longitude} = self.playerInfo;
 	return [latitude, longitude];
 };
+
+Long.fromBignum = function(b, signed) {
+    return new Long(b.and(lowMask).toNumber(), b.shiftRight(32).and(lowMask).toNumber(), signed ? false : true);
+}
+
+function getNeighbors(lat, lng) {
+    var origin = s2.CellId.from_lat_lng(s2.LatLng.from_degrees(lat, lng)).parent(15);
+    var walk = [origin.id()];
+    // 10 before and 10 after
+    var next = origin.next();
+    var prev = origin.prev();
+    for (var i = 0; i < 10; i++) {
+        // in range(10):
+        walk.push(prev.id());
+        walk.push(next.id());
+        next = next.next();
+        prev = prev.prev();
+    }
+    return walk;
+}
 
 function Pokeio() {
     var self = this;
@@ -183,6 +207,7 @@ function Pokeio() {
             if (err) {
                 return callback(err);
             }
+
             var profile = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile
 
             if (profile.username) {
@@ -192,37 +217,32 @@ function Pokeio() {
         });
     };
 
-    self.GetPokemons = function(callback) {
-        var nullbytes = new Buffer(21);
-        nullbytes.fill(0);
-
-        var mquad = new RequestEnvelop.MessageQuad(
-                0,
-                nullbytes,
-                ...GetCoords(self)
-        );
-
-        var req = new RequestEnvelop.Requests(106, mquad);
-
-        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(err, f_ret) {
-            if(err) {
-                return callback(err);
-            }
-            console.log(f_ret);
-            var pokemon = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
-            console.log(pokemon);
-            callback(null, pokemon)
-        });
-    };
-
+    // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM 
     self.Heartbeat = function(callback) {
 		let {apiEndpoint, accessToken} = self.playerInfo;
+
         let nullbytes = new Buffer(21);
 		nullbytes.fill(0);
         let mquad = new RequestEnvelop.MessageQuad(0, nullbytes, ...GetCoords(self));
 
+        // Generating walk data using s2 geometry
+        var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude).sort((a, b) => {return a.cmp(b);});
+        var buffer = new ByteBuffer(21 * 10).LE();
+        walk.forEach((elem) => {
+            buffer.writeVarint64(Long.fromBignum(elem));
+        });
+
+        // Creating MessageQuad for Requests type=106
+        buffer.flip();
+        var walkData = new RequestEnvelop.MessageQuad({
+            'f1': buffer.toBuffer(),
+            'f2': nullbytes,
+            'lat': self.playerInfo.latitude,
+            'long': self.playerInfo.longitude
+        });
+
         var req = [
-            new RequestEnvelop.Requests(106, mquad),
+            new RequestEnvelop.Requests(106, walkData),
             new RequestEnvelop.Requests(126),
             new RequestEnvelop.Requests(4, Date.now()),
             new RequestEnvelop.Requests(129),
@@ -233,10 +253,14 @@ function Pokeio() {
             if(err) {
                 return callback(err);
             }
+            else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+                return callback('No result');
+            }
+
             console.log(f_ret);
-            var pokemon = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
-            console.log(pokemon);
-            callback(null, pokemon)
+            var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
+            console.log(heartbeat);
+            callback(null, heartbeat)
         });
     };
 

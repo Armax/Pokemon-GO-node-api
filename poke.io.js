@@ -122,7 +122,12 @@ function Pokeio() {
                 }
             }
 
-            return callback(null, f_ret);
+            if(f_ret) {
+                return callback(null, f_ret);
+            }
+            else {
+                api_req(api_endpoint, access_token, req, callback)
+            }
         });
 
     }
@@ -197,7 +202,7 @@ function Pokeio() {
             var api_endpoint = `https://${f_ret.api_url}/rpc`;
             self.playerInfo.apiEndpoint = api_endpoint;
             self.DebugPrint('[i] Received API Endpoint: ' + api_endpoint);
-            callback(null, api_endpoint);
+            return callback(null, api_endpoint);
         });
     };
 
@@ -217,7 +222,7 @@ function Pokeio() {
         });
     };
 
-    // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM 
+    // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
     self.Heartbeat = function(callback) {
 		let {apiEndpoint, accessToken} = self.playerInfo;
 

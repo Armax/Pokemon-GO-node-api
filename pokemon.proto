@@ -3,11 +3,10 @@ message RequestEnvelop {
   optional int64 rpc_id = 3;
   repeated Requests requests = 4;
   optional Unknown6 unknown6 = 6;
-  optional fixed64 latitude = 7;
-  optional fixed64 longitude = 8;
-  optional fixed64 altitude = 9;
+  optional double latitude = 7;
+  optional double longitude = 8;
+  optional double altitude = 9;
   optional AuthInfo auth = 10;
-  optional UnknownAuth unknown11 = 11;
   optional int64 unknown12 = 12;
 
   message Requests {
@@ -15,35 +14,8 @@ message RequestEnvelop {
     optional bytes message = 2;
   }
 
-  message MessageSingleString {
-    required bytes bytes = 1;
-  }
-
-  message MessageSingleInt {
-    required int64 f1 = 1;
-  }
-
-  message MessageTwoInts {
-    required int64 f1 = 1;
-    required int64 f5 = 5;
-  }
-
-  message MessageQuad {
-    required bytes f1 = 1;
-    required bytes f2 = 2;
-    required fixed64 lat = 3;
-    required fixed64 long = 4;
-  }
-
-  message Wat {
-    repeated int64 lols = 134217728;
-  }
-
   message Unknown3 {
-    required bytes unknown4 = 1;
-    optional bytes unknown2 = 2;
-    optional fixed64 lat = 3;
-    optional fixed64 long = 4;
+    required string unknown4 = 1;
   }
 
   message Unknown6 {
@@ -64,13 +36,13 @@ message RequestEnvelop {
       required int32 unknown13  = 2;
     }
   }
-}
 
-
-message UnknownAuth {
-  optional bytes unknown71 = 1;
-  optional int64 unknown72 = 2;
-  optional bytes unknown73 = 3;
+  message MessageQuad {
+    repeated bytes f1 = 1;
+    required string f2 = 2;
+    required double lat = 3;
+    required double long = 4;
+  }
 }
 
 message ResponseEnvelop {
@@ -78,17 +50,23 @@ message ResponseEnvelop {
   optional int64 unknown2 = 2;
   optional string api_url = 3;
   optional Unknown6 unknown6 = 6;
-  optional UnknownAuth unknown7 = 7;
+  optional Unknown7 unknown7 = 7;
   repeated bytes payload = 100;
 
   message Unknown6 {
-    optional int32 unknown1 = 1;
+    required int32 unknown1 = 1;
     required Unknown2 unknown2 = 2;
 
     message Unknown2 {
       required bytes unknown1 = 1;
     }
 
+  }
+
+  message Unknown7 {
+    optional bytes unknown71 = 1;
+    optional int64 unknown72 = 2;
+    optional bytes unknown73 = 3;
   }
 
   message HeartbeatPayload {
@@ -123,11 +101,11 @@ message ResponseEnvelop {
 
   message MapPokemonProto {
     required string SpawnpointId = 1;
-    required uint64 EncounterId = 2;
+    required fixed64 EncounterId = 2;
     required int32 PokedexTypeId = 3;
     required int64 ExpirationTimeMs = 4;
-    required double Latitude = 5;
-    required double Longitude = 6;
+    optional double Latitude = 5;
+    optional double Longitude = 6;
   }
 
   message PokemonFortProto {
@@ -135,19 +113,19 @@ message ResponseEnvelop {
     required int64 LastModifiedMs = 2;
     required double Latitude = 3;
     required double Longitude = 4;
-    required int32 Team = 5;
-    required int32 GuardPokemonId = 6;
-    required int32 GuardPokemonLevel = 7;
+    optional int32 Team = 5;
+    optional int32 GuardPokemonId = 6;
+    optional int32 GuardPokemonLevel = 7;
     required bool Enabled = 8;
     // ENUM.Holoholo.Rpc.FortType FortType = 9;
-    required int32 FortType = 9;
-    required int64 GymPoints = 10;
-    required bool IsInBattle = 11;
+    optional int32 FortType = 9;
+    optional int64 GymPoints = 10;
+    optional bool IsInBattle = 11;
     //unknown ActiveFortModifier = 12;
     optional MapPokemonProto ActivePokemon = 13;
-    required int64 CooldownCompleteMs = 14;
+    optional int64 CooldownCompleteMs = 14;
     // ENUM.Holoholo.Rpc.Sponsor.Types.FortSponsor.Sponsor Sponsor = 15;
-    required int32 Sponsor = 15;
+    optional int32 Sponsor = 15;
     // ENUM.Holoholo.Rpc.RenderingType.Types.FortRenderingType.RenderingType RenderingType = 16;
     optional int32 RenderingType = 16;
   }
@@ -165,7 +143,7 @@ message ResponseEnvelop {
   }
 
   message WildPokemonProto {
-    optional uint64 EncounterId = 1;
+    optional fixed64 EncounterId = 1;
     optional int64 LastModifiedMs = 2;
     optional double Latitude = 3;
     optional double Longitude = 4;
@@ -174,19 +152,19 @@ message ResponseEnvelop {
     optional int32 TimeTillHiddenMs = 11;
 
     message Pokemon {
-    	optional uint64 Id = 1;
-    	optional int32 PokemonId = 2;
+        optional uint64 Id = 1;
+        optional int32 PokemonId = 2;
     }
   }
 
   message NearbyPokemonProto {
     optional int32 PokedexNumber = 1;
     optional float DistanceMeters = 2;
-    optional uint64 EncounterId = 3;
+    optional fixed64 EncounterId = 3;
   }
 
   message ProfilePayload {
-    required int32 unknown1 = 1;
+    repeated int32 unknown1 = 1;
     optional Profile profile = 2;
   }
 
@@ -198,9 +176,9 @@ message ResponseEnvelop {
     optional AvatarDetails avatar = 8;
     optional int32 poke_storage = 9;
     optional int32 item_storage = 10;
-    optional string unknown11 = 11;
-    optional string unknown12 = 12;
-    optional string unknown13 = 13;
+    optional DailyBonus daily_bonus = 11;
+    optional bytes unknown12 = 12;
+    optional bytes unknown13 = 13;
     repeated Currency currency = 14;
 
     message AvatarDetails {
@@ -208,6 +186,11 @@ message ResponseEnvelop {
       optional int32 unknown3 = 3;
       optional int32 unknown9 = 9;
       optional int32 unknown10 = 10;
+    }
+
+    message DailyBonus {
+      optional int64 NextCollectTimestampMs = 1;
+      optional int64 NextDefenderBonusCollectTimestampMs = 2;
     }
 
     message Currency {

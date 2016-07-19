@@ -39,7 +39,7 @@ message RequestEnvelop {
 
   message MessageQuad {
     repeated bytes f1 = 1;
-    required string f2 = 2;
+    required bytes f2 = 2;
     required double lat = 3;
     required double long = 4;
   }

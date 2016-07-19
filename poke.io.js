@@ -29,6 +29,7 @@ function GetCoords(self) {
 	return [latitude, longitude];
 };
 
+const lowMask = bignum('ffffffff', 16);
 Long.fromBignum = function(b, signed) {
     return new Long(b.and(lowMask).toNumber(), b.shiftRight(32).and(lowMask).toNumber(), signed ? false : true);
 }
@@ -224,11 +225,11 @@ function Pokeio() {
 
     // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
     self.Heartbeat = function(callback) {
-		let {apiEndpoint, accessToken} = self.playerInfo;
+        let {apiEndpoint, accessToken} = self.playerInfo;
 
         let nullbytes = new Buffer(21);
-		nullbytes.fill(0);
-        let mquad = new RequestEnvelop.MessageQuad(0, nullbytes, ...GetCoords(self));
+        nullbytes.fill(0);
+        //let mquad = new RequestEnvelop.MessageQuad(0, nullbytes, ...GetCoords(self));
 
         // Generating walk data using s2 geometry
         var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude).sort((a, b) => {return a.cmp(b);});
@@ -247,14 +248,15 @@ function Pokeio() {
         });
 
         var req = [
-            new RequestEnvelop.Requests(106, walkData),
+            new RequestEnvelop.Requests(106, walkData.encode().toBuffer()),
             new RequestEnvelop.Requests(126),
-            new RequestEnvelop.Requests(4, Date.now()),
+            new RequestEnvelop.Requests(4, Date.now().toString()),
             new RequestEnvelop.Requests(129),
             new RequestEnvelop.Requests(5, '05daf51635c82611d1aac95c0b051d3ec088a930')
         ];
 
         api_req(apiEndpoint, accessToken, req, function(err, f_ret) {
+            console.log(f_ret);
             if(err) {
                 return callback(err);
             }

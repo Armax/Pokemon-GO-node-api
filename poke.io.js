@@ -1,24 +1,24 @@
 'use strict';
 
-var request = require('request');
-var geocoder = require('geocoder');
-var events = require('events');
-var ProtoBuf = require('protobufjs');
-var GoogleOAuth = require('gpsoauthnode');
+const request = require('request');
+const geocoder = require('geocoder');
+const events = require('events');
+const ProtoBuf = require('protobufjs');
+const GoogleOAuth = require('gpsoauthnode');
 
-var Logins = require('./logins');
+const Logins = require('./logins');
 
-var builder = ProtoBuf.loadProtoFile('pokemon.proto');
+let builder = ProtoBuf.loadProtoFile('pokemon.proto');
 if (builder === null) {
     builder = ProtoBuf.loadProtoFile('./node_modules/pokemon-go-node-api/pokemon.proto');
 }
 
-var pokemonProto = builder.build();
-var {RequestEnvelop, ResponseEnvelop} = pokemonProto;
+const pokemonProto = builder.build();
+const {RequestEnvelop, ResponseEnvelop} = pokemonProto;
 
-var EventEmitter = events.EventEmitter;
+const EventEmitter = events.EventEmitter;
 
-var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
+const api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
 
 function GetCoords(self) {
 	let {latitude, longitude} = self.playerInfo;

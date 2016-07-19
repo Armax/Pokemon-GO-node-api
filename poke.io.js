@@ -251,13 +251,8 @@ function Pokeio() {
     };
 
     self.GetLocationCoords = function() {
-        var coords = {
-            latitude: self.playerInfo.latitude,
-            longitude: self.playerInfo.longitude,
-            altitude: self.playerInfo.altitude,
-        };
-
-        return coords;
+		let {latitude, longitude, altitude} = self.playerInfo;
+		return {latitude, longitude, altitude};
     };
 
     self.SetLocation = function(location, callback) {

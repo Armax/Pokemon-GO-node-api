@@ -27,9 +27,10 @@ Accepts locations by name or coordinates
   * `location {Object}` location accepts a combination of type = 'name' & name or type = 'coords' & latitude, longitude, altitude
     * `type {String}` Must be one of ['name', 'coords']
     * `name {String}` Address for lookup using the google maps api.
-    * `latitude {Number}`
-    * `longitude {Number}`
-    * `altitude {Number}`
+    * `coords {Object}` 
+      * `latitude {Number}`
+      * `longitude {Number}`
+      * `altitude {Number}`
   * `provider {String}` Must be one of ['ptc', 'google']
   * `callback {Function(error)}`
     * `error {Error}`

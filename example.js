@@ -33,12 +33,14 @@ Pokeio.init(username, password, location, provider, function(err) {
         console.log('[i] Pokecoin: ' + poke);
         console.log('[i] Stardust: ' + profile.currency[1].amount);
 
-        Pokeio.Heartbeat(function(err, heartbeat) {
+
+        Pokeio.Heartbeat(function(err,hb) {
             if(err) {
                 console.log(err);
             }
 
-            console.log(heartbeat)
+            console.log(hb.cells[i].Fort)
+
         });
 
     });

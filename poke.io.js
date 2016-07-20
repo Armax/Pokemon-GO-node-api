@@ -9,7 +9,7 @@ const Long = require('long');
 const ByteBuffer = require('bytebuffer');
 const bignum = require('bignum');
 
-const s2 = require('./s2.js');
+const s2 = require('simple-s2-node');
 const Logins = require('./logins');
 
 let builder = ProtoBuf.loadProtoFile('pokemon.proto');
@@ -25,17 +25,12 @@ const EventEmitter = events.EventEmitter;
 const api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
 
 function GetCoords(self) {
-	let {latitude, longitude} = self.playerInfo;
-	return [latitude, longitude];
+    let {latitude, longitude} = self.playerInfo;
+    return [latitude, longitude];
 };
 
-const lowMask = bignum('ffffffff', 16);
-Long.fromBignum = function(b, signed) {
-    return new Long(b.and(lowMask).toNumber(), b.shiftRight(32).and(lowMask).toNumber(), signed ? false : true);
-}
-
 function getNeighbors(lat, lng) {
-    var origin = s2.CellId.from_lat_lng(s2.LatLng.from_degrees(lat, lng)).parent(15);
+    var origin = s2.S2CellId.from_lat_lng(s2.S2LatLng.from_degrees(lat, lng)).parent(15);
     var walk = [origin.id()];
     // 10 before and 10 after
     var next = origin.next();
@@ -54,7 +49,7 @@ function Pokeio() {
     var self = this;
     self.events = new EventEmitter();
     self.j = request.jar();
-    self.request = request.defaults({ jar: self.j });
+    self.request = request.defaults({jar: self.j});
 
     self.google = new GoogleOAuth();
 
@@ -69,7 +64,7 @@ function Pokeio() {
         apiEndpoint: ''
     };
 
-    self.DebugPrint = function(str) {
+    self.DebugPrint = function (str) {
         if (self.playerInfo.debug === true) {
             //self.events.emit('debug',str)
             console.log(str);
@@ -108,7 +103,7 @@ function Pokeio() {
             }
         };
 
-        self.request.post(options, function(err, response, body) {
+        self.request.post(options, function (err, response, body) {
             if (response === undefined || body === undefined) {
                 console.error('[!] RPC Server offline');
                 return callback(new Error('RPC Server offline'));
@@ -123,7 +118,7 @@ function Pokeio() {
                 }
             }
 
-            if(f_ret) {
+            if (f_ret) {
                 return callback(null, f_ret);
             }
             else {
@@ -133,24 +128,24 @@ function Pokeio() {
 
     }
 
-    self.init = function(username, password, location, provider, callback) {
+    self.init = function (username, password, location, provider, callback) {
         if (provider !== 'ptc' && provider !== 'google') {
             return callback(new Error('Invalid provider'));
         }
         // set provider
         self.playerInfo.provider = provider;
         // Updating location
-        self.SetLocation(location, function(err, loc) {
+        self.SetLocation(location, function (err, loc) {
             if (err) {
                 return callback(err);
             }
             // Getting access token
-            self.GetAccessToken(username, password, function(err, token) {
+            self.GetAccessToken(username, password, function (err, token) {
                 if (err) {
                     return callback(err);
                 }
                 // Getting api endpoint
-                self.GetApiEndpoint(function(err, api_endpoint) {
+                self.GetApiEndpoint(function (err, api_endpoint) {
                     if (err) {
                         return callback(err);
                     }
@@ -161,10 +156,10 @@ function Pokeio() {
 
     };
 
-    self.GetAccessToken = function(user, pass, callback) {
+    self.GetAccessToken = function (user, pass, callback) {
         self.DebugPrint('[i] Logging with user: ' + user);
         if (self.playerInfo.provider === 'ptc') {
-            Logins.PokemonClub(user, pass, self, function(err, token) {
+            Logins.PokemonClub(user, pass, self, function (err, token) {
                 if (err) {
                     return callback(err);
                 }
@@ -174,7 +169,7 @@ function Pokeio() {
                 callback(null, token);
             });
         } else {
-            Logins.GoogleAccount(user, pass, self, function(err, token) {
+            Logins.GoogleAccount(user, pass, self, function (err, token) {
                 if (err) {
                     return callback(err);
                 }
@@ -187,7 +182,7 @@ function Pokeio() {
     };
 
 
-    self.GetApiEndpoint = function(callback) {
+    self.GetApiEndpoint = function (callback) {
         var req = [
             new RequestEnvelop.Requests(2),
             new RequestEnvelop.Requests(126),
@@ -196,7 +191,7 @@ function Pokeio() {
             new RequestEnvelop.Requests(5)
         ];
 
-        api_req(api_url, self.playerInfo.accessToken, req, function(err, f_ret) {
+        api_req(api_url, self.playerInfo.accessToken, req, function (err, f_ret) {
             if (err) {
                 return callback(err);
             }
@@ -207,9 +202,9 @@ function Pokeio() {
         });
     };
 
-    self.GetProfile = function(callback) {
+    self.GetProfile = function (callback) {
         var req = new RequestEnvelop.Requests(2);
-        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(err, f_ret) {
+        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function (err, f_ret) {
             if (err) {
                 return callback(err);
             }
@@ -224,18 +219,19 @@ function Pokeio() {
     };
 
     // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
-    self.Heartbeat = function(callback) {
+    self.Heartbeat = function (callback) {
         let {apiEndpoint, accessToken} = self.playerInfo;
 
         let nullbytes = new Buffer(21);
         nullbytes.fill(0);
-        //let mquad = new RequestEnvelop.MessageQuad(0, nullbytes, ...GetCoords(self));
 
         // Generating walk data using s2 geometry
-        var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude).sort((a, b) => {return a.cmp(b);});
+        var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude).sort((a, b) => {
+            return a.cmp(b);
+        });
         var buffer = new ByteBuffer(21 * 10).LE();
         walk.forEach((elem) => {
-            buffer.writeVarint64(Long.fromBignum(elem));
+            buffer.writeVarint64(s2.S2Utils.long_from_bignum(elem));
         });
 
         // Creating MessageQuad for Requests type=106
@@ -255,8 +251,8 @@ function Pokeio() {
             new RequestEnvelop.Requests(5, (new RequestEnvelop.Unknown3('05daf51635c82611d1aac95c0b051d3ec088a930')).encode().toBuffer())
         ];
 
-        api_req(apiEndpoint, accessToken, req, function(err, f_ret) {
-            if(err) {
+        api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+            if (err) {
                 return callback(err);
             }
             else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
@@ -268,8 +264,8 @@ function Pokeio() {
         });
     };
 
-    self.GetLocation = function(callback) {
-		geocoder.reverseGeocode(...GetCoords(self), function(err, data) {
+    self.GetLocation = function (callback) {
+        geocoder.reverseGeocode(...GetCoords(self), function (err, data) {
             if (data.status === 'ZERO_RESULTS') {
                 return callback(new Error('location not found'));
             }
@@ -278,12 +274,12 @@ function Pokeio() {
         });
     };
 
-	self.GetLocationCoords = function() {
+    self.GetLocationCoords = function () {
         let {latitude, longitude, altitude} = self.playerInfo;
         return {latitude, longitude, altitude};
     };
 
-    self.SetLocation = function(location, callback) {
+    self.SetLocation = function (location, callback) {
         if (location.type !== 'name' && location.type !== 'coords') {
             return callback(new Error('Invalid location type'));
         }
@@ -293,14 +289,14 @@ function Pokeio() {
                 return callback(new Error('You should add a location name'));
             }
             var locationName = location.name;
-            geocoder.geocode(locationName, function(err, data) {
+            geocoder.geocode(locationName, function (err, data) {
                 if (err || data.status === 'ZERO_RESULTS') {
                     return callback(new Error('location not found'));
                 }
 
-				let {lat, lng} = data.results[0].geometry.location;
+                let {lat, lng} = data.results[0].geometry.location;
 
-				self.playerInfo.latitude = lat;
+                self.playerInfo.latitude = lat;
                 self.playerInfo.longitude = lng;
                 self.playerInfo.locationName = locationName;
 
@@ -315,7 +311,7 @@ function Pokeio() {
             self.playerInfo.longitude = location.coords.longitude || self.playerInfo.longitude;
             self.playerInfo.altitude = location.coords.altitude || self.playerInfo.altitude;
 
-            geocoder.reverseGeocode(...GetCoords(self), function(err, data) {
+            geocoder.reverseGeocode(...GetCoords(self), function (err, data) {
                 if (data.status !== 'ZERO_RESULTS') {
                     self.playerInfo.locationName = data.results[0].formatted_address;
                 }

@@ -121,13 +121,22 @@ message ResponseEnvelop {
     optional int32 FortType = 9;
     optional int64 GymPoints = 10;
     optional bool IsInBattle = 11;
-    //unknown ActiveFortModifier = 12;
-    optional MapPokemonProto ActivePokemon = 13;
+    optional bytes ActiveFortModifier = 12;
+    optional FortLureInfoProto LureInfo = 13;
     optional int64 CooldownCompleteMs = 14;
     // ENUM.Holoholo.Rpc.Sponsor.Types.FortSponsor.Sponsor Sponsor = 15;
     optional int32 Sponsor = 15;
     // ENUM.Holoholo.Rpc.RenderingType.Types.FortRenderingType.RenderingType RenderingType = 16;
     optional int32 RenderingType = 16;
+  }
+
+   //based on : https://github.com/AHAAAAAAA/PokemonGo-Map/blob/master/pokemon.proto
+  message FortLureInfoProto {
+    required string FortId = 1;
+    required double unknown2 = 2;
+    required int32 ActivePokemonId = 3;
+    required int64 LureExpiresTimestampMs = 4;
+    optional string DeployerPlayerCodename = 5;
   }
 
   message PokemonSummaryFortProto {

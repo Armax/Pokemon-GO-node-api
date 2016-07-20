@@ -12,6 +12,7 @@
     "gpsoauthnode": "^0.0.5",
     "istanbul": "^0.4.4",
     "protobufjs": "^5.0.1",
+    "simple-s2-node": "^0.0.2",
     "request": "^2.73.0",
     "tape": "^4.6.0"
   },

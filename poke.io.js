@@ -14,7 +14,7 @@ const Logins = require('./logins');
 
 let builder = ProtoBuf.loadProtoFile('pokemon.proto');
 if (builder === null) {
-    builder = ProtoBuf.loadProtoFile('./node_modules/pokemon-go-node-api/pokemon.proto');
+    builder = ProtoBuf.loadProtoFile(__dirname + '/pokemon.proto');
 }
 
 const pokemonProto = builder.build();

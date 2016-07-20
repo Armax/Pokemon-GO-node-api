@@ -206,6 +206,18 @@ function Pokeio() {
             return callback(null, api_endpoint);
         });
     };
+    
+    self.GetInventory = function(callback) {
+        var req = new RequestEnvelop.Requests(4);
+
+        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(err, f_ret){
+            if(err){
+                return callback(err);
+            }
+            var inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[0]);
+            return callback(null, inventory);
+        });
+    };
 
     self.GetProfile = function(callback) {
         var req = new RequestEnvelop.Requests(2);

@@ -182,10 +182,15 @@ message ResponseEnvelop {
     repeated Currency currency = 14;
 
     message AvatarDetails {
-      optional int32 unknown2 = 2;
-      optional int32 unknown3 = 3;
-      optional int32 unknown9 = 9;
-      optional int32 unknown10 = 10;
+        optional int32 skin = 2;
+        optional int32 hair = 3;
+        optional int32 tshirt = 4;
+        optional int32 trousers = 5;
+        optional int32 cap = 6;
+        optional int32 boots = 7;
+        optional int32 gender = 8;
+        optional int32 eyes = 9;
+        optional int32 backpack = 10;
     }
 
     message DailyBonus {

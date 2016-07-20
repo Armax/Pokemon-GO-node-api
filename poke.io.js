@@ -5,7 +5,7 @@ const geocoder = require('geocoder');
 const events = require('events');
 const ProtoBuf = require('protobufjs');
 const GoogleOAuth = require('gpsoauthnode');
-const Long = require('Long');
+const Long = require('long');
 const ByteBuffer = require('bytebuffer');
 const bignum = require('bignum');
 

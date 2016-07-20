@@ -250,13 +250,12 @@ function Pokeio() {
         var req = [
             new RequestEnvelop.Requests(106, walkData.encode().toBuffer()),
             new RequestEnvelop.Requests(126),
-            new RequestEnvelop.Requests(4, Date.now().toString()),
+            new RequestEnvelop.Requests(4, (new RequestEnvelop.Unknown3(Date.now().toString())).encode().toBuffer()),
             new RequestEnvelop.Requests(129),
-            new RequestEnvelop.Requests(5, '05daf51635c82611d1aac95c0b051d3ec088a930')
+            new RequestEnvelop.Requests(5, (new RequestEnvelop.Unknown3('05daf51635c82611d1aac95c0b051d3ec088a930')).encode().toBuffer())
         ];
 
         api_req(apiEndpoint, accessToken, req, function(err, f_ret) {
-            console.log(f_ret);
             if(err) {
                 return callback(err);
             }
@@ -264,9 +263,7 @@ function Pokeio() {
                 return callback('No result');
             }
 
-            console.log(f_ret);
             var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
-            console.log(heartbeat);
             callback(null, heartbeat)
         });
     };

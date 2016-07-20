@@ -45,36 +45,37 @@ function getNeighbors(lat, lng) {
     return walk;
 }
 
-function Pokeio() {
-    var self = this;
-    self.events = new EventEmitter();
-    self.j = request.jar();
-    self.request = request.defaults({jar: self.j});
+class Pokeio {
+    constructor(){
+		this.events = new EventEmitter();
 
-    self.google = new GoogleOAuth();
+		this.j = request.jar();
+		this.request = request.defaults({jar: this.j});
 
-    self.playerInfo = {
-        accessToken: '',
-        debug: true,
-        latitude: 0,
-        longitude: 0,
-        altitude: 0,
-        locationName: '',
-        provider: '',
-        apiEndpoint: ''
-    };
+		this.google = new GoogleOAuth();
 
-    self.DebugPrint = function (str) {
-        if (self.playerInfo.debug === true) {
-            //self.events.emit('debug',str)
+		this.playerInfo = {
+			accessToken: '',
+			debug: true,
+			latitude: 0,
+			longitude: 0,
+			altitude: 0,
+			locationName: '',
+			provider: '',
+			apiEndpoint: ''
+		};
+	}
+
+    DebugPrint(str) {
+        if (this.playerInfo.debug === true) {
             console.log(str);
         }
-    };
+    }
 
-    function api_req(api_endpoint, access_token, req, callback) {
+    api_req(api_endpoint, access_token, req, callback) {
         // Auth
         var auth = new RequestEnvelop.AuthInfo({
-            provider: self.playerInfo.provider,
+            provider: this.playerInfo.provider,
             token: new RequestEnvelop.AuthInfo.JWT(access_token, 59)
         });
 
@@ -84,9 +85,9 @@ function Pokeio() {
 
             requests: req,
 
-            latitude: self.playerInfo.latitude,
-            longitude: self.playerInfo.longitude,
-            altitude: self.playerInfo.altitude,
+            latitude: this.playerInfo.latitude,
+            longitude: this.playerInfo.longitude,
+            altitude: this.playerInfo.altitude,
 
             auth: auth,
             unknown12: 989
@@ -103,7 +104,7 @@ function Pokeio() {
             }
         };
 
-        self.request.post(options, function (err, response, body) {
+        this.request.post(options, (err, response, body) => {
             if (response === undefined || body === undefined) {
                 console.error('[!] RPC Server offline');
                 return callback(new Error('RPC Server offline'));
@@ -122,30 +123,30 @@ function Pokeio() {
                 return callback(null, f_ret);
             }
             else {
-                api_req(api_endpoint, access_token, req, callback)
+                this.api_req(api_endpoint, access_token, req, callback)
             }
         });
 
     }
 
-    self.init = function (username, password, location, provider, callback) {
+    init(username, password, location, provider, callback) {
         if (provider !== 'ptc' && provider !== 'google') {
             return callback(new Error('Invalid provider'));
         }
         // set provider
-        self.playerInfo.provider = provider;
+        this.playerInfo.provider = provider;
         // Updating location
-        self.SetLocation(location, function (err, loc) {
+        this.SetLocation(location, (err, loc) => {
             if (err) {
                 return callback(err);
             }
             // Getting access token
-            self.GetAccessToken(username, password, function (err, token) {
+            this.GetAccessToken(username, password, (err, token) => {
                 if (err) {
                     return callback(err);
                 }
                 // Getting api endpoint
-                self.GetApiEndpoint(function (err, api_endpoint) {
+                this.GetApiEndpoint((err, api_endpoint) => {
                     if (err) {
                         return callback(err);
                     }
@@ -153,36 +154,34 @@ function Pokeio() {
                 });
             });
         });
+    }
 
-    };
-
-    self.GetAccessToken = function (user, pass, callback) {
-        self.DebugPrint('[i] Logging with user: ' + user);
-        if (self.playerInfo.provider === 'ptc') {
-            Logins.PokemonClub(user, pass, self, function (err, token) {
+    GetAccessToken(user, pass, callback) {
+        this.DebugPrint('[i] Logging with user: ' + user);
+        if (this.playerInfo.provider === 'ptc') {
+            Logins.PokemonClub(user, pass, this, (err, token) => {
                 if (err) {
                     return callback(err);
                 }
 
-                self.playerInfo.accessToken = token;
-                self.DebugPrint('[i] Received PTC access token!')
+                this.playerInfo.accessToken = token;
+                this.DebugPrint('[i] Received PTC access token!')
                 callback(null, token);
             });
         } else {
-            Logins.GoogleAccount(user, pass, self, function (err, token) {
+            Logins.GoogleAccount(user, pass, this, (err, token) => {
                 if (err) {
                     return callback(err);
                 }
 
-                self.playerInfo.accessToken = token;
-                self.DebugPrint('[i] Received Google access token!')
+                this.playerInfo.accessToken = token;
+                this.DebugPrint('[i] Received Google access token!')
                 callback(null, token);
             });
         }
-    };
+    }
 
-
-    self.GetApiEndpoint = function (callback) {
+    GetApiEndpoint(callback) {
         var req = [
             new RequestEnvelop.Requests(2),
             new RequestEnvelop.Requests(126),
@@ -191,32 +190,32 @@ function Pokeio() {
             new RequestEnvelop.Requests(5)
         ];
 
-        api_req(api_url, self.playerInfo.accessToken, req, function (err, f_ret) {
+        this.api_req(api_url, this.playerInfo.accessToken, req, (err, f_ret) => {
             if (err) {
                 return callback(err);
             }
             var api_endpoint = `https://${f_ret.api_url}/rpc`;
-            self.playerInfo.apiEndpoint = api_endpoint;
-            self.DebugPrint('[i] Received API Endpoint: ' + api_endpoint);
+            this.playerInfo.apiEndpoint = api_endpoint;
+            this.DebugPrint('[i] Received API Endpoint: ' + api_endpoint);
             return callback(null, api_endpoint);
         });
-    };
-    
-    self.GetInventory = function(callback) {
+    }
+
+    GetInventory(callback) {
         var req = new RequestEnvelop.Requests(4);
 
-        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(err, f_ret){
+        this.api_req(this.playerInfo.apiEndpoint, this.playerInfo.accessToken, req, (err, f_ret) => {
             if(err){
                 return callback(err);
             }
             var inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[0]);
             return callback(null, inventory);
         });
-    };
+    }
 
-    self.GetProfile = function (callback) {
+    GetProfile(callback) {
         var req = new RequestEnvelop.Requests(2);
-        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function (err, f_ret) {
+        this.api_req(this.playerInfo.apiEndpoint, this.playerInfo.accessToken, req, (err, f_ret) => {
             if (err) {
                 return callback(err);
             }
@@ -224,21 +223,21 @@ function Pokeio() {
             var profile = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile
 
             if (profile.username) {
-                self.DebugPrint('[i] Logged in!');
+                this.DebugPrint('[i] Logged in!');
             }
             callback(null, profile);
         });
-    };
+    }
 
     // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
-    self.Heartbeat = function (callback) {
-        let {apiEndpoint, accessToken} = self.playerInfo;
+    Heartbeat(callback) {
+        let {apiEndpoint, accessToken} = this.playerInfo;
 
         let nullbytes = new Buffer(21);
         nullbytes.fill(0);
 
         // Generating walk data using s2 geometry
-        var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude).sort((a, b) => {
+        var walk = getNeighbors(this.playerInfo.latitude, this.playerInfo.longitude).sort((a, b) => {
             return a.cmp(b);
         });
         var buffer = new ByteBuffer(21 * 10).LE();
@@ -249,10 +248,10 @@ function Pokeio() {
         // Creating MessageQuad for Requests type=106
         buffer.flip();
         var walkData = new RequestEnvelop.MessageQuad({
-            'f1': buffer.toBuffer(),
-            'f2': nullbytes,
-            'lat': self.playerInfo.latitude,
-            'long': self.playerInfo.longitude
+            f1: buffer.toBuffer(),
+            f2: nullbytes,
+            lat: this.playerInfo.latitude,
+            long: this.playerInfo.longitude
         });
 
         var req = [
@@ -263,7 +262,7 @@ function Pokeio() {
             new RequestEnvelop.Requests(5, (new RequestEnvelop.Unknown3('05daf51635c82611d1aac95c0b051d3ec088a930')).encode().toBuffer())
         ];
 
-        api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+        this.api_req(apiEndpoint, accessToken, req, (err, f_ret) => {
             if (err) {
                 return callback(err);
             }
@@ -274,24 +273,24 @@ function Pokeio() {
             var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
             callback(null, heartbeat)
         });
-    };
+    }
 
-    self.GetLocation = function (callback) {
-        geocoder.reverseGeocode(...GetCoords(self), function (err, data) {
+    GetLocation(callback) {
+        geocoder.reverseGeocode(...GetCoords(this), (err, data) => {
             if (data.status === 'ZERO_RESULTS') {
                 return callback(new Error('location not found'));
             }
 
             callback(null, data.results[0].formatted_address);
         });
-    };
+    }
 
-    self.GetLocationCoords = function () {
-        let {latitude, longitude, altitude} = self.playerInfo;
+    GetLocationCoords() {
+        let {latitude, longitude, altitude} = this.playerInfo;
         return {latitude, longitude, altitude};
-    };
+    }
 
-    self.SetLocation = function (location, callback) {
+    SetLocation(location, callback) {
         if (location.type !== 'name' && location.type !== 'coords') {
             return callback(new Error('Invalid location type'));
         }
@@ -301,37 +300,37 @@ function Pokeio() {
                 return callback(new Error('You should add a location name'));
             }
             var locationName = location.name;
-            geocoder.geocode(locationName, function (err, data) {
+            geocoder.geocode(locationName, (err, data) => {
                 if (err || data.status === 'ZERO_RESULTS') {
                     return callback(new Error('location not found'));
                 }
 
                 let {lat, lng} = data.results[0].geometry.location;
 
-                self.playerInfo.latitude = lat;
-                self.playerInfo.longitude = lng;
-                self.playerInfo.locationName = locationName;
+                this.playerInfo.latitude = lat;
+                this.playerInfo.longitude = lng;
+                this.playerInfo.locationName = locationName;
 
-                callback(null, self.GetLocationCoords());
+                callback(null, this.GetLocationCoords());
             });
         } else if (location.type === 'coords') {
             if (!location.coords) {
                 return callback(new Error('Coords object missing'));
             }
 
-            self.playerInfo.latitude = location.coords.latitude || self.playerInfo.latitude;
-            self.playerInfo.longitude = location.coords.longitude || self.playerInfo.longitude;
-            self.playerInfo.altitude = location.coords.altitude || self.playerInfo.altitude;
+            this.playerInfo.latitude = location.coords.latitude || this.playerInfo.latitude;
+            this.playerInfo.longitude = location.coords.longitude || this.playerInfo.longitude;
+            this.playerInfo.altitude = location.coords.altitude || this.playerInfo.altitude;
 
-            geocoder.reverseGeocode(...GetCoords(self), function (err, data) {
+            geocoder.reverseGeocode(...GetCoords(this), (err, data) => {
                 if (data.status !== 'ZERO_RESULTS') {
-                    self.playerInfo.locationName = data.results[0].formatted_address;
+                    this.playerInfo.locationName = data.results[0].formatted_address;
                 }
 
-                callback(null, self.GetLocationCoords());
+                callback(null, this.GetLocationCoords());
             });
         }
-    };
+    }
 }
 
 module.exports = new Pokeio();

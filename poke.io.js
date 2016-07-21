@@ -16,7 +16,11 @@ if (builder === null) {
 }
 
 const pokemonProto = builder.build();
-const {RequestEnvelop, ResponseEnvelop} = pokemonProto;
+
+const RequestEnvelop = pokemonProto.RequestEnvelop;
+const ResponseEnvelop = pokemonProto.ResponseEnvelop;
+const fs = require('fs');
+var pokemonlist = JSON.parse(fs.readFileSync(__dirname + '/pokemons.json', 'utf8'));
 
 const EventEmitter = events.EventEmitter;
 
@@ -50,6 +54,8 @@ function Pokeio() {
     self.request = request.defaults({jar: self.j});
 
     self.google = new GoogleOAuth();
+
+    self.pokemonlist = pokemonlist.pokemon;
 
     self.playerInfo = {
         accessToken: '',
@@ -337,7 +343,7 @@ function Pokeio() {
         });
 
     }
-    
+
     self.GetLocationCoords = function () {
         let {latitude, longitude, altitude} = self.playerInfo;
         return {latitude, longitude, altitude};

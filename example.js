@@ -40,8 +40,11 @@ Pokeio.init(username, password, location, provider, function(err) {
             }
 
             for (var i = hb.cells.length - 1; i >= 0; i--) {
-                var current = hb.cells[i].Fort;
-                console.log(current);
+                if(hb.cells[i].NearbyPokemon[0]) {
+                    //console.log(Pokeio.pokemonlist[0])
+                    var pokemon = Pokeio.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1]
+                    console.log('[+] There is a ' + pokemon.name + ' at ' + hb.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters')
+                }
             }
 
         });

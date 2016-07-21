@@ -1,35 +1,40 @@
 'use strict';
 
-const request = require('request');
-const geocoder = require('geocoder');
-const events = require('events');
-const ProtoBuf = require('protobufjs');
-const GoogleOAuth = require('gpsoauthnode');
-const ByteBuffer = require('bytebuffer');
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-const s2 = require('s2geometry-node');
-const Logins = require('./logins');
+var request = require('request');
+var geocoder = require('geocoder');
+var events = require('events');
+var ProtoBuf = require('protobufjs');
+var GoogleOAuth = require('gpsoauthnode');
+var ByteBuffer = require('bytebuffer');
+var fs = require('fs');
+var s2 = require('s2geometry-node');
 
-let builder = ProtoBuf.loadProtoFile('pokemon.proto');
+var Logins = require('./logins');
+
+var builder = ProtoBuf.loadProtoFile('pokemon.proto');
 if (builder === null) {
     builder = ProtoBuf.loadProtoFile(__dirname + '/pokemon.proto');
 }
 
-const pokemonProto = builder.build();
+var pokemonProto = builder.build();
 
-const RequestEnvelop = pokemonProto.RequestEnvelop;
-const ResponseEnvelop = pokemonProto.ResponseEnvelop;
-const fs = require('fs');
+var RequestEnvelop = pokemonProto.RequestEnvelop;
+var ResponseEnvelop = pokemonProto.ResponseEnvelop;
 var pokemonlist = JSON.parse(fs.readFileSync(__dirname + '/pokemons.json', 'utf8'));
 
-const EventEmitter = events.EventEmitter;
+var EventEmitter = events.EventEmitter;
 
-const api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
+var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
 
 function GetCoords(self) {
-    let {latitude, longitude} = self.playerInfo;
+    var _self$playerInfo = self.playerInfo;
+    var latitude = _self$playerInfo.latitude;
+    var longitude = _self$playerInfo.longitude;
+
     return [latitude, longitude];
-};
+}
 
 function getNeighbors(lat, lng) {
     var origin = new s2.S2CellId(new s2.S2LatLng(lat, lng)).parent(15);
@@ -51,7 +56,7 @@ function Pokeio() {
     var self = this;
     self.events = new EventEmitter();
     self.j = request.jar();
-    self.request = request.defaults({jar: self.j});
+    self.request = request.defaults({ jar: self.j });
 
     self.google = new GoogleOAuth();
 
@@ -116,7 +121,8 @@ function Pokeio() {
             try {
                 var f_ret = ResponseEnvelop.decode(body);
             } catch (e) {
-                if (e.decoded) { // Truncated
+                if (e.decoded) {
+                    // Truncated
                     console.warn(e);
                     f_ret = e.decoded; // Decoded message with missing required fields
                 }
@@ -124,12 +130,10 @@ function Pokeio() {
 
             if (f_ret) {
                 return callback(null, f_ret);
-            }
-            else {
-                api_req(api_endpoint, access_token, req, callback)
+            } else {
+                api_req(api_endpoint, access_token, req, callback);
             }
         });
-
     }
 
     self.init = function (username, password, location, provider, callback) {
@@ -157,7 +161,6 @@ function Pokeio() {
                 });
             });
         });
-
     };
 
     self.GetAccessToken = function (user, pass, callback) {
@@ -169,7 +172,7 @@ function Pokeio() {
                 }
 
                 self.playerInfo.accessToken = token;
-                self.DebugPrint('[i] Received PTC access token!')
+                self.DebugPrint('[i] Received PTC access token!');
                 callback(null, token);
             });
         } else {
@@ -179,38 +182,31 @@ function Pokeio() {
                 }
 
                 self.playerInfo.accessToken = token;
-                self.DebugPrint('[i] Received Google access token!')
+                self.DebugPrint('[i] Received Google access token!');
                 callback(null, token);
             });
         }
     };
 
-
     self.GetApiEndpoint = function (callback) {
-        var req = [
-            new RequestEnvelop.Requests(2),
-            new RequestEnvelop.Requests(126),
-            new RequestEnvelop.Requests(4),
-            new RequestEnvelop.Requests(129),
-            new RequestEnvelop.Requests(5)
-        ];
+        var req = [new RequestEnvelop.Requests(2), new RequestEnvelop.Requests(126), new RequestEnvelop.Requests(4), new RequestEnvelop.Requests(129), new RequestEnvelop.Requests(5)];
 
         api_req(api_url, self.playerInfo.accessToken, req, function (err, f_ret) {
             if (err) {
                 return callback(err);
             }
-            var api_endpoint = `https://${f_ret.api_url}/rpc`;
+            var api_endpoint = 'https://' + f_ret.api_url + '/rpc';
             self.playerInfo.apiEndpoint = api_endpoint;
             self.DebugPrint('[i] Received API Endpoint: ' + api_endpoint);
             return callback(null, api_endpoint);
         });
     };
 
-    self.GetInventory = function(callback) {
+    self.GetInventory = function (callback) {
         var req = new RequestEnvelop.Requests(4);
 
-        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function(err, f_ret){
-            if(err){
+        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function (err, f_ret) {
+            if (err) {
                 return callback(err);
             }
             var inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[0]);
@@ -225,7 +221,7 @@ function Pokeio() {
                 return callback(err);
             }
 
-            var profile = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile
+            var profile = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile;
 
             if (profile.username) {
                 self.DebugPrint('[i] Logged in!');
@@ -236,17 +232,20 @@ function Pokeio() {
 
     // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
     self.Heartbeat = function (callback) {
-        let {apiEndpoint, accessToken} = self.playerInfo;
+        var _self$playerInfo2 = self.playerInfo;
+        var apiEndpoint = _self$playerInfo2.apiEndpoint;
+        var accessToken = _self$playerInfo2.accessToken;
 
-        let nullbytes = new Buffer(21);
+
+        var nullbytes = new Buffer(21);
         nullbytes.fill(0);
 
         // Generating walk data using s2 geometry
-        var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude).sort((a, b) => {
+        var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude).sort(function (a, b) {
             return a > b;
         });
         var buffer = new ByteBuffer(21 * 10).LE();
-        walk.forEach((elem) => {
+        walk.forEach(function (elem) {
             buffer.writeVarint64(elem);
         });
 
@@ -259,40 +258,36 @@ function Pokeio() {
             'long': self.playerInfo.longitude
         });
 
-        var req = [
-            new RequestEnvelop.Requests(106, walkData.encode().toBuffer()),
-            new RequestEnvelop.Requests(126),
-            new RequestEnvelop.Requests(4, (new RequestEnvelop.Unknown3(Date.now().toString())).encode().toBuffer()),
-            new RequestEnvelop.Requests(129),
-            new RequestEnvelop.Requests(5, (new RequestEnvelop.Unknown3('05daf51635c82611d1aac95c0b051d3ec088a930')).encode().toBuffer())
-        ];
+        var req = [new RequestEnvelop.Requests(106, walkData.encode().toBuffer()), new RequestEnvelop.Requests(126), new RequestEnvelop.Requests(4, new RequestEnvelop.Unknown3(Date.now().toString()).encode().toBuffer()), new RequestEnvelop.Requests(129), new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3('05daf51635c82611d1aac95c0b051d3ec088a930').encode().toBuffer())];
 
         api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
             if (err) {
                 return callback(err);
-            }
-            else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+            } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
                 return callback('No result');
             }
 
             var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
-            callback(null, heartbeat)
+            callback(null, heartbeat);
         });
     };
 
     self.GetLocation = function (callback) {
-        geocoder.reverseGeocode(...GetCoords(self), function (err, data) {
+        geocoder.reverseGeocode.apply(geocoder, _toConsumableArray(GetCoords(self)).concat([function (err, data) {
             if (data.status === 'ZERO_RESULTS') {
                 return callback(new Error('location not found'));
             }
 
             callback(null, data.results[0].formatted_address);
-        });
+        }]));
     };
 
     //still WIP
     self.CatchPokemon = function (mapPokemon, normalizedHitPosition, normalizedReticleSize, spinModifier, pokeball, callback) {
-        let {apiEndpoint, accessToken} = self.playerInfo;
+        var _self$playerInfo3 = self.playerInfo;
+        var apiEndpoint = _self$playerInfo3.apiEndpoint;
+        var accessToken = _self$playerInfo3.accessToken;
+
         var catchPokemon = new RequestEnvelop.CatchPokemonMessage({
             'encounter_id': mapPokemon.EncounterId,
             'pokeball': pokeball,
@@ -308,19 +303,22 @@ function Pokeio() {
         api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
             if (err) {
                 return callback(err);
-            }
-            else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+            } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
                 return callback('No result');
             }
 
             var catchPokemonResponse = ResponseEnvelop.CatchPokemonResponse.decode(f_ret.payload[0]);
-            callback(null, catchPokemonResponse)
+            callback(null, catchPokemonResponse);
         });
-
-    }
+    };
 
     self.EncounterPokemon = function (catchablePokemon, callback) {
-        let {apiEndpoint, accessToken, latitude, longitude} = self.playerInfo;
+        var _self$playerInfo4 = self.playerInfo;
+        var apiEndpoint = _self$playerInfo4.apiEndpoint;
+        var accessToken = _self$playerInfo4.accessToken;
+        var latitude = _self$playerInfo4.latitude;
+        var longitude = _self$playerInfo4.longitude;
+
         var encounterPokemon = new RequestEnvelop.EncounterMessage({
             'encounter_id': catchablePokemon.EncounterId,
             'spawnpoint_id': catchablePokemon.SpawnPointId,
@@ -333,20 +331,22 @@ function Pokeio() {
         api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
             if (err) {
                 return callback(err);
-            }
-            else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+            } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
                 return callback('No result');
             }
 
             var catchPokemonResponse = ResponseEnvelop.EncounterResponse.decode(f_ret.payload[0]);
-            callback(null, catchPokemonResponse)
+            callback(null, catchPokemonResponse);
         });
-
-    }
+    };
 
     self.GetLocationCoords = function () {
-        let {latitude, longitude, altitude} = self.playerInfo;
-        return {latitude, longitude, altitude};
+        var _self$playerInfo5 = self.playerInfo;
+        var latitude = _self$playerInfo5.latitude;
+        var longitude = _self$playerInfo5.longitude;
+        var altitude = _self$playerInfo5.altitude;
+
+        return { latitude: latitude, longitude: longitude, altitude: altitude };
     };
 
     self.SetLocation = function (location, callback) {
@@ -364,7 +364,10 @@ function Pokeio() {
                     return callback(new Error('location not found'));
                 }
 
-                let {lat, lng} = data.results[0].geometry.location;
+                var _data$results$0$geome = data.results[0].geometry.location;
+                var lat = _data$results$0$geome.lat;
+                var lng = _data$results$0$geome.lng;
+
 
                 self.playerInfo.latitude = lat;
                 self.playerInfo.longitude = lng;
@@ -381,13 +384,13 @@ function Pokeio() {
             self.playerInfo.longitude = location.coords.longitude || self.playerInfo.longitude;
             self.playerInfo.altitude = location.coords.altitude || self.playerInfo.altitude;
 
-            geocoder.reverseGeocode(...GetCoords(self), function (err, data) {
+            geocoder.reverseGeocode.apply(geocoder, _toConsumableArray(GetCoords(self)).concat([function (err, data) {
                 if (data.status !== 'ZERO_RESULTS') {
                     self.playerInfo.locationName = data.results[0].formatted_address;
                 }
 
                 callback(null, self.GetLocationCoords());
-            });
+            }]));
         }
     };
 }

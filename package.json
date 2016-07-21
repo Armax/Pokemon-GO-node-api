@@ -6,7 +6,6 @@
   "license": "MIT",
   "main": "poke.io.js",
   "dependencies": {
-    "bignum": "^0.12.5",
     "events": "^1.1.1",
     "geocoder": "^0.2.2",
     "gpsoauthnode": "^0.0.5",
@@ -14,9 +13,9 @@
     "protobufjs": "^5.0.1",
     "request": "^2.73.0",
     "s2geometry-node": "^1.1.0",
-    "tape": "^4.6.0"
+    "tape": "^4.6.0",
+    "bytebuffer": "latest"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "istanbul cover node_modules/tape/bin/tape tests/**/*.js"
   },

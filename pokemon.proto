@@ -87,18 +87,6 @@ message ResponseEnvelop {
     repeated NearbyPokemonProto NearbyPokemon = 11;
   }
 
-
-  message WildPokemon {
-    required string UniqueId = 1;
-    required string PokemonId = 2;
-    // int64 three = 3;
-    // float four = 4;
-    // int32 five = 5;
-    // unknown six = 6;
-    repeated NearbyPokemonProto pokemon = 11;
-  }
-
-
   message MapPokemonProto {
     required string SpawnpointId = 1;
     required fixed64 EncounterId = 2;
@@ -212,25 +200,25 @@ message ResponseEnvelop {
       optional int32 amount = 2;
     }
   }
-  
+
   message GetInventoryResponse {
       optional bool success = 1;
       optional InventoryDelta inventory_delta = 2;
-      
+
   }
-  
+
   message InventoryDelta {
       optional int64 original_timestamp_ms = 1;
       optional int64 new_timestamp_ms = 2;
       repeated InventoryItem inventory_items = 3;
   }
-  
+
   message InventoryItem {
       optional int64 modified_timestamp_ms = 1;
       optional int64 deleted_item_key = 2;
       optional InventoryItemData inventory_item_data = 3;
   }
-  
+
   message InventoryItemData {
       optional PokemonData pokemon = 1;
       optional Item item = 2;
@@ -243,7 +231,7 @@ message ResponseEnvelop {
       optional EggIncubators egg_incubators = 9;
       optional PokemonFamily pokemon_family = 10;
   }
-  
+
   message PokemonData {
       optional fixed64 id = 1;
       optional PokemonId pokemon_id = 2;
@@ -276,7 +264,7 @@ message ResponseEnvelop {
       optional string nickname = 30;
       optional int32 from_fort = 31;
   }
-  
+
   message Pokemon {
       optional int32 id = 1;
       optional PokemonId pokemon_type = 2;
@@ -308,9 +296,9 @@ message ResponseEnvelop {
       optional int32 favorite = 29;
       optional string nickname = 30;
       optional int32 from_fort = 31;
-      
+
   }
-  
+
   enum  PokemonMove {
       MOVE_UNSET = 0;
       THUNDER_SHOCK = 1;
@@ -493,7 +481,7 @@ message ResponseEnvelop {
       FIRE_FANG_FAST = 240;
       ROCK_SMASH_FAST = 241;
   }
-  
+
   enum PokemonId {
       MISSINGNO = 0;
       BULBASAUR = 1;
@@ -648,13 +636,13 @@ message ResponseEnvelop {
       MEWTWO = 150;
       MEW = 151;
   }
-  
+
   message Item {
       optional ItemType item = 1;
       optional int32 count = 2;
       optional bool unseen = 3;
   }
-  
+
   enum ItemType {
       ITEM_TYPE_NONE = 0;
       ITEM_TYPE_POKEBALL = 1;
@@ -670,7 +658,7 @@ message ResponseEnvelop {
       ITEM_TYPE_XP_BOOST = 11;
       ITEM_TYPE_INVENTORY_UPGRADE = 12;
   }
-  
+
   message PokedexEntry {
       optional int32 pokedex_entry_number = 1;
       optional int32 times_encountered = 2;
@@ -678,7 +666,7 @@ message ResponseEnvelop {
       optional int32 evolution_stone_pieces = 4;
       optional int32 evolution_stones = 5;
   }
-  
+
   message PlayerStats {
       optional int32 level = 1;
       optional int64 experience = 2;
@@ -704,7 +692,7 @@ message ResponseEnvelop {
       optional bytes pokemon_caught_by_type = 22; // TODO: repeated PokemonType ??
       optional int32 small_rattata_caught = 23;
   }
-  
+
   message PlayerCurrency {
       optional int32 gems = 1;
   }
@@ -879,5 +867,87 @@ message ResponseEnvelop {
       FAMILY_MEWTWO = 150;
       FAMILY_MEW = 151;
   }
-  
+
+  enum FortType {
+      GYM = 0;
+      CHECKPOINT = 1;
+  }
+
+  message CatchPokemonResponse {
+      optional CatchStatus Status = 1;
+      optional double MissPercent = 2;
+        // optional uint64 CapturedPokemonId = 3;
+      optional CaptureAward CaptureAward = 4;
+
+      enum CatchStatus {
+          CATCH_ERROR = 0;
+          CATCH_SUCCESS = 1;
+          CATCH_ESCAPE = 2;
+          CATCH_FLEE = 3;
+          CATCH_MISSED = 4;
+      }
+  }
+
+  enum ActivityType {
+      ACTIVITY_UNKNOWN = 0;
+      ACTIVITY_CATCH_POKEMON = 1;
+      ACTIVITY_CATCH_LEGEND_POKEMON = 2;
+      ACTIVITY_FLEE_POKEMON = 3;
+      ACTIVITY_DEFEAT_FORT = 4;
+      ACTIVITY_EVOLVE_POKEMON = 5;
+      ACTIVITY_HATCH_EGG = 6;
+      ACTIVITY_WALK_KM = 7;
+      ACTIVITY_POKEDEX_ENTRY_NEW = 8;
+      ACTIVITY_CATCH_FIRST_THROW = 9;
+      ACTIVITY_CATCH_NICE_THROW = 10;
+      ACTIVITY_CATCH_GREAT_THROW = 11;
+      ACTIVITY_CATCH_EXCELLENT_THROW = 12;
+      ACTIVITY_CATCH_CURVEBALL = 13;
+      ACTIVITY_CATCH_FIRST_CATCH_OF_DAY = 14;
+      ACTIVITY_CATCH_MILESTONE = 15;
+      ACTIVITY_TRAIN_POKEMON = 16;
+      ACTIVITY_SEARCH_FORT = 17;
+      ACTIVITY_RELEASE_POKEMON = 18;
+      ACTIVITY_HATCH_EGG_SMALL_BONUS = 19;
+      ACTIVITY_HATCH_EGG_MEDIUM_BONUS = 20;
+      ACTIVITY_HATCH_EGG_LARGE_BONUS = 21;
+      ACTIVITY_DEFEAT_GYM_DEFENDER = 22;
+      ACTIVITY_DEFEAT_GYM_LEADER = 23;
+  }
+
+  message CaptureAward {
+      repeated ActivityType ActivityType = 1;
+      repeated int32 XP = 2;
+      repeated int32 Candy = 3;
+      repeated int32 Stardust = 4;
+  }
+
+  message CaptureProbability {
+      repeated ItemId PokeballType = 1;
+      repeated float CaptureProbability = 2;
+      optional float ReticleDifficultySize = 12;
+  }
+
+  message EncounterResponse {
+      optional WildPokemonProto WildPokemon = 1;
+      optional Background EncounterBackground = 2;
+      optional Status EncounterStatus = 3;
+      //optional CaptureProbability EncounterCaptureProbability = 4;
+
+      enum Background {
+          PARK = 0;
+          DESERT = 1;
+      }
+
+      enum Status {
+          ENCOUNTER_ERROR = 0;
+          ENCOUNTER_SUCCESS = 1;
+          ENCOUNTER_NOT_FOUND = 2;
+          ENCOUNTER_CLOSED = 3;
+          ENCOUNTER_POKEMON_FLED = 4;
+          ENCOUNTER_NOT_IN_RANGE = 5;
+          ENCOUNTER_ALREADY_HAPPENED = 6;
+          POKEMON_INVENTORY_FULL = 7;
+      }
+  }
 }

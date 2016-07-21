@@ -39,7 +39,10 @@ Pokeio.init(username, password, location, provider, function(err) {
                 console.log(err);
             }
 
-            console.log(hb.cells[i].Fort)
+            for (var i = hb.cells.length - 1; i >= 0; i--) {
+                var current = hb.cells[i].Fort;
+                console.log(current);
+            }
 
         });
 

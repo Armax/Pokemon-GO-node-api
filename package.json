@@ -1,6 +1,6 @@
 {
   "name": "pokemon-go-node-api",
-  "version": "1.2.5",
+  "version": "1.2.8",
   "description": "Pokemon GO node.js module",
   "author": "Arm4x",
   "license": "MIT",
@@ -12,8 +12,8 @@
     "gpsoauthnode": "^0.0.5",
     "istanbul": "^0.4.4",
     "protobufjs": "^5.0.1",
-    "simple-s2-node": "^0.0.2",
     "request": "^2.73.0",
+    "s2geometry-node": "^1.1.0",
     "tape": "^4.6.0"
   },
   "devDependencies": {},

@@ -1,6 +1,6 @@
 # Poke.io
 Pokemon GO api node.js library, still WIP<br>
-Check main.js for examples
+Check 'example.js' for examples
 
 ## Installation & Usage:
 ```

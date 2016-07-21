@@ -12,7 +12,7 @@ var Pokeio = require('pokemon-go-node-api')
 Check [example.js](./example.js) for the result showed in the demo or check the documentation below.
 
 ## Demo:
-![alt tag](http://cl.arm4x.net/poke2.png)
+![alt tag](http://cl.arm4x.net/poke3.png)
 
 ## Documentation:
 
@@ -27,7 +27,7 @@ Accepts locations by name or coordinates
   * `location {Object}` location accepts a combination of type = 'name' & name or type = 'coords' & latitude, longitude, altitude
     * `type {String}` Must be one of ['name', 'coords']
     * `name {String}` Address for lookup using the google maps api.
-    * `coords {Object}` 
+    * `coords {Object}`
       * `latitude {Number}`
       * `longitude {Number}`
       * `altitude {Number}`

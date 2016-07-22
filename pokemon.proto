@@ -43,6 +43,13 @@ message RequestEnvelop {
     required double lat = 3;
     required double long = 4;
   }
+  
+  message EncounterMessage {
+    repeated fixed64 encounter_id = 1;
+    required string spawnpoint_id = 2;
+    required double player_latitude = 3;
+    required double player_longitude = 4;
+  }
 }
 
 message ResponseEnvelop {

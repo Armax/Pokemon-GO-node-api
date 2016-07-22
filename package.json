@@ -13,8 +13,7 @@
     "protobufjs": "^5.0.1",
     "request": "^2.73.0",
     "s2geometry-node": "^1.1.0",
-    "tape": "^4.6.0",
-    "bytebuffer": "latest"
+    "tape": "^4.6.0"
   },
   "scripts": {
     "test": "istanbul cover node_modules/tape/bin/tape tests/**/*.js"

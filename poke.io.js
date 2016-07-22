@@ -282,6 +282,30 @@ function Pokeio() {
         }]));
     };
 
+    // Still WIP
+    self.GetFort = function(fortid, fortlat, fortlong, callback) {
+        var FortMessage = new RequestEnvelop.FortSearchMessage({
+            'fort_id': fortid,
+            'player_latitude': self.playerInfo.latitude,
+            'player_longitude': self.playerInfo.longitude,
+            'fort_latitude': fortlat,
+            'fort_longitude': fortlong
+        });
+
+        var req = new RequestEnvelop.Requests(101, FortMessage.encode().toBuffer());
+
+        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function (err, f_ret) {
+            if (err) {
+                return callback(err);
+            } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+                return callback('No result');
+            }
+
+            var FortSearchResponse = ResponseEnvelop.FortSearchResponse.decode(f_ret.payload[0]);
+            callback(null, FortSearchResponse);
+        });
+    }
+
     //still WIP
     self.CatchPokemon = function (mapPokemon, normalizedHitPosition, normalizedReticleSize, spinModifier, pokeball, callback) {
         var _self$playerInfo3 = self.playerInfo;

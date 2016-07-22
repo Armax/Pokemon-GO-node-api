@@ -901,8 +901,8 @@ message ResponseEnvelop {
   message CatchPokemonResponse {
       optional CatchStatus Status = 1;
       optional double MissPercent = 2;
-        // optional uint64 CapturedPokemonId = 3;
-      optional CaptureAward CaptureAward = 4;
+      //optional uint64 CapturedPokemonId = 3;
+      //optional CaptureAward CaptureAward = 4;
 
       enum CatchStatus {
           CATCH_ERROR = 0;

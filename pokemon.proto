@@ -38,8 +38,8 @@ message RequestEnvelop {
   }
 
   message MessageQuad {
-    repeated bytes f1 = 1;
-    required bytes f2 = 2;
+    repeated uint64 f1 = 1 [packed=true];
+    repeated int64 f2 = 2 [packed=true];
     required double lat = 3;
     required double long = 4;
   }

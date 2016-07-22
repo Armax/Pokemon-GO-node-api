@@ -24,7 +24,12 @@ module.exports = {
             if (err) {
                 return callback(err, null);
             }
-            data = JSON.parse(body);
+            
+            try {
+              data = JSON.parse(body);
+            }catch(err){
+              return callback(err, null);
+            }
 
             options = {
                 url: login_url,
@@ -77,6 +82,7 @@ module.exports = {
                     }
 
                     token = body.split('token=')[1];
+                    if(!token) return callback(new Error('Login failed'), null);
                     token = token.split('&')[0];
 
                     if (!token) {

@@ -413,5 +413,52 @@ function Pokeio() {
     };
 }
 
+Pokeio.prototype.serialize = function () {
+    var self = this;
+    var json = {
+      username: self.playerInfo.username
+    , password: self.playerInfo.password
+    , provider: self.playerInfo.provider
+
+    , latitude: self.playerInfo.latitude
+    , longitude: self.playerInfo.longitude
+    , altitude: self.playerInfo.altitude
+
+      // refresh before expires
+    , accessToken: self.playerInfo.accessToken
+    , accessTokenExpires: self.playerInfo.accessTokenExpires
+    , apiEndpoint: self.playerInfo.apiEndpoint
+    };
+    return json;
+};
+module.exports.serialize = Pokeio.serialize = function (pokeio) {
+    return pokeio.serialize();
+};
+
+Pokeio.prototype.deserialize = function (opts) {
+    var self = this;
+    self.playerInfo.username = opts.username || 'johndoe';
+    self.playerInfo.password = opts.password || 'secret';
+    self.playerInfo.provider = opts.provider || 'ptc';
+    self.playerInfo.accessToken = opts.accessToken || 'xyz';
+    self.playerInfo.accessTokenExpires = opts.accessTokenExpires || 0;
+    self.playerInfo.latitude = opts.latitude || 40.36915523640919;
+    self.playerInfo.longitude = opts.longitude || -111.75098587678943;
+    self.playerInfo.altitude = opts.altitude || 0;
+
+    // TODO
+    // logging reveals that cookies are probably not even used, just JWTs :)
+    //self.j = request.jar(new FileCookieStore(path.resolve('/tmp/', self.playerInfo.username + '.pokemongo.json')));
+    //self.request = request.defaults({ jar: self.j });
+
+    self.playerInfo.apiEndpoint = opts.apiEndpoint;
+};
+
+module.exports.deserialize = Pokeio.deserialize = function (opts) {
+    var pokeio = new Pokeio();
+    pokeio.deserialize(opts);
+    return pokeio;
+};
+
 module.exports = new Pokeio();
 module.exports.Pokeio = Pokeio;

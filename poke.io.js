@@ -21,7 +21,7 @@ var pokemonProto = builder.build();
 
 var RequestEnvelop = pokemonProto.RequestEnvelop;
 var ResponseEnvelop = pokemonProto.ResponseEnvelop;
-var pokemonlist = JSON.parse(fs.readFileSync(__dirname + '/pokemons.json', 'utf8'));
+var pokemonlist = require('./pokemons');
 
 var EventEmitter = events.EventEmitter;
 

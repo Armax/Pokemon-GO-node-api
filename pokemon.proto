@@ -268,7 +268,7 @@ message ResponseEnvelop {
       optional int32 deployed_fort_id = 8;
       optional string owner_name = 9;
       optional bool is_egg = 10;
-      optional int32 egg_km_walked_target = 11;
+      //optional int32 egg_km_walked_target = 11;
       optional int32 egg_km_walked_start = 12;
       optional int32 origin = 14;
       optional float height_m = 15;
@@ -901,8 +901,8 @@ message ResponseEnvelop {
   message CatchPokemonResponse {
       optional CatchStatus Status = 1;
       optional double MissPercent = 2;
-        // optional uint64 CapturedPokemonId = 3;
-      optional CaptureAward CaptureAward = 4;
+      //optional uint64 CapturedPokemonId = 3;
+      //optional CaptureAward CaptureAward = 4;
 
       enum CatchStatus {
           CATCH_ERROR = 0;

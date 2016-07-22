@@ -7,7 +7,6 @@ var geocoder = require('geocoder');
 var events = require('events');
 var ProtoBuf = require('protobufjs');
 var GoogleOAuth = require('gpsoauthnode');
-var ByteBuffer = require('bytebuffer');
 var fs = require('fs');
 var s2 = require('s2geometry-node');
 
@@ -237,22 +236,17 @@ function Pokeio() {
         var accessToken = _self$playerInfo2.accessToken;
 
 
-        var nullbytes = new Buffer(21);
+        var nullbytes = new Array(21);
         nullbytes.fill(0);
 
         // Generating walk data using s2 geometry
         var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude).sort(function (a, b) {
             return a > b;
         });
-        var buffer = new ByteBuffer(21 * 10).LE();
-        walk.forEach(function (elem) {
-            buffer.writeVarint64(elem);
-        });
 
         // Creating MessageQuad for Requests type=106
-        buffer.flip();
         var walkData = new RequestEnvelop.MessageQuad({
-            'f1': buffer.toBuffer(),
+            'f1': walk,
             'f2': nullbytes,
             'lat': self.playerInfo.latitude,
             'long': self.playerInfo.longitude

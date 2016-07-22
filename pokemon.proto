@@ -43,12 +43,30 @@ message RequestEnvelop {
     required double lat = 3;
     required double long = 4;
   }
-  
+
+  message CatchPokemonMessage {
+    required fixed64 encounter_id = 1;
+    required int32 pokeball = 2;
+    required double normalized_reticle_size = 3;
+    required string spawnpoint_id = 4;
+    required bool hit_pokemon = 5;
+    required double spin_modifier = 6;
+    required double normalized_hit_position = 7;
+   }
+
   message EncounterMessage {
     repeated fixed64 encounter_id = 1;
     required string spawnpoint_id = 2;
     required double player_latitude = 3;
     required double player_longitude = 4;
+  }
+
+  message FortSearchMessage {
+	required string fort_id = 1;
+	required double player_latitude = 2;
+	required double player_longitude = 3;
+	required double fort_latitude = 4;
+    required double fort_longitude = 5;
   }
 }
 
@@ -956,5 +974,28 @@ message ResponseEnvelop {
           ENCOUNTER_ALREADY_HAPPENED = 6;
           POKEMON_INVENTORY_FULL = 7;
       }
+  }
+
+  message FortSearchResponse {
+	optional Result result = 1;
+	repeated ItemAward items_awarded = 2;
+	optional int32 gems_awarded = 3;
+	optional PokemonData pokemon_data_egg = 4;
+	optional int32 experience_awarded = 5;
+	optional int64 cooldown_complete_timestamp_ms = 6;
+	optional int32 chain_hack_sequence_number = 7;
+
+	enum Result {
+		NO_RESULT_SET = 0;
+		SUCCESS = 1;
+		OUT_OF_RANGE = 2;
+		IN_COOLDOWN_PERIOD = 3;
+		INVENTORY_FULL = 4;
+	}
+  }
+
+  message ItemAward {
+	optional ItemId item_id = 1;
+	optional int32 item_count = 2;
   }
 }

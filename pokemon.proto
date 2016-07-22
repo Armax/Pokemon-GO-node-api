@@ -43,6 +43,24 @@ message RequestEnvelop {
     required double lat = 3;
     required double long = 4;
   }
+
+  //rpc id : 103
+  message CatchPokemonMessage {
+      required fixed64 encounter_id = 1;
+      required int32 pokeball = 2;
+      required double normalized_reticle_size = 3;
+      required string spawnpoint_id = 4;
+      required bool hit_pokemon = 5;
+      required double spin_modifier = 6;
+      required double normalized_hit_position = 7;
+  }
+
+  message EncounterMessage {
+      required fixed64 encounter_id = 1;
+      required string spawnpoint_id = 2;
+      required double player_latitude = 3;
+      required double player_longitude = 4;
+  }
 }
 
 message ResponseEnvelop {

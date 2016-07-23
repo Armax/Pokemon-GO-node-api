@@ -325,8 +325,8 @@ function Pokeio() {
                 return callback('No result');
             }
 
-            var catchPokemonResponse = ResponseEnvelop.CatchPokemonResponse.decode(f_ret.payload[0]);
-            callback(null, catchPokemonResponse);
+            // var catchPokemonResponse = ResponseEnvelop.CatchPokemonResponse.decode(f_ret.payload[0]);
+            callback(null, {});
         });
     };
 

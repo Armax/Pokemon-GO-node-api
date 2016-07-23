@@ -44,7 +44,7 @@ pokeio.init(username, password, location, provider, function(err) {
         console.log('[i] Pokecoin: ' + poke);
         console.log('[i] Stardust: ' + profile.currency[1].amount);
 
-        setInterval(function(){ pokeio.Heartbeat(botTick(pokeio)); }, 5000);
+        setInterval(function(){ pokeio.Heartbeat(botTick(pokeio, location)); }, 3000);
 
     });
 });

@@ -1,6 +1,6 @@
 var _ = require("lodash")
 
-module.exports = function(pokeio){
+module.exports = function(pokeio, myLocation){
   var logNearbyPokemon = function(nearbyPokemon){
     var pokemon = pokeio.pokemonlist[parseInt(nearbyPokemon.PokedexNumber) - 1]
     console.log(
@@ -23,6 +23,12 @@ module.exports = function(pokeio){
     })
   }
 
+  var moveAround = function(){
+    myLocation.coords.latitude += 0.0005;
+    myLocation.coords.longitude += 0.0005;
+    pokeio.SetLocation(myLocation, function(){ console.log("I've moved."); })
+  }
+
   var botTick = function (err, hb) {
     if(err) { console.log("Error on botTick: ", err); }
 
@@ -32,6 +38,8 @@ module.exports = function(pokeio){
 
       catchWildPokemons(cell);
     }) // end enumerating cells
+
+    moveAround();
   }
 
   return botTick;

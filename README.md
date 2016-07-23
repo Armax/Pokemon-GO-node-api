@@ -11,6 +11,19 @@ var Pokeio = require('pokemon-go-node-api')
 ```
 Check [example.js](./example.js) for the result showed in the demo or check the documentation below.
 
+## How to write own scripts
+```
+git clone https://github.com/Armax/Pokemon-GO-node-api.git && cd Pokemon-GO-node-api
+```
+```
+npm install
+```
+```
+export $(cat .env); node main.js
+```
+
+Now you can modify `botTick.js` to get desired behavior
+
 ## Demo:
 ![alt tag](http://cl.arm4x.net/poke3.png)
 

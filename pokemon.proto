@@ -68,6 +68,12 @@ message RequestEnvelop {
 	required double fort_latitude = 4;
     required double fort_longitude = 5;
   }
+
+  //rpc id : 137
+  message RecycleInventoryItemMessage {
+      required int32 item_id = 1;
+      required int32 count = 2;
+  }
 }
 
 message ResponseEnvelop {
@@ -992,6 +998,18 @@ message ResponseEnvelop {
 		IN_COOLDOWN_PERIOD = 3;
 		INVENTORY_FULL = 4;
 	}
+  }
+
+  message RecycleInventoryItemResponse {
+      optional Result result = 1;
+      optional int32 new_count = 2;
+
+      enum Result {
+          UNSET = 0;
+          SUCCESS = 1;
+          ERROR_NOT_ENOUGH_COPIES = 2;
+          ERROR_CANNOT_RECYCLE_INCUBATORS = 3;
+      }
   }
 
   message ItemAward {

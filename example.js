@@ -93,7 +93,7 @@ b.init(username1, password1, location1, provider1, function(err) {
                     console.log(err);
                 }
 
-                for (let i = hb.cells.length - 1; i >= 0; i--) {
+                for (var i = hb.cells.length - 1; i >= 0; i--) {
                     if(hb.cells[i].NearbyPokemon[0]) {
                         //console.log(a.pokemonlist[0])
                         var pokemon = b.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1];
@@ -102,8 +102,8 @@ b.init(username1, password1, location1, provider1, function(err) {
                 }
 
                 // Show WildPokemons (catchable) & catch
-                for (let i = hb.cells.length - 1; i >= 0; i--) {
-                    for (let j = hb.cells[i].WildPokemon.length - 1; j >= 0; j--)
+                for (i = hb.cells.length - 1; i >= 0; i--) {
+                    for (var j = hb.cells[i].WildPokemon.length - 1; j >= 0; j--)
                     {   // use async lib with each or eachSeries should be better :)
                         var currentPokemon = hb.cells[i].WildPokemon[j];
                         var pokedexInfo = b.pokemonlist[parseInt(currentPokemon.pokemon.PokemonId)-1];

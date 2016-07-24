@@ -62,12 +62,19 @@ message RequestEnvelop {
   }
 
   message FortSearchMessage {
-	required string fort_id = 1;
-	required double player_latitude = 2;
-	required double player_longitude = 3;
-	required double fort_latitude = 4;
+	  required string fort_id = 1;
+	  required double player_latitude = 2;
+	  required double player_longitude = 3;
+	  required double fort_latitude = 4;
     required double fort_longitude = 5;
   }
+
+	message FortDetailsRequest
+	{
+  	required string fort_id = 1;
+ 	  required double fort_latitude = 2;
+    required double fort_longitude = 3;
+	}
 
   //rpc id : 137
   message RecycleInventoryItemMessage {
@@ -328,6 +335,13 @@ message ResponseEnvelop {
       optional string nickname = 30;
       optional int32 from_fort = 31;
 
+  }
+  
+  enum TeamColor {
+    NEUTRAL = 0;
+    BLUE = 1;
+    RED = 2;
+    YELLOW = 3;
   }
 
   enum  PokemonMove {
@@ -983,21 +997,43 @@ message ResponseEnvelop {
   }
 
   message FortSearchResponse {
-	optional Result result = 1;
-	repeated ItemAward items_awarded = 2;
-	optional int32 gems_awarded = 3;
-	optional PokemonData pokemon_data_egg = 4;
-	optional int32 experience_awarded = 5;
-	optional int64 cooldown_complete_timestamp_ms = 6;
-	optional int32 chain_hack_sequence_number = 7;
+  	optional Result result = 1;
+  	repeated ItemAward items_awarded = 2;
+  	optional int32 gems_awarded = 3;
+  	optional PokemonData pokemon_data_egg = 4;
+  	optional int32 experience_awarded = 5;
+  	optional int64 cooldown_complete_timestamp_ms = 6;
+  	optional int32 chain_hack_sequence_number = 7;
+  
+  	enum Result {
+  		NO_RESULT_SET = 0;
+  		SUCCESS = 1;
+  		OUT_OF_RANGE = 2;
+  		IN_COOLDOWN_PERIOD = 3;
+  		INVENTORY_FULL = 4;
+	  }
+  }
 
-	enum Result {
-		NO_RESULT_SET = 0;
-		SUCCESS = 1;
-		OUT_OF_RANGE = 2;
-		IN_COOLDOWN_PERIOD = 3;
-		INVENTORY_FULL = 4;
-	}
+  message FortDetailsResponse {
+    optional string fort_id = 1;
+    optional TeamColor team_color = 2;
+    optional PokemonData pokemon_data = 3;
+    optional string name = 4;
+    repeated string image_urls = 5;
+    optional int32 fp = 6;
+    optional int32 stamina = 7;
+    optional int32 max_stamina = 8;
+    optional int32 type = 9;
+    optional double latitude = 10;
+    optional double longitude = 11;
+    optional string description = 12;
+    repeated FortModifier modifiers = 13;
+  }
+
+  message FortModifier {
+    optional ItemId item_id = 1;
+    optional int64 expiration_timestamp_ms = 2;
+    optional string deployer_player_codename = 3;
   }
 
   message RecycleInventoryItemResponse {

@@ -286,6 +286,32 @@ function Pokeio() {
     };
 
     // Still WIP
+    self.GetFortDetails = function (fortid, fortlat, fortlong, callback) {
+        var FortMessage = new RequestEnvelop.FortDetailsRequest({
+            'fort_id': fortid,
+            'fort_latitude': fortlat,
+            'fort_longitude': fortlong
+        });
+
+        var req = new RequestEnvelop.Requests(104, FortMessage.encode().toBuffer());
+
+        api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function (err, f_ret) {
+            if (err) {
+                return callback(err);
+            } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+                return callback('No result');
+            }
+
+            try {
+                var FortSearchResponse = ResponseEnvelop.FortDetailsResponse.decode(f_ret.payload[0]);
+                callback(null, FortSearchResponse);
+            } catch (err) {
+                callback(err, null);
+            }
+        });
+    }
+
+    // Still WIP
     self.GetFort = function (fortid, fortlat, fortlong, callback) {
         var FortMessage = new RequestEnvelop.FortSearchMessage({
             'fort_id': fortid,

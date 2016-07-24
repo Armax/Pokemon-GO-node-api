@@ -1,6 +1,15 @@
 'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+function _toConsumableArray(arr) {
+    if (Array.isArray(arr)) {
+        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+            arr2[i] = arr[i];
+        }
+        return arr2;
+    } else {
+        return Array.from(arr);
+    }
+}
 
 var request = require('request');
 var geocoder = require('geocoder');
@@ -55,7 +64,7 @@ function Pokeio() {
     var self = this;
     self.events = new EventEmitter();
     self.j = request.jar();
-    self.request = request.defaults({ jar: self.j });
+    self.request = request.defaults({jar: self.j});
 
     self.google = new GoogleOAuth();
 
@@ -277,7 +286,7 @@ function Pokeio() {
     };
 
     // Still WIP
-    self.GetFort = function(fortid, fortlat, fortlong, callback) {
+    self.GetFort = function (fortid, fortlat, fortlong, callback) {
         var FortMessage = new RequestEnvelop.FortSearchMessage({
             'fort_id': fortid,
             'player_latitude': self.playerInfo.latitude,
@@ -295,8 +304,12 @@ function Pokeio() {
                 return callback('No result');
             }
 
-            var FortSearchResponse = ResponseEnvelop.FortSearchResponse.decode(f_ret.payload[0]);
-            callback(null, FortSearchResponse);
+            try {
+                var FortSearchResponse = ResponseEnvelop.FortSearchResponse.decode(f_ret.payload[0]);
+                callback(null, FortSearchResponse);
+            } catch (err) {
+                callback(err, null);
+            }
         });
     }
 
@@ -310,7 +323,7 @@ function Pokeio() {
             'encounter_id': mapPokemon.EncounterId,
             'pokeball': pokeball,
             'normalized_reticle_size': normalizedReticleSize,
-            'spawnpoint_id': mapPokemon.SpawnPointId,
+            'spawnpoint_id': mapPokemon.SpawnpointId,
             'hit_pokemon': true,
             'spin_modifier': spinModifier,
             'normalized_hit_position': normalizedHitPosition
@@ -324,9 +337,12 @@ function Pokeio() {
             } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
                 return callback('No result');
             }
-
-            var catchPokemonResponse = ResponseEnvelop.CatchPokemonResponse.decode(f_ret.payload[0]);
-            callback(null, catchPokemonResponse);
+            try {
+                var catchPokemonResponse = ResponseEnvelop.CatchPokemonResponse.decode(f_ret.payload[0]);
+                callback(null, catchPokemonResponse);
+            } catch (err) {
+                callback(err, null);
+            }
         });
     };
 
@@ -339,7 +355,7 @@ function Pokeio() {
 
         var encounterPokemon = new RequestEnvelop.EncounterMessage({
             'encounter_id': catchablePokemon.EncounterId,
-            'spawnpoint_id': catchablePokemon.SpawnPointId,
+            'spawnpoint_id': catchablePokemon.SpawnpointId,
             'player_latitude': latitude,
             'player_longitude': longitude
         });
@@ -353,7 +369,37 @@ function Pokeio() {
                 return callback('No result');
             }
 
-            var catchPokemonResponse = ResponseEnvelop.EncounterResponse.decode(f_ret.payload[0]);
+            try {
+                var catchPokemonResponse = ResponseEnvelop.EncounterResponse.decode(f_ret.payload[0]);
+                callback(null, catchPokemonResponse);
+            } catch (err) {
+                callback(err, null);
+            }
+        });
+    };
+
+    self.DropItem = function (itemId, count, callback) {
+        var _self$playerInfo4 = self.playerInfo;
+        var apiEndpoint = _self$playerInfo4.apiEndpoint;
+        var accessToken = _self$playerInfo4.accessToken;
+        var latitude = _self$playerInfo4.latitude;
+        var longitude = _self$playerInfo4.longitude;
+
+        var dropItemMessage = new RequestEnvelop.RecycleInventoryItemMessage({
+            'item_id': itemId,
+            'count': count
+        });
+
+        var req = new RequestEnvelop.Requests(137, dropItemMessage.encode().toBuffer());
+
+        api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+            if (err) {
+                return callback(err);
+            } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+                return callback('No result');
+            }
+
+            var catchPokemonResponse = ResponseEnvelop.RecycleInventoryItemResponse.decode(f_ret.payload[0]);
             callback(null, catchPokemonResponse);
         });
     };
@@ -364,7 +410,7 @@ function Pokeio() {
         var longitude = _self$playerInfo5.longitude;
         var altitude = _self$playerInfo5.altitude;
 
-        return { latitude: latitude, longitude: longitude, altitude: altitude };
+        return {latitude: latitude, longitude: longitude, altitude: altitude};
     };
 
     self.SetLocation = function (location, callback) {

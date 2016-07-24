@@ -449,6 +449,7 @@ function Pokeio() {
             self.playerInfo.altitude = location.coords.altitude || self.playerInfo.altitude;
 
             geocoder.reverseGeocode.apply(geocoder, _toConsumableArray(GetCoords(self)).concat([function (err, data) {
+                if (err) return callback(err);
                 if (data && data.status !== 'ZERO_RESULTS' && data.results && data.results[0]) {
                     self.playerInfo.locationName = data.results[0].formatted_address;
                 }

@@ -44,14 +44,14 @@ function GetCoords(self) {
     return [latitude, longitude];
 }
 
-function getNeighbors(lat, lng) {
+function getNeighbors(lat, lng, numNeighborCells) {
     var origin = new s2.S2CellId(new s2.S2LatLng(lat, lng)).parent(15);
     var walk = [origin.id()];
-    // 10 before and 10 after
+    // numNeighborCells before and numNeighborCells after
     var next = origin.next();
     var prev = origin.prev();
-    for (var i = 0; i < 10; i++) {
-        // in range(10):
+    for (var i = 0; i < numNeighborCells; i++) {
+        // in range(numNeighborCells):
         walk.push(prev.id());
         walk.push(next.id());
         next = next.next();
@@ -239,17 +239,17 @@ function Pokeio() {
     };
 
     // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
-    self.Heartbeat = function (callback) {
+    self.Heartbeat = function (numNeighborCells, callback) {
+        numNeighborCells = numNeighborCells === undefined ? 10 : numNeighborCells
         var _self$playerInfo2 = self.playerInfo;
         var apiEndpoint = _self$playerInfo2.apiEndpoint;
         var accessToken = _self$playerInfo2.accessToken;
-
-
-        var nullbytes = new Array(21);
+        var numBytes = numNeighborCells * 2 + 1
+        var nullbytes = new Array(numBytes);
         nullbytes.fill(0);
 
         // Generating walk data using s2 geometry
-        var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude).sort(function (a, b) {
+        var walk = getNeighbors(self.playerInfo.latitude, self.playerInfo.longitude, numNeighborCells).sort(function (a, b) {
             return a > b;
         });
 

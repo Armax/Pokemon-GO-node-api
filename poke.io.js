@@ -433,6 +433,35 @@ function Pokeio() {
     });
   };
 
+
+  self.ReleasePokemon = function (pokemon, callback) {
+    console.log(pokemon.toString());
+    var releasePokemon = new RequestEnvelop.ReleasePokemonMessage({
+      'pokemon_id': pokemon.toString()
+    });
+    var req = new RequestEnvelop.Requests(112, releasePokemon.encode().toBuffer());
+
+    var _self$playerInfo3 = self.playerInfo;
+    var apiEndpoint = _self$playerInfo3.apiEndpoint;
+    var accessToken = _self$playerInfo3.accessToken;
+
+    api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+      if (err) {
+        return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
+      }
+      try {
+        var releasePokemonResponse = ResponseEnvelop.ReleasePokemonResponse.decode(f_ret.payload[0]);
+        callback(null, releasePokemonResponse);
+      } catch (err) {
+        callback(err, null);
+      }
+    });
+
+  };
+
+
   self.GetLocationCoords = function () {
     var _self$playerInfo5 = self.playerInfo;
     var latitude = _self$playerInfo5.latitude;

@@ -72,12 +72,24 @@ Will save the api endpoint to the Pokeio internal state.
         * `currency {Object}`
           * `type {String}`
           * `amount {Number}`
+          
+          
+### Pokeio.myPokemon(filter, callback)
+Returns an array of objects of your Pokemon, filter works like lodash filter, can be obj or function(pokemon)
+Each pokemon has a release(callback) function.
+
+**Parameters**
+  * `filter` {obj}/{Function(pkm)}
+  * `callback {Function(error, list)}`
+    * `error {Error}`
+    * `list [Array]`
+      
 
 ### Pokeio.GetLocation(callback)
 Reads current latitude and longitude and returns a human readable address using the google maps api.
 
 **Parameters**
-  * `callback {Function(error, formatted_address)}`
+  * `callback {Function(error, formatted_address)}` (optional)
     * `error {Error}`
     * `formatted_address {String}`
 

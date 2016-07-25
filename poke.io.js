@@ -18,7 +18,9 @@ var ProtoBuf = require('protobufjs');
 var GoogleOAuth = require('gpsoauthnode');
 var fs = require('fs');
 var s2 = require('s2geometry-node');
+var _ = require('lodash');
 
+var spatial = require('./spatial'); // spatial functions
 var Logins = require('./logins');
 
 var builder = ProtoBuf.loadProtoFile('pokemon.proto');
@@ -274,6 +276,58 @@ function Pokeio() {
       }
 
       var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
+
+      // heart beat obj returning smarter cell occupants.
+      heartbeat.forts = [];
+      heartbeat.wildPokemon = [];
+
+      _.each(heartbeat.cells, function (cell) {
+        if (cell.Fort.length > 0) {
+          if (cell.Fort[0].FortType == 1 && cell.Fort[0].Enabled) {
+            cell.Fort[0].distance = spatial.distance({
+              latitude: self.playerInfo.latitude,
+              longitude: self.playerInfo.longitude
+            }, {
+              latitude: cell.Fort[0].Latitude,
+              longitude: cell.Fort[0].Longitude
+            });
+            cell.Fort[0].inRange = false;
+            if (cell.Fort[0].distance < 41) {
+              cell.Fort[0].inRange = true;
+            }
+            // perfect user case for constructors. still playing around so no need for tears yet.
+            cell.Fort[0].GetFort = function (callback) {
+              self.GetFort(cell.Fort[0].FortId, cell.Fort[0].Latitude, cell.Fort[0].Longitude, callback);
+            };
+            cell.Fort[0].GetFortDetails = function (callback) {
+              self.GetFort(cell.Fort[0].FortId, cell.Fort[0].Latitude, cell.Fort[0].Longitude, callback);
+            };
+            heartbeat.forts.push(cell.Fort[0]);
+          }
+        }
+
+        // not sure if 2 pkm can occupy cell? assuming no, but not the end of the world if it happens.
+        if (cell.WildPokemon.length > 0) {
+          cell.WildPokemon[0].pokedexInfo = self.pokemonlist[parseInt(cell.WildPokemon[0].pokemon.PokemonId) - 1];
+          cell.WildPokemon[0].catchIt = function (opts, callback) {
+            // auto preset opts if not set.
+            if (typeof opts == 'function') {
+              callback = opts;
+              opts = {
+                normalizedHitPosition: 1,
+                normalizedReticleSize: 1.950,
+                spinModifier: 1,
+                pokeball: 1
+              };
+            }
+            self.EncounterPokemon(cell.WildPokemon[0], function (suc, dat) {
+              self.CatchPokemon(cell.WildPokemon[0], opts.normalizedHitPosition, opts.normalizedReticleSize, opts.spinModifier, opts.pokeball, callback);
+            });
+          };
+          heartbeat.wildPokemon.push(cell.WildPokemon[0]);
+        }
+      });
+
       callback(null, heartbeat);
     });
   };
@@ -352,7 +406,7 @@ function Pokeio() {
       'encounter_id': mapPokemon.EncounterId,
       'pokeball': pokeball,
       'normalized_reticle_size': normalizedReticleSize,
-      'spawnpoint_id': mapPokemon.SpawnpointId,
+      'spawnpoint_id': mapPokemon.SpawnPointId,
       'hit_pokemon': true,
       'spin_modifier': spinModifier,
       'normalized_hit_position': normalizedHitPosition
@@ -384,7 +438,7 @@ function Pokeio() {
 
     var encounterPokemon = new RequestEnvelop.EncounterMessage({
       'encounter_id': catchablePokemon.EncounterId,
-      'spawnpoint_id': catchablePokemon.SpawnpointId,
+      'spawnpoint_id': catchablePokemon.SpawnPointId,
       'player_latitude': latitude,
       'player_longitude': longitude
     });
@@ -399,8 +453,8 @@ function Pokeio() {
       }
 
       try {
-        var catchPokemonResponse = ResponseEnvelop.EncounterResponse.decode(f_ret.payload[0]);
-        callback(null, catchPokemonResponse);
+        var encounterPokemonResponse = ResponseEnvelop.EncounterResponse.decode(f_ret.payload[0]);
+        callback(null, encounterPokemonResponse);
       } catch (err) {
         callback(err, null);
       }
@@ -435,7 +489,6 @@ function Pokeio() {
 
 
   self.ReleasePokemon = function (pokemon, callback) {
-    console.log(pokemon.toString());
     var releasePokemon = new RequestEnvelop.ReleasePokemonMessage({
       'pokemon_id': pokemon.toString()
     });
@@ -520,7 +573,63 @@ function Pokeio() {
             }]));
     }
   };
+
+
+
+  // smarter API functions
+
+  self.myPokemon = function (filter, callback) {
+    // dont bother
+    if (!filter && !callback) return;
+    // work without filter
+    if (!callback && typeof filter == 'function') {
+      callback = filter;
+      // set greedy filter
+      filter = function () {
+        return true;
+      };
+    }
+
+    self.GetInventory(function (err, contents) {
+      if (err)
+        return callback(err);
+      var pokemon = _.chain(contents.inventory_delta.inventory_items)
+        .filter(function (i) {
+          if (!i.inventory_item_data.pokemon) return false;
+          if (!i.inventory_item_data.pokemon.pokemon_id) return false;
+          return true;
+        })
+        .map(function (i) {
+          var info = self.pokemonlist[parseInt(i.inventory_item_data.pokemon.pokemon_id) - 1];
+          info.pokedex_id = info.id;
+
+          var pkm = _.merge(info, i.inventory_item_data.pokemon.toRaw());
+
+          return pkm;
+        })
+        .filter(filter)
+        .value();
+
+
+      // last step appends
+      _.map(pokemon, function (pkm) {
+        pkm.dupeCount = _.filter(pokemon, {
+          name: pkm.name
+        });
+
+        // break this out into a constructor :|
+        pkm.release = function (callback) {
+          self.ReleasePokemon(pkm.id, callback);
+        };
+      });
+
+      callback(null, pokemon);
+
+    });
+  };
+
 }
+
 
 module.exports = new Pokeio();
 module.exports.Pokeio = Pokeio;

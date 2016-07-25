@@ -77,7 +77,9 @@ Will save the api endpoint to the Pokeio internal state.
 ### Pokeio.myPokemon(filter, callback)
 Returns an array of objects of your Pokemon, filter works like lodash filter, can be obj or function(pokemon)
 Each pokemon has a release(callback) function.
+
 **Parameters**
+  * `filter` {obj}/{Function(pkm)}
   * `callback {Function(error, list)}`
     * `error {Error}`
     * `list [Array]`

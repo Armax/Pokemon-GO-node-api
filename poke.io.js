@@ -240,7 +240,10 @@ function Pokeio() {
 
     // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
     self.Heartbeat = function (numNeighborCells, callback) {
-        numNeighborCells = numNeighborCells === undefined ? 10 : numNeighborCells
+        if (typeof(numNeighborCells) === "function") {
+          callback = numNeighborCells;
+          numNeighborCells = 10;
+        }
         var _self$playerInfo2 = self.playerInfo;
         var apiEndpoint = _self$playerInfo2.apiEndpoint;
         var accessToken = _self$playerInfo2.accessToken;

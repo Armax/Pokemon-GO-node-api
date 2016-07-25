@@ -303,12 +303,30 @@ function Pokeio() {
           };
           heartbeat.forts.push(cell.Fort[0]);
         }
+
+        // not sure if 2 pkm can occupy cell? assuming no, but not the end of the world if it happens.
         if (cell.WildPokemon.length > 0) {
+          cell.WildPokemon[0].pokedexInfo = self.pokemonlist[parseInt(cell.WildPokemon[0].pokemon.PokemonId) - 1];
+          cell.WildPokemon[0].catchIt = function (opts, callback) {
+            // auto preset opts if not set.
+            if (typeof opts == 'function') {
+              opts = {
+                normalizedHitPosition: 1,
+                normalizedReticleSize: 1.950,
+                spinModifier: 1,
+                pokeball: 1
+              };
+              callback = opts;
+            }
+            self.EncounterPokemon(cell.WildPokemon[0], function (suc, dat) {
+              self.CatchPokemon(cell.WildPokemon[0], opts.normalizedHitPosition, opts.normalizedReticleSize, opts.spinModifier, opts.pokeball, callback);
+            });
+          };
           heartbeat.wildPokemon.push(cell.WildPokemon[0]);
         }
       });
 
-      console.log(heartbeat.forts);
+      console.log(heartbeat.wildPokemon);
 
       callback(null, heartbeat);
     });

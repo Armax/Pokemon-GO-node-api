@@ -18,6 +18,7 @@ var ProtoBuf = require('protobufjs');
 var GoogleOAuth = require('gpsoauthnode');
 var fs = require('fs');
 var s2 = require('s2geometry-node');
+var _ = require('lodash');
 
 var Logins = require('./logins');
 
@@ -435,7 +436,6 @@ function Pokeio() {
 
 
   self.ReleasePokemon = function (pokemon, callback) {
-    console.log(pokemon.toString());
     var releasePokemon = new RequestEnvelop.ReleasePokemonMessage({
       'pokemon_id': pokemon.toString()
     });
@@ -520,7 +520,54 @@ function Pokeio() {
             }]));
     }
   };
+
+
+
+  // smarter API functions
+
+  self.myPokemon = function (filter, callback) {
+    // dont bother
+    if (!filter && !callback) return;
+    // work without filter
+    if (!callback && typeof filter == 'function') {
+      callback = filter;
+      // set greedy filter
+      filter = function () {
+        return true;
+      };
+    }
+
+    self.GetInventory(function (err, contents) {
+      if (err)
+        return callback(err);
+      var pokemon = _.chain(contents.inventory_delta.inventory_items)
+        .filter(function (i) {
+          if (!i.inventory_item_data.pokemon) return false;
+          if (!i.inventory_item_data.pokemon.pokemon_id) return false;
+          return true;
+        })
+        .map(function (i) {
+          var info = self.pokemonlist[parseInt(i.inventory_item_data.pokemon.pokemon_id) - 1];
+          info.pokedex_id = info.id;
+
+          var pkm = _.merge(info, i.inventory_item_data.pokemon.toRaw());
+
+          // break this out into a constructor :|
+          pkm.release = function (callback) {
+            self.ReleasePokemon(pkm.id, callback);
+          };
+          return pkm;
+        })
+        .filter(filter)
+        .value();
+
+      callback(null, pokemon);
+
+    });
+  };
+
 }
+
 
 module.exports = new Pokeio();
 module.exports.Pokeio = Pokeio;

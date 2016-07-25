@@ -20,6 +20,7 @@ var fs = require('fs');
 var s2 = require('s2geometry-node');
 var _ = require('lodash');
 
+var spatial = require('./spatial'); // spatial functions
 var Logins = require('./logins');
 
 var builder = ProtoBuf.loadProtoFile('pokemon.proto');
@@ -275,6 +276,40 @@ function Pokeio() {
       }
 
       var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
+
+      // heart beat obj returning smarter cell occupants.
+      heartbeat.forts = [];
+      heartbeat.wildPokemon = [];
+
+      _.each(heartbeat.cells, function (cell) {
+        if (cell.Fort.length > 0) {
+          cell.Fort[0].distance = spatial.distance({
+            latitude: self.playerInfo.latitude,
+            longitude: self.playerInfo.longitude
+          }, {
+            latitude: cell.Fort[0].Latitude,
+            longitude: cell.Fort[0].Longitude
+          });
+          cell.Fort[0].inRange = false;
+          if (cell.Fort[0].distance < 41) {
+            cell.Fort[0].inRange = true;
+          }
+          // perfect user case for constructors. still playing around so no need for tears yet.
+          cell.Fort[0].GetFort = function (callback) {
+            self.GetFort(cell.Fort[0].FortId, cell.Fort[0].Latitude, cell.Fort[0].Longitude, callback);
+          };
+          cell.Fort[0].GetFortDetails = function (callback) {
+            self.GetFort(cell.Fort[0].FortId, cell.Fort[0].Latitude, cell.Fort[0].Longitude, callback);
+          };
+          heartbeat.forts.push(cell.Fort[0]);
+        }
+        if (cell.WildPokemon.length > 0) {
+          heartbeat.wildPokemon.push(cell.WildPokemon[0]);
+        }
+      });
+
+      console.log(heartbeat.forts);
+
       callback(null, heartbeat);
     });
   };
@@ -400,8 +435,8 @@ function Pokeio() {
       }
 
       try {
-        var catchPokemonResponse = ResponseEnvelop.EncounterResponse.decode(f_ret.payload[0]);
-        callback(null, catchPokemonResponse);
+        var encounterPokemonResponse = ResponseEnvelop.EncounterResponse.decode(f_ret.payload[0]);
+        callback(null, encounterPokemonResponse);
       } catch (err) {
         callback(err, null);
       }
@@ -552,14 +587,23 @@ function Pokeio() {
 
           var pkm = _.merge(info, i.inventory_item_data.pokemon.toRaw());
 
-          // break this out into a constructor :|
-          pkm.release = function (callback) {
-            self.ReleasePokemon(pkm.id, callback);
-          };
           return pkm;
         })
         .filter(filter)
         .value();
+
+
+      // last step appends
+      _.map(pokemon, function (pkm) {
+        pkm.dupeCount = _.filter(pokemon, {
+          name: pkm.name
+        });
+
+        // break this out into a constructor :|
+        pkm.release = function (callback) {
+          self.ReleasePokemon(pkm.id, callback);
+        };
+      });
 
       callback(null, pokemon);
 

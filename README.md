@@ -89,7 +89,7 @@ Each pokemon has a release(callback) function.
 Reads current latitude and longitude and returns a human readable address using the google maps api.
 
 **Parameters**
-  * `callback {Function(error, formatted_address)}`
+  * `callback {Function(error, formatted_address)}` (optional)
     * `error {Error}`
     * `formatted_address {String}`
 

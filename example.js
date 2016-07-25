@@ -101,23 +101,27 @@ b.init(username1, password1, location1, provider1, function(err) {
                     }
                 }
 
-                // Show WildPokemons (catchable) & catch
+                // Show MapPokemons (catchable) & catch
                 for (i = hb.cells.length - 1; i >= 0; i--) {
-                    for (var j = hb.cells[i].WildPokemon.length - 1; j >= 0; j--)
+                    for (var j = hb.cells[i].MapPokemon.length - 1; j >= 0; j--)
                     {   // use async lib with each or eachSeries should be better :)
-                        var currentPokemon = hb.cells[i].WildPokemon[j];
-                        var pokedexInfo = b.pokemonlist[parseInt(currentPokemon.pokemon.PokemonId)-1];
-                        console.log('[+] There is a ' + pokedexInfo.name + ' near!! I can try to catch it!');
+                        var currentPokemon = hb.cells[i].MapPokemon[j];
 
-                        b.EncounterPokemon(currentPokemon, function(suc, dat) {
-                            console.log('Encountering pokemon ' + pokedexInfo.name + '...');
-                            b.CatchPokemon(currentPokemon, 1, 1.950, 1, 1, function(xsuc, xdat) {
-                                var status = ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch'];
-                                console.log(status[xdat.Status]);
+                        (function(currentPokemon) {
+                            var pokedexInfo = b.pokemonlist[parseInt(currentPokemon.PokedexTypeId)-1];
+                            console.log('[+] There is a ' + pokedexInfo.name + ' near!! I can try to catch it!');
+
+                            b.EncounterPokemon(currentPokemon, function(suc, dat) {
+                                console.log('Encountering pokemon ' + pokedexInfo.name + '...');
+                                b.CatchPokemon(currentPokemon, 1, 1.950, 1, 1, function(xsuc, xdat) {
+                                    var status = ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch'];
+                                    console.log(status[xdat.Status]);
+                                });
                             });
-                        });
+                        })(currentPokemon);
+
                     }
-                }
+                    }
             });
         }, 5000);
 

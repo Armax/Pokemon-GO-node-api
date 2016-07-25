@@ -4,7 +4,7 @@ var async = require('async');
 
 var location = {
   type: 'name',
-  name: process.env.PGO_LOCATION || 'Fortitude Valley Queensland Australia'
+  name: process.env.PGO_LOCATION || 'Times Square'
 };
 var username = process.argv[2] || process.env.PGO_USERNAME || 'USER';
 var password = process.argv[3] || process.env.PGO_PASSWORD || 'PASS';
@@ -38,6 +38,7 @@ trainer.init(username, password, location, 'ptc', function (err) {
               });
             } else {
               // cant reach it, so dont bother.
+              console.log('[-] Cant reach Pokestop');
               doneFort();
             }
           }, function () {
@@ -64,6 +65,7 @@ trainer.init(username, password, location, 'ptc', function (err) {
             });
 
           }, function () {
+            console.log('[i] WildPokemon done!');
             finishedTask(null, 'OK!');
           });
       }

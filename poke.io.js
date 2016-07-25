@@ -409,7 +409,7 @@ function Pokeio() {
       'encounter_id': mapPokemon.EncounterId,
       'pokeball': pokeball,
       'normalized_reticle_size': normalizedReticleSize,
-      'spawnpoint_id': mapPokemon.SpawnpointId,
+      'spawnpoint_id': mapPokemon.SpawnPointId,
       'hit_pokemon': true,
       'spin_modifier': spinModifier,
       'normalized_hit_position': normalizedHitPosition
@@ -441,7 +441,7 @@ function Pokeio() {
 
     var encounterPokemon = new RequestEnvelop.EncounterMessage({
       'encounter_id': catchablePokemon.EncounterId,
-      'spawnpoint_id': catchablePokemon.SpawnpointId,
+      'spawnpoint_id': catchablePokemon.SpawnPointId,
       'player_latitude': latitude,
       'player_longitude': longitude
     });

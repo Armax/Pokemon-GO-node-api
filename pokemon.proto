@@ -139,7 +139,7 @@ message ResponseEnvelop {
   }
 
   message MapPokemonProto {
-    required string SpawnpointId = 1;
+    required string SpawnPointId = 1;
     required fixed64 EncounterId = 2;
     required int32 PokedexTypeId = 3;
     required int64 ExpirationTimeMs = 4;
@@ -195,7 +195,7 @@ message ResponseEnvelop {
     optional int64 LastModifiedMs = 2;
     optional double Latitude = 3;
     optional double Longitude = 4;
-    optional string SpawnpointId = 5;
+    optional string SpawnPointId = 5;
     optional Pokemon pokemon = 7;
     optional int32 TimeTillHiddenMs = 11;
 

@@ -283,25 +283,27 @@ function Pokeio() {
 
       _.each(heartbeat.cells, function (cell) {
         if (cell.Fort.length > 0) {
-          cell.Fort[0].distance = spatial.distance({
-            latitude: self.playerInfo.latitude,
-            longitude: self.playerInfo.longitude
-          }, {
-            latitude: cell.Fort[0].Latitude,
-            longitude: cell.Fort[0].Longitude
-          });
-          cell.Fort[0].inRange = false;
-          if (cell.Fort[0].distance < 41) {
-            cell.Fort[0].inRange = true;
+          if (cell.Fort[0].FortType == 1 && cell.Fort[0].Enabled) {
+            cell.Fort[0].distance = spatial.distance({
+              latitude: self.playerInfo.latitude,
+              longitude: self.playerInfo.longitude
+            }, {
+              latitude: cell.Fort[0].Latitude,
+              longitude: cell.Fort[0].Longitude
+            });
+            cell.Fort[0].inRange = false;
+            if (cell.Fort[0].distance < 41) {
+              cell.Fort[0].inRange = true;
+            }
+            // perfect user case for constructors. still playing around so no need for tears yet.
+            cell.Fort[0].GetFort = function (callback) {
+              self.GetFort(cell.Fort[0].FortId, cell.Fort[0].Latitude, cell.Fort[0].Longitude, callback);
+            };
+            cell.Fort[0].GetFortDetails = function (callback) {
+              self.GetFort(cell.Fort[0].FortId, cell.Fort[0].Latitude, cell.Fort[0].Longitude, callback);
+            };
+            heartbeat.forts.push(cell.Fort[0]);
           }
-          // perfect user case for constructors. still playing around so no need for tears yet.
-          cell.Fort[0].GetFort = function (callback) {
-            self.GetFort(cell.Fort[0].FortId, cell.Fort[0].Latitude, cell.Fort[0].Longitude, callback);
-          };
-          cell.Fort[0].GetFortDetails = function (callback) {
-            self.GetFort(cell.Fort[0].FortId, cell.Fort[0].Latitude, cell.Fort[0].Longitude, callback);
-          };
-          heartbeat.forts.push(cell.Fort[0]);
         }
 
         // not sure if 2 pkm can occupy cell? assuming no, but not the end of the world if it happens.
@@ -310,13 +312,13 @@ function Pokeio() {
           cell.WildPokemon[0].catchIt = function (opts, callback) {
             // auto preset opts if not set.
             if (typeof opts == 'function') {
+              callback = opts;
               opts = {
                 normalizedHitPosition: 1,
                 normalizedReticleSize: 1.950,
                 spinModifier: 1,
                 pokeball: 1
               };
-              callback = opts;
             }
             self.EncounterPokemon(cell.WildPokemon[0], function (suc, dat) {
               self.CatchPokemon(cell.WildPokemon[0], opts.normalizedHitPosition, opts.normalizedReticleSize, opts.spinModifier, opts.pokeball, callback);
@@ -325,8 +327,6 @@ function Pokeio() {
           heartbeat.wildPokemon.push(cell.WildPokemon[0]);
         }
       });
-
-      console.log(heartbeat.wildPokemon);
 
       callback(null, heartbeat);
     });
@@ -406,7 +406,7 @@ function Pokeio() {
       'encounter_id': mapPokemon.EncounterId,
       'pokeball': pokeball,
       'normalized_reticle_size': normalizedReticleSize,
-      'spawnpoint_id': mapPokemon.SpawnpointId,
+      'spawnpoint_id': mapPokemon.SpawnPointId,
       'hit_pokemon': true,
       'spin_modifier': spinModifier,
       'normalized_hit_position': normalizedHitPosition
@@ -438,7 +438,7 @@ function Pokeio() {
 
     var encounterPokemon = new RequestEnvelop.EncounterMessage({
       'encounter_id': catchablePokemon.EncounterId,
-      'spawnpoint_id': catchablePokemon.SpawnpointId,
+      'spawnpoint_id': catchablePokemon.SpawnPointId,
       'player_latitude': latitude,
       'player_longitude': longitude
     });

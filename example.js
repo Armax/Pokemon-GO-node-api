@@ -106,18 +106,22 @@ b.init(username1, password1, location1, provider1, function(err) {
                     for (var j = hb.cells[i].MapPokemon.length - 1; j >= 0; j--)
                     {   // use async lib with each or eachSeries should be better :)
                         var currentPokemon = hb.cells[i].MapPokemon[j];
-                        var pokedexInfo = b.pokemonlist[parseInt(currentPokemon.PokedexTypeId)-1];
-                        console.log('[+] There is a ' + pokedexInfo.name + ' near!! I can try to catch it!');
 
-                        b.EncounterPokemon(currentPokemon, function(suc, dat) {
-                            console.log('Encountering pokemon ' + pokedexInfo.name + '...');
-                            b.CatchPokemon(currentPokemon, 1, 1.950, 1, 1, function(xsuc, xdat) {
-                                var status = ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch'];
-                                console.log(status[xdat.Status]);
+                        (function(currentPokemon) {
+                            var pokedexInfo = b.pokemonlist[parseInt(currentPokemon.PokedexTypeId)-1];
+                            console.log('[+] There is a ' + pokedexInfo.name + ' near!! I can try to catch it!');
+
+                            b.EncounterPokemon(currentPokemon, function(suc, dat) {
+                                console.log('Encountering pokemon ' + pokedexInfo.name + '...');
+                                b.CatchPokemon(currentPokemon, 1, 1.950, 1, 1, function(xsuc, xdat) {
+                                    var status = ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch'];
+                                    console.log(status[xdat.Status]);
+                                });
                             });
-                        });
+                        })(currentPokemon);
+
                     }
-                }
+                    }
             });
         }, 5000);
 

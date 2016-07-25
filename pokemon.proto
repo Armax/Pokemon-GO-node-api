@@ -81,6 +81,11 @@ message RequestEnvelop {
       required int32 item_id = 1;
       required int32 count = 2;
   }
+  
+  message ReleasePokemonMessage {
+    optional fixed64 pokemon_id = 1;
+    repeated fixed64 pokemon_ids = 2;
+  }
 }
 
 message ResponseEnvelop {
@@ -1052,4 +1057,17 @@ message ResponseEnvelop {
 	optional ItemId item_id = 1;
 	optional int32 item_count = 2;
   }
+  
+  message ReleasePokemonResponse {
+    required ReleaseStatus Status = 1;
+    optional int32 CandyAwarded = 2;
+    enum ReleaseStatus {
+      UNSET = 0;
+      SUCCESS = 1;
+      POKEMON_DEPLOYED = 2;
+      FAILED = 3;
+      ERROR_POKEMON_IS_EGG = 4;
+    }
+  }
+  
 }

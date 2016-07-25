@@ -1,5 +1,6 @@
 # Dependency directory
 node_modules
+localtest
 
 # Istanbul coverage report
 coverage

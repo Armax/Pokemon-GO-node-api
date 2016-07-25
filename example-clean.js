@@ -1,3 +1,8 @@
+//
+// this performs one single heartbeat, in most cases you will
+// want to do this at interval or after a SetLocation
+//
+
 var PokemonGO = require('./poke.io.js');
 var _ = require('lodash');
 var async = require('async');
@@ -22,11 +27,16 @@ trainer.init(username, password, location, 'ptc', function (err) {
 
     // build task list of things to do at this heartbeat (Location)
     async.series([
-      // scan available forts
+
+      //
+      // scan available forts within cell
+      //
+
       function (finishedTask) {
           // check forts syncronously call 'doneFort' when we are done with each
           async.eachSeries(hb.forts, function (fort, doneFort) {
             if (fort.inRange) {
+
               // swipe pokestop
               fort.GetFort(function (err, response) {
                 if (err || !response.result) {
@@ -36,6 +46,7 @@ trainer.init(username, password, location, 'ptc', function (err) {
                 console.log('[+] ' + status[response.result]);
                 doneFort();
               });
+
             } else {
               // cant reach it, so dont bother.
               console.log('[-] Cant reach Pokestop');
@@ -47,8 +58,13 @@ trainer.init(username, password, location, 'ptc', function (err) {
           });
 
       },
-      // scan wild pokemon
+
+      //
+      // scan wild pokemon within cell
+      //
+
       function (finishedTask) {
+
           // check wildpokemon syncronously call 'doneFort' when we are done with each
           async.eachSeries(hb.wildPokemon, function (pokemon, donePkm) {
             // some logic to decide whether or not to catch would go here.

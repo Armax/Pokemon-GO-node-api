@@ -974,10 +974,10 @@ message ResponseEnvelop {
   }
 
   message CaptureAward {
-      repeated ActivityType ActivityType = 1;
-      repeated int32 XP = 2;
-      repeated int32 Candy = 3;
-      repeated int32 Stardust = 4;
+      repeated ActivityType ActivityType = 1 [packed=true];
+      repeated int32 XP = 2 [packed=true];
+      repeated int32 Candy = 3 [packed=true];
+      repeated int32 Stardust = 4 [packed=true];
   }
 
   message CaptureProbability {

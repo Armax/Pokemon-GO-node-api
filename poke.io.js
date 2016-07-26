@@ -295,13 +295,13 @@ function Pokeio() {
 
   // Still WIP
   self.GetFortDetails = function (fortid, fortlat, fortlong, callback) {
-    var FortDetailsMessage = new RequestEnvelop.FortDetailsRequest({
+    var fortDetailsMessage = new RequestEnvelop.FortDetailsRequest({
       'fort_id': fortid,
       'fort_latitude': fortlat,
       'fort_longitude': fortlong
     });
 
-    var req = new RequestEnvelop.Requests(104, FortDetailsMessage.encode().toBuffer());
+    var req = new RequestEnvelop.Requests(104, fortDetailsMessage.encode().toBuffer());
 
     api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function (err, f_ret) {
       if (err) {
@@ -311,8 +311,8 @@ function Pokeio() {
       }
 
       try {
-        var FortSearchResponse = ResponseEnvelop.FortDetailsResponse.decode(f_ret.payload[0]);
-        callback(null, FortSearchResponse);
+        var fortSearchResponse = ResponseEnvelop.FortDetailsResponse.decode(f_ret.payload[0]);
+        callback(null, fortSearchResponse);
       } catch (err) {
         callback(err, null);
       }
@@ -321,7 +321,7 @@ function Pokeio() {
 
   // Still WIP
   self.GetFort = function (fortid, fortlat, fortlong, callback) {
-    var FortSearchMessage = new RequestEnvelop.FortSearchMessage({
+    var fortSearchMessage = new RequestEnvelop.FortSearchMessage({
       'fort_id': fortid,
       'player_latitude': self.playerInfo.latitude,
       'player_longitude': self.playerInfo.longitude,
@@ -329,7 +329,7 @@ function Pokeio() {
       'fort_longitude': fortlong
     });
 
-    var req = new RequestEnvelop.Requests(101, FortSearchMessage.encode().toBuffer());
+    var req = new RequestEnvelop.Requests(101, fortSearchMessage.encode().toBuffer());
 
     api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function (err, f_ret) {
       if (err) {
@@ -339,8 +339,8 @@ function Pokeio() {
       }
 
       try {
-        var FortSearchResponse = ResponseEnvelop.FortSearchResponse.decode(f_ret.payload[0]);
-        callback(null, FortSearchResponse);
+        var fortSearchResponse = ResponseEnvelop.FortSearchResponse.decode(f_ret.payload[0]);
+        callback(null, fortSearchResponse);
       } catch (err) {
         callback(err, null);
       }

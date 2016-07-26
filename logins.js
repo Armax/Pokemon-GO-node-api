@@ -28,7 +28,7 @@ module.exports = {
             if (body.trim().indexOf('<') === 0) {
                 // the response is html but should be json, exit here with error
                 // this usually happens on server-/login-error
-                return callback(new Error('Error: The response is HTML, but must be JSON!'), null);
+                return callback(new Error('Error: CAS is Unavailable! There was an error trying to complete your request. Please notify your support desk or try again.'), null);
             }
             
             try {

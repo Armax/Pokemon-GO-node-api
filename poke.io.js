@@ -242,7 +242,7 @@ function Pokeio() {
     self.Heartbeat = function (numNeighborCells, callback) {
         if (typeof(numNeighborCells) === "function") {
           callback = numNeighborCells;
-          numNeighborCells = 10;
+          numNeighborCells = 21;
         }
         var _self$playerInfo2 = self.playerInfo;
         var apiEndpoint = _self$playerInfo2.apiEndpoint;

@@ -951,8 +951,8 @@ message ResponseEnvelop {
   message CatchPokemonResponse {
       required CatchStatus Status = 1;
       optional double MissPercent = 2;
-      optional fixed64 CapturedPokemonId = 3;
-      optional CaptureAward CaptureAward = 4;
+      //optional uint64 CapturedPokemonId = 3;
+      //optional CaptureAward CaptureAward = 4;
 
       enum CatchStatus {
           CATCH_ERROR = 0;
@@ -998,16 +998,16 @@ message ResponseEnvelop {
   }
 
   message CaptureProbability {
-      repeated ItemId PokeballType = 1 [packed=true];
-      repeated float CaptureProbability = 2 [packed=true];
-      optional float ReticleDifficultySize = 12 [packed=true];
+      repeated ItemId PokeballType = 1;
+      repeated float CaptureProbability = 2;
+      optional float ReticleDifficultySize = 12;
   }
 
   message EncounterResponse {
       optional WildPokemonProto WildPokemon = 1;
       optional Background EncounterBackground = 2;
       optional Status EncounterStatus = 3;
-      optional CaptureProbability EncounterCaptureProbability = 4;
+      //optional CaptureProbability EncounterCaptureProbability = 4;
 
       enum Background {
           PARK = 0;
@@ -1148,4 +1148,5 @@ message ResponseEnvelop {
       optional bool MaximumTarget = 6;
       optional bool SlowTarget = 7;
   }
+
 }

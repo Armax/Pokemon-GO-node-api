@@ -202,6 +202,7 @@ message ResponseEnvelop {
     message Pokemon {
         optional uint64 Id = 1;
         optional int32 PokemonId = 2;
+        optional int32 cp = 3;
     }
   }
 
@@ -291,7 +292,7 @@ message ResponseEnvelop {
     	optional int32 stamina_max = 5;
     	optional PokemonMove move_1 = 6;
     	optional PokemonMove move_2 = 7;
-    	optional int32 deployed_fort_id = 8;
+    	optional string deployed_fort_id = 8;
     	optional string owner_name = 9;
     	optional bool is_egg = 10;
     	optional double egg_km_walked_target = 11;

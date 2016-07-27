@@ -358,6 +358,32 @@ function Pokeio() {
         });
     };
 
+    self.DropItem = function (itemId, count, callback) {
+        var _self$playerInfo4 = self.playerInfo;
+        var apiEndpoint = _self$playerInfo4.apiEndpoint;
+        var accessToken = _self$playerInfo4.accessToken;
+        var latitude = _self$playerInfo4.latitude;
+        var longitude = _self$playerInfo4.longitude;
+
+        var dropItemMessage = new RequestEnvelop.RecycleInventoryItemMessage({
+          'item_id': itemId,
+          'count': count
+        });
+
+        var req = new RequestEnvelop.Requests(137, dropItemMessage.encode().toBuffer());
+
+        api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+          if (err) {
+            return callback(err);
+          } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+            return callback('No result');
+          }
+
+          var catchPokemonResponse = ResponseEnvelop.RecycleInventoryItemResponse.decode(f_ret.payload[0]);
+          callback(null, catchPokemonResponse);
+        });
+    };
+
     self.GetLocationCoords = function () {
         var _self$playerInfo5 = self.playerInfo;
         var latitude = _self$playerInfo5.latitude;

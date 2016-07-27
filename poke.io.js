@@ -167,19 +167,6 @@ function Pokeio() {
       if (err) {
         return callback(err);
       }
-      // Getting access token
-      self.GetAccessToken(username, password, function (err, token) {
-        if (err) {
-          return callback(err);
-        }
-        // Getting api endpoint
-        self.GetApiEndpoint(function (err, api_endpoint) {
-          if (err) {
-            return callback(err);
-          }
-          callback(null);
-        });
-      });
     });
   };
 

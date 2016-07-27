@@ -79,7 +79,6 @@ function Pokeio() {
     altitude: 0,
     locationName: '',
     provider: '',
-    apiEndpoint: ''
   };
 
   self.DebugPrint = function (str) {
@@ -200,10 +199,9 @@ function Pokeio() {
       if (err) {
         return callback(err);
       }
-      var api_endpoint = 'https://' + f_ret.api_url + '/rpc';
-      self.playerInfo.apiEndpoint = api_endpoint;
-      self.DebugPrint('[i] Received API Endpoint: ' + api_endpoint);
-      return callback(null, api_endpoint);
+      var apiEndpoint = 'https://' + f_ret.api_url + '/rpc';
+      self.DebugPrint('[i] Received API Endpoint: ' + apiEndpoint);
+      return callback(null, apiEndpoint);
     });
   };
 
@@ -237,10 +235,6 @@ function Pokeio() {
 
   // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
   self.Heartbeat = function (accessToken, callback) {
-    var _self$playerInfo2 = self.playerInfo;
-    var apiEndpoint = _self$playerInfo2.apiEndpoint;
-
-
     var nullbytes = new Array(21);
     nullbytes.fill(0);
 
@@ -336,9 +330,6 @@ function Pokeio() {
   };
 
   self.EvolvePokemon = function (pokemonId, accessToken, callback) {
-    var _self$playerInfo3 = self.playerInfo;
-    var apiEndpoint = _self$playerInfo3.apiEndpoint;
-
     var evolvePokemon = new RequestEnvelop.EvolvePokemonMessage({
       'PokemonId': pokemonId
     });
@@ -361,9 +352,6 @@ function Pokeio() {
   };
 
   self.TransferPokemon = function (pokemonId, accessToken, callback) {
-    var _self$playerInfo3 = self.playerInfo;
-    var apiEndpoint = _self$playerInfo3.apiEndpoint;
-
     var transferPokemon = new RequestEnvelop.TransferPokemonMessage({
       'PokemonId': pokemonId
     });
@@ -387,9 +375,6 @@ function Pokeio() {
 
   //still WIP
   self.CatchPokemon = function (mapPokemon, normalizedHitPosition, normalizedReticleSize, spinModifier, pokeball, accessToken, callback) {
-    var _self$playerInfo3 = self.playerInfo;
-    var apiEndpoint = _self$playerInfo3.apiEndpoint;
-
     var catchPokemon = new RequestEnvelop.CatchPokemonMessage({
       'encounter_id': mapPokemon.EncounterId,
       'pokeball': pokeball,
@@ -419,7 +404,6 @@ function Pokeio() {
 
   self.EncounterPokemon = function (catchablePokemon, accessToken, callback) {
     var _self$playerInfo4 = self.playerInfo;
-    var apiEndpoint = _self$playerInfo4.apiEndpoint;
     var latitude = _self$playerInfo4.latitude;
     var longitude = _self$playerInfo4.longitude;
 
@@ -450,7 +434,6 @@ function Pokeio() {
 
   self.DropItem = function (itemId, count, accessToken, callback) {
     var _self$playerInfo4 = self.playerInfo;
-    var apiEndpoint = _self$playerInfo4.apiEndpoint;
     var latitude = _self$playerInfo4.latitude;
     var longitude = _self$playerInfo4.longitude;
 
@@ -480,9 +463,6 @@ function Pokeio() {
       'pokemon_id': pokemon.toString()
     });
     var req = new RequestEnvelop.Requests(112, releasePokemon.encode().toBuffer());
-
-    var _self$playerInfo3 = self.playerInfo;
-    var apiEndpoint = _self$playerInfo3.apiEndpoint;
 
     api_req(accessToken, req, function (err, f_ret) {
       if (err) {

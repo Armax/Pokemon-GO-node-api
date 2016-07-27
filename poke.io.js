@@ -123,16 +123,15 @@ function Pokeio() {
     };
 
     self.request.post(options, function (err, response, body) {
-      if (err)
-      {
+      if (err) {
         return callback(new Error('Error'));
       }
-      
+
       if (response === undefined || body === undefined) {
         console.error('[!] RPC Server offline');
         return callback(new Error('RPC Server offline'));
       }
-      
+
       var f_ret;
       try {
         f_ret = ResponseEnvelop.decode(body);
@@ -310,12 +309,13 @@ function Pokeio() {
         return callback('No result');
       }
 
+      var dErr, response;
       try {
-        var FortSearchResponse = ResponseEnvelop.FortDetailsResponse.decode(f_ret.payload[0]);
-        callback(null, FortSearchResponse);
+        response = ResponseEnvelop.FortDetailsResponse.decode(f_ret.payload[0]);
       } catch (err) {
-        callback(err, null);
+        dErr = err;
       }
+      callback(err, response);
     });
   };
 
@@ -338,12 +338,13 @@ function Pokeio() {
         return callback('No result');
       }
 
+      var dErr, response;
       try {
-        var FortSearchResponse = ResponseEnvelop.FortSearchResponse.decode(f_ret.payload[0]);
-        callback(null, FortSearchResponse);
+        response = ResponseEnvelop.FortSearchResponse.decode(f_ret.payload[0]);
       } catch (err) {
-        callback(err, null);
+        dErr = err;
       }
+      callback(err, response);
     });
   };
 
@@ -364,12 +365,14 @@ function Pokeio() {
       } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
         return callback('No result');
       }
+
+      var dErr, response;
       try {
-        var catchPokemonResponse = ResponseEnvelop.EvolvePokemonResponse.decode(f_ret.payload[0]);
-        callback(null, catchPokemonResponse);
+        response = ResponseEnvelop.EvolvePokemonResponse.decode(f_ret.payload[0]);
       } catch (err) {
-        callback(err, null);
+        dErr = err;
       }
+      callback(err, response);
     });
   };
 
@@ -390,12 +393,14 @@ function Pokeio() {
       } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
         return callback('No result');
       }
+
+      var dErr, response;
       try {
-        var catchPokemonResponse = ResponseEnvelop.TransferPokemonResponse.decode(f_ret.payload[0]);
-        callback(null, catchPokemonResponse);
+        response = ResponseEnvelop.TransferPokemonResponse.decode(f_ret.payload[0]);
       } catch (err) {
-        callback(err, null);
+        dErr = err;
       }
+      callback(err, response);
     });
   };
 
@@ -423,12 +428,15 @@ function Pokeio() {
       } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
         return callback('No result');
       }
+
+      var dErr, response;
       try {
-        var catchPokemonResponse = ResponseEnvelop.CatchPokemonResponse.decode(f_ret.payload[0]);
-        callback(null, catchPokemonResponse);
+        response = ResponseEnvelop.CatchPokemonResponse.decode(f_ret.payload[0]);
       } catch (err) {
-        callback(err, null);
+        dErr = err;
       }
+      callback(err, response);
+
     });
   };
 
@@ -455,12 +463,14 @@ function Pokeio() {
         return callback('No result');
       }
 
+      var dErr, response;
       try {
-        var catchPokemonResponse = ResponseEnvelop.EncounterResponse.decode(f_ret.payload[0]);
-        callback(null, catchPokemonResponse);
+        response = ResponseEnvelop.EncounterResponse.decode(f_ret.payload[0]);
       } catch (err) {
-        callback(err, null);
+        dErr = err;
       }
+      callback(err, response);
+
     });
   };
 
@@ -508,12 +518,14 @@ function Pokeio() {
       } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
         return callback('No result');
       }
+
+      var dErr, response;
       try {
-        var releasePokemonResponse = ResponseEnvelop.ReleasePokemonResponse.decode(f_ret.payload[0]);
-        callback(null, releasePokemonResponse);
+        response = ResponseEnvelop.ReleasePokemonResponse.decode(f_ret.payload[0]);
       } catch (err) {
-        callback(err, null);
+        dErr = err;
       }
+      callback(err, response);
     });
 
   };

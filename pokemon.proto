@@ -53,11 +53,11 @@ message RequestEnvelop {
     required double spin_modifier = 6;
     required double normalized_hit_position = 7;
    }
-   
+
   message EvolvePokemonMessage {
     required fixed64 PokemonId = 1;
   }
-  
+
   message TransferPokemonMessage {
     required fixed64 PokemonId = 1;
   }
@@ -89,10 +89,26 @@ message RequestEnvelop {
       required int32 item_id = 1;
       required int32 count = 2;
   }
-  
+
   message ReleasePokemonMessage {
     optional fixed64 pokemon_id = 1;
     repeated fixed64 pokemon_ids = 2;
+  }
+
+  message PlayerUpdateMessage {
+      optional double latitude = 1;
+      optional double longitude = 2;
+  }
+
+  message UseItemEggIncubatorMessage {
+      required string item_id = 1;
+      required uint64 pokemon_id = 2;
+  }
+
+  message UseItemCaptureMessage {
+      required int32 item_id = 1;
+      required fixed64 encounter_id = 2;
+      required string spawn_point_id = 3;
   }
 }
 
@@ -350,7 +366,7 @@ message ResponseEnvelop {
       optional int32 from_fort = 31;
 
   }
-  
+
   enum TeamColor {
     NEUTRAL = 0;
     BLUE = 1;
@@ -935,8 +951,8 @@ message ResponseEnvelop {
   message CatchPokemonResponse {
       required CatchStatus Status = 1;
       optional double MissPercent = 2;
-      //optional uint64 CapturedPokemonId = 3;
-      //optional CaptureAward CaptureAward = 4;
+      optional fixed64 CapturedPokemonId = 3;
+      optional CaptureAward CaptureAward = 4;
 
       enum CatchStatus {
           CATCH_ERROR = 0;
@@ -982,16 +998,16 @@ message ResponseEnvelop {
   }
 
   message CaptureProbability {
-      repeated ItemId PokeballType = 1;
-      repeated float CaptureProbability = 2;
-      optional float ReticleDifficultySize = 12;
+      repeated ItemId PokeballType = 1 [packed=true];
+      repeated float CaptureProbability = 2 [packed=true];
+      optional float ReticleDifficultySize = 12 [packed=true];
   }
 
   message EncounterResponse {
       optional WildPokemonProto WildPokemon = 1;
       optional Background EncounterBackground = 2;
       optional Status EncounterStatus = 3;
-      //optional CaptureProbability EncounterCaptureProbability = 4;
+      optional CaptureProbability EncounterCaptureProbability = 4;
 
       enum Background {
           PARK = 0;
@@ -1018,7 +1034,7 @@ message ResponseEnvelop {
   	optional int32 experience_awarded = 5;
   	optional int64 cooldown_complete_timestamp_ms = 6;
   	optional int32 chain_hack_sequence_number = 7;
-  
+
   	enum Result {
   		NO_RESULT_SET = 0;
   		SUCCESS = 1;
@@ -1066,7 +1082,7 @@ message ResponseEnvelop {
 	optional ItemId item_id = 1;
 	optional int32 item_count = 2;
   }
-  
+
   message ReleasePokemonResponse {
     required ReleaseStatus Status = 1;
     optional int32 CandyAwarded = 2;
@@ -1078,8 +1094,8 @@ message ResponseEnvelop {
       ERROR_POKEMON_IS_EGG = 4;
     }
   }
- 
-  message EvolvePokemonResponse 
+
+  message EvolvePokemonResponse
   {
     optional EvolvePokemonStatus Result = 1;
     optional Pokemon EvolvedPokemon = 2;
@@ -1094,10 +1110,42 @@ message ResponseEnvelop {
   		FAILED_POKEMON_CANNOT_EVOLVE = 4;
   		FAILED_POKEMON_IS_DEPLOYED = 5;
   	}
-  } 
-  
+  }
+
   message TransferPokemonResponse {
     optional int32 Status = 1;
     optional int32 CandyAwarded = 2;
+  }
+
+  message PlayerUpdateResponse {
+      repeated WildPokemonProto WildPokemon = 1;
+      repeated PokemonFortProto Forts = 2;
+      optional int32 NearbyForts = 3;
+  }
+
+  message UseItemEggIncubatorResponse {
+      optional Result Status = 1;
+      optional EggIncubator EggIncubator = 2;
+
+      enum Result {
+          UNSET = 0;
+          SUCCESS = 1;
+          ERROR_INCUBATOR_NOT_FOUND = 2;
+          ERROR_POKEMON_EGG_NOT_FOUND = 3;
+          ERROR_POKEMON_ID_NOT_EGG = 4;
+          ERROR_INCUBATOR_ALREADY_IN_USE = 5;
+          ERROR_POKEMON_ALREADY_INCUBATING = 6;
+          ERROR_INCUBATOR_NO_USES_REMAINING = 7;
+      }
+  }
+
+  message UseItemCaptureResponse {
+      optional bool Success = 1;
+      optional double UseItemCaptureMulitplier = 2;
+      optional double UseItemFleeMultiplier = 3;
+      optional bool StopMovement = 4;
+      optional bool StopAttact = 5;
+      optional bool MaximumTarget = 6;
+      optional bool SlowTarget = 7;
   }
 }

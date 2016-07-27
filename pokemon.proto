@@ -1,1102 +1,1111 @@
 message RequestEnvelop {
-  required int32 unknown1 = 1;
-  optional int64 rpc_id = 3;
-  repeated Requests requests = 4;
-  optional Unknown6 unknown6 = 6;
-  optional double latitude = 7;
-  optional double longitude = 8;
-  optional double altitude = 9;
-  optional AuthInfo auth = 10;
-  optional int64 unknown12 = 12;
-
-  message Requests {
-    required int32 type = 1;
-    optional bytes message = 2;
-  }
-
-  message Unknown3 {
-    required string unknown4 = 1;
-  }
-
-  message Unknown6 {
     required int32 unknown1 = 1;
-    required Unknown2 unknown2 = 2;
+    optional int64 rpc_id = 3;
+    repeated Requests requests = 4;
+    optional Unknown6 unknown6 = 6;
+    optional double latitude = 7;
+    optional double longitude = 8;
+    optional double altitude = 9;
+    optional AuthInfo auth = 10;
+    optional int64 unknown12 = 12;
 
-    message Unknown2 {
-      required bytes unknown1 = 1;
+    message Requests {
+        required int32 type = 1;
+        optional bytes message = 2;
     }
 
-  }
-  message AuthInfo {
-    required string provider = 1;
-    required JWT token = 2;
-
-    message JWT {
-      required string contents = 1;
-      required int32 unknown13  = 2;
+    message Unknown3 {
+        required string unknown4 = 1;
     }
-  }
 
-  message MessageQuad {
-    repeated uint64 f1 = 1 [packed=true];
-    repeated int64 f2 = 2 [packed=true];
-    required double lat = 3;
-    required double long = 4;
-  }
+    message Unknown6 {
+        required int32 unknown1 = 1;
+        required Unknown2 unknown2 = 2;
 
-  message CatchPokemonMessage {
-    required fixed64 encounter_id = 1;
-    required int32 pokeball = 2;
-    required double normalized_reticle_size = 3;
-    required string spawnpoint_id = 4;
-    required bool hit_pokemon = 5;
-    required double spin_modifier = 6;
-    required double normalized_hit_position = 7;
-   }
-   
-  message EvolvePokemonMessage {
-    required fixed64 PokemonId = 1;
-  }
-  
-  message TransferPokemonMessage {
-    required fixed64 PokemonId = 1;
-  }
+        message Unknown2 {
+            required bytes unknown1 = 1;
+        }
 
-  message EncounterMessage {
-    repeated fixed64 encounter_id = 1;
-    required string spawnpoint_id = 2;
-    required double player_latitude = 3;
-    required double player_longitude = 4;
-  }
+    }
+    message AuthInfo {
+        required string provider = 1;
+        required JWT token = 2;
 
-  message FortSearchMessage {
-	  required string fort_id = 1;
-	  required double player_latitude = 2;
-	  required double player_longitude = 3;
-	  required double fort_latitude = 4;
-    required double fort_longitude = 5;
-  }
+        message JWT {
+            required string contents = 1;
+            required int32 unknown13 = 2;
+        }
+    }
 
-	message FortDetailsRequest
-	{
-  	required string fort_id = 1;
- 	  required double fort_latitude = 2;
-    required double fort_longitude = 3;
-	}
+    message MessageQuad {
+        repeated uint64 f1 = 1 [packed = true];
+        repeated int64 f2 = 2 [packed = true];
+        required double lat = 3;
+        required double long = 4;
+    }
 
-  //rpc id : 137
-  message RecycleInventoryItemMessage {
-      required int32 item_id = 1;
-      required int32 count = 2;
-  }
-  
-  message ReleasePokemonMessage {
-    optional fixed64 pokemon_id = 1;
-    repeated fixed64 pokemon_ids = 2;
-  }
+    message CatchPokemonMessage {
+        required fixed64 encounter_id = 1;
+        required int32 pokeball = 2;
+        required double normalized_reticle_size = 3;
+        required string spawnpoint_id = 4;
+        required bool hit_pokemon = 5;
+        required double spin_modifier = 6;
+        required double normalized_hit_position = 7;
+    }
+
+    message EvolvePokemonMessage {
+        required fixed64 PokemonId = 1;
+    }
+
+    message TransferPokemonMessage {
+        required fixed64 PokemonId = 1;
+    }
+
+    message EncounterMessage {
+        repeated fixed64 encounter_id = 1;
+        required string spawnpoint_id = 2;
+        required double player_latitude = 3;
+        required double player_longitude = 4;
+    }
+
+    message FortSearchMessage {
+        required string fort_id = 1;
+        required double player_latitude = 2;
+        required double player_longitude = 3;
+        required double fort_latitude = 4;
+        required double fort_longitude = 5;
+    }
+
+    message FortDetailsRequest {
+        required string fort_id = 1;
+        required double fort_latitude = 2;
+        required double fort_longitude = 3;
+    }
+
+    //rpc id : 137
+    message RecycleInventoryItemMessage {
+        required int32 item_id = 1;
+        required int32 count = 2;
+    }
+
+    message ReleasePokemonMessage {
+        optional fixed64 pokemon_id = 1;
+        repeated fixed64 pokemon_ids = 2;
+    }
+
+    message PlayerUpdateMessage {
+        optional double latitude = 1;
+        optional double longitude = 2;
+    }
 }
 
 message ResponseEnvelop {
-  optional int32 unknown1 = 1;
-  optional int64 unknown2 = 2;
-  optional string api_url = 3;
-  optional Unknown6 unknown6 = 6;
-  optional Unknown7 unknown7 = 7;
-  repeated bytes payload = 100;
+    optional int32 unknown1 = 1;
+    optional int64 unknown2 = 2;
+    optional string api_url = 3;
+    optional Unknown6 unknown6 = 6;
+    optional Unknown7 unknown7 = 7;
+    repeated bytes payload = 100;
 
-  message Unknown6 {
-    required int32 unknown1 = 1;
-    required Unknown2 unknown2 = 2;
+    message Unknown6 {
+        required int32 unknown1 = 1;
+        required Unknown2 unknown2 = 2;
 
-    message Unknown2 {
-      required bytes unknown1 = 1;
+        message Unknown2 {
+            required bytes unknown1 = 1;
+        }
+
     }
 
-  }
+    message Unknown7 {
+        optional bytes unknown71 = 1;
+        optional int64 unknown72 = 2;
+        optional bytes unknown73 = 3;
+    }
 
-  message Unknown7 {
-    optional bytes unknown71 = 1;
-    optional int64 unknown72 = 2;
-    optional bytes unknown73 = 3;
-  }
+    message HeartbeatPayload {
+        repeated ClientMapCell cells = 1;
+    }
 
-  message HeartbeatPayload {
-    repeated ClientMapCell cells = 1;
-  }
+    message ClientMapCell {
+        required uint64 S2CellId = 1;
+        required int64 AsOfTimeMs = 2;
+        repeated PokemonFortProto Fort = 3;
+        repeated ClientSpawnPointProto SpawnPoint = 4;
+        repeated WildPokemonProto WildPokemon = 5;
+        //unknown DeletedObject = 6;
+        optional bool IsTruncatedList = 7;
+        repeated PokemonSummaryFortProto FortSummary = 8;
+        repeated ClientSpawnPointProto DecimatedSpawnPoint = 9;
+        repeated MapPokemonProto MapPokemon = 10;
+        repeated NearbyPokemonProto NearbyPokemon = 11;
+    }
 
-  message ClientMapCell {
-    required uint64 S2CellId = 1;
-    required int64 AsOfTimeMs = 2;
-    repeated PokemonFortProto Fort = 3;
-    repeated ClientSpawnPointProto SpawnPoint = 4;
-    repeated WildPokemonProto WildPokemon = 5;
-    //unknown DeletedObject = 6;
-    optional bool IsTruncatedList = 7;
-    repeated PokemonSummaryFortProto FortSummary = 8;
-    repeated ClientSpawnPointProto DecimatedSpawnPoint = 9;
-    repeated MapPokemonProto MapPokemon = 10;
-    repeated NearbyPokemonProto NearbyPokemon = 11;
-  }
+    message MapPokemonProto {
+        required string SpawnPointId = 1;
+        required fixed64 EncounterId = 2;
+        required int32 PokedexTypeId = 3;
+        required int64 ExpirationTimeMs = 4;
+        optional double Latitude = 5;
+        optional double Longitude = 6;
+    }
 
-  message MapPokemonProto {
-    required string SpawnPointId = 1;
-    required fixed64 EncounterId = 2;
-    required int32 PokedexTypeId = 3;
-    required int64 ExpirationTimeMs = 4;
-    optional double Latitude = 5;
-    optional double Longitude = 6;
-  }
+    message PokemonFortProto {
+        required string FortId = 1;
+        required int64 LastModifiedMs = 2;
+        required double Latitude = 3;
+        required double Longitude = 4;
+        optional int32 Team = 5;
+        optional int32 GuardPokemonId = 6;
+        optional int32 GuardPokemonLevel = 7;
+        required bool Enabled = 8;
+        // ENUM.Holoholo.Rpc.FortType FortType = 9;
+        optional int32 FortType = 9;
+        optional int64 GymPoints = 10;
+        optional bool IsInBattle = 11;
+        optional bytes ActiveFortModifier = 12;
+        optional FortLureInfoProto LureInfo = 13;
+        optional int64 CooldownCompleteMs = 14;
+        // ENUM.Holoholo.Rpc.Sponsor.Types.FortSponsor.Sponsor Sponsor = 15;
+        optional int32 Sponsor = 15;
+        // ENUM.Holoholo.Rpc.RenderingType.Types.FortRenderingType.RenderingType RenderingType = 16;
+        optional int32 RenderingType = 16;
+    }
 
-  message PokemonFortProto {
-    required string FortId = 1;
-    required int64 LastModifiedMs = 2;
-    required double Latitude = 3;
-    required double Longitude = 4;
-    optional int32 Team = 5;
-    optional int32 GuardPokemonId = 6;
-    optional int32 GuardPokemonLevel = 7;
-    required bool Enabled = 8;
-    // ENUM.Holoholo.Rpc.FortType FortType = 9;
-    optional int32 FortType = 9;
-    optional int64 GymPoints = 10;
-    optional bool IsInBattle = 11;
-    optional bytes ActiveFortModifier = 12;
-    optional FortLureInfoProto LureInfo = 13;
-    optional int64 CooldownCompleteMs = 14;
-    // ENUM.Holoholo.Rpc.Sponsor.Types.FortSponsor.Sponsor Sponsor = 15;
-    optional int32 Sponsor = 15;
-    // ENUM.Holoholo.Rpc.RenderingType.Types.FortRenderingType.RenderingType RenderingType = 16;
-    optional int32 RenderingType = 16;
-  }
+    //based on : https://github.com/AHAAAAAAA/PokemonGo-Map/blob/master/pokemon.proto
+    message FortLureInfoProto {
+        required string FortId = 1;
+        required double unknown2 = 2;
+        required int32 ActivePokemonId = 3;
+        required int64 LureExpiresTimestampMs = 4;
+        optional string DeployerPlayerCodename = 5;
+    }
 
-   //based on : https://github.com/AHAAAAAAA/PokemonGo-Map/blob/master/pokemon.proto
-  message FortLureInfoProto {
-    required string FortId = 1;
-    required double unknown2 = 2;
-    required int32 ActivePokemonId = 3;
-    required int64 LureExpiresTimestampMs = 4;
-    optional string DeployerPlayerCodename = 5;
-  }
+    message PokemonSummaryFortProto {
+        required string FortSummaryId = 1;
+        required int64 LastModifiedMs = 2;
+        required double Latitude = 3;
+        required double Longitude = 4;
+    }
 
-  message PokemonSummaryFortProto {
-    required string FortSummaryId = 1;
-    required int64 LastModifiedMs = 2;
-    required double Latitude = 3;
-    required double Longitude = 4;
-  }
+    message ClientSpawnPointProto {
+        required double Latitude = 2;
+        required double Longitude = 3;
+    }
 
-  message ClientSpawnPointProto {
-    required double Latitude = 2;
-    required double Longitude = 3;
-  }
+    message WildPokemonProto {
+        optional fixed64 EncounterId = 1;
+        optional int64 LastModifiedMs = 2;
+        optional double Latitude = 3;
+        optional double Longitude = 4;
+        optional string SpawnPointId = 5;
+        optional PokemonData pokemon = 7;
+        optional int32 TimeTillHiddenMs = 11;
 
-  message WildPokemonProto {
-    optional fixed64 EncounterId = 1;
-    optional int64 LastModifiedMs = 2;
-    optional double Latitude = 3;
-    optional double Longitude = 4;
-    optional string SpawnPointId = 5;
-    optional Pokemon pokemon = 7;
-    optional int32 TimeTillHiddenMs = 11;
+        message Pokemon {
+            optional uint64 Id = 1;
+            optional int32 PokemonId = 2;
+        }
+    }
+
+    message NearbyPokemonProto {
+        optional int32 PokedexNumber = 1;
+        optional float DistanceMeters = 2;
+        optional fixed64 EncounterId = 3;
+    }
+
+    message ProfilePayload {
+        repeated int32 unknown1 = 1;
+        optional Profile profile = 2;
+    }
+
+    message Profile {
+        required int64 creation_time = 1;
+        optional string username = 2;
+        optional int32 team = 5;
+        optional bytes tutorial = 7;
+        optional AvatarDetails avatar = 8;
+        optional int32 poke_storage = 9;
+        optional int32 item_storage = 10;
+        optional DailyBonus daily_bonus = 11;
+        optional bytes unknown12 = 12;
+        optional bytes unknown13 = 13;
+        repeated Currency currency = 14;
+
+        message AvatarDetails {
+            optional int32 skin = 2;
+            optional int32 hair = 3;
+            optional int32 tshirt = 4;
+            optional int32 trousers = 5;
+            optional int32 cap = 6;
+            optional int32 boots = 7;
+            optional int32 gender = 8;
+            optional int32 eyes = 9;
+            optional int32 backpack = 10;
+        }
+
+        message DailyBonus {
+            optional int64 NextCollectTimestampMs = 1;
+            optional int64 NextDefenderBonusCollectTimestampMs = 2;
+        }
+
+        message Currency {
+            required string type = 1;
+            optional int32 amount = 2;
+        }
+    }
+
+    message GetInventoryResponse {
+        optional bool success = 1;
+        optional InventoryDelta inventory_delta = 2;
+
+    }
+
+    message InventoryDelta {
+        optional int64 original_timestamp_ms = 1;
+        optional int64 new_timestamp_ms = 2;
+        repeated InventoryItem inventory_items = 3;
+    }
+
+    message InventoryItem {
+        optional int64 modified_timestamp_ms = 1;
+        optional int64 deleted_item_key = 2;
+        optional InventoryItemData inventory_item_data = 3;
+    }
+
+    message InventoryItemData {
+        optional PokemonData pokemon = 1;
+        optional Item item = 2;
+        optional PokedexEntry pokedex_entry = 3;
+        optional PlayerStats player_stats = 4;
+        optional PlayerCurrency player_currency = 5;
+        optional PlayerCamera player_camera = 6;
+        optional InventoryUpgrades inventory_upgrades = 7;
+        optional AppliedItems applied_items = 8;
+        optional EggIncubators egg_incubators = 9;
+        optional PokemonFamily pokemon_family = 10;
+    }
+
+    message PokemonData {
+        optional fixed64 Id = 1;
+        optional PokemonId PokemonId = 2;
+        optional int32 CombatPower = 3;
+        optional int32 Stamina = 4;
+        optional int32 MaxStamina = 5;
+        optional PokemonMove FirstMove = 6;
+        optional PokemonMove SecondMove = 7;
+        optional int32 DeployedFortId = 8;
+        optional string OwnerName = 9;
+        optional bool IsEgg = 10;
+        optional double EggKmWalkedTarget = 11;
+        optional double EggKmWalkedStart = 12;
+        optional int32 Origin = 14;
+        optional float HeightMetres = 15;
+        optional float WeightKg = 16;
+        optional int32 IndividualAttacks = 17;
+        optional int32 IndividualDefense = 18;
+        optional int32 IndividualStamina = 19;
+        optional float CpMultiplier = 20;
+        optional ItemId Pokeball = 21;
+        optional uint64 CapturedCellId = 22;
+        optional int32 BattlesAttacked = 23;
+        optional int32 BattlesDefended = 24;
+        optional string EggIncubatorId = 25;
+        optional uint64 CreationTimeMs = 26;
+        optional int32 NumberUpgrades = 27;
+        optional float AdditionalCpMultiplier = 28;
+        optional int32 Favorite = 29;
+        optional string Nickname = 30;
+        optional int32 FromFort = 31;
+    }
 
     message Pokemon {
-        optional uint64 Id = 1;
-        optional int32 PokemonId = 2;
-    }
-  }
+        optional int32 id = 1;
+        optional PokemonId pokemon_type = 2;
+        optional int32 cp = 3;
+        optional int32 stamina = 4;
+        optional int32 stamina_max = 5;
+        optional PokemonMove move_1 = 6;
+        optional PokemonMove move_2 = 7;
+        optional int32 deployed_fort_id = 8;
+        optional string owner_name = 9;
+        optional bool is_egg = 10;
+        optional int32 egg_km_walked_target = 11;
+        optional int32 egg_km_walked_start = 12;
+        optional int32 origin = 14;
+        optional float height_m = 15;
+        optional float weight_kg = 16;
+        optional int32 individual_attack = 17;
+        optional int32 individual_defense = 18;
+        optional int32 individual_stamina = 19;
+        optional int32 cp_multiplier = 20;
+        optional int32 pokeball = 21;
+        optional uint64 captured_cell_id = 22;
+        optional int32 battles_attacked = 23;
+        optional int32 battles_defended = 24;
+        optional int32 egg_incubator_id = 25;
+        optional uint64 creation_time_ms = 26;
+        optional int32 num_upgrades = 27;
+        optional int32 additional_cp_multiplier = 28;
+        optional int32 favorite = 29;
+        optional string nickname = 30;
+        optional int32 from_fort = 31;
 
-  message NearbyPokemonProto {
-    optional int32 PokedexNumber = 1;
-    optional float DistanceMeters = 2;
-    optional fixed64 EncounterId = 3;
-  }
-
-  message ProfilePayload {
-    repeated int32 unknown1 = 1;
-    optional Profile profile = 2;
-  }
-
-  message Profile {
-    required int64 creation_time = 1;
-    optional string username = 2;
-    optional int32 team = 5;
-    optional bytes tutorial = 7;
-    optional AvatarDetails avatar = 8;
-    optional int32 poke_storage = 9;
-    optional int32 item_storage = 10;
-    optional DailyBonus daily_bonus = 11;
-    optional bytes unknown12 = 12;
-    optional bytes unknown13 = 13;
-    repeated Currency currency = 14;
-
-    message AvatarDetails {
-        optional int32 skin = 2;
-        optional int32 hair = 3;
-        optional int32 tshirt = 4;
-        optional int32 trousers = 5;
-        optional int32 cap = 6;
-        optional int32 boots = 7;
-        optional int32 gender = 8;
-        optional int32 eyes = 9;
-        optional int32 backpack = 10;
     }
 
-    message DailyBonus {
-      optional int64 NextCollectTimestampMs = 1;
-      optional int64 NextDefenderBonusCollectTimestampMs = 2;
+    enum TeamColor {
+        NEUTRAL = 0;
+        BLUE = 1;
+        RED = 2;
+        YELLOW = 3;
     }
 
-    message Currency {
-      required string type = 1;
-      optional int32 amount = 2;
+    enum PokemonMove {
+        MOVE_UNSET = 0;
+        THUNDER_SHOCK = 1;
+        QUICK_ATTACK = 2;
+        SCRATCH = 3;
+        EMBER = 4;
+        VINE_WHIP = 5;
+        TACKLE = 6;
+        RAZOR_LEAF = 7;
+        TAKE_DOWN = 8;
+        WATER_GUN = 9;
+        BITE = 10;
+        POUND = 11;
+        DOUBLE_SLAP = 12;
+        WRAP = 13;
+        HYPER_BEAM = 14;
+        LICK = 15;
+        DARK_PULSE = 16;
+        SMOG = 17;
+        SLUDGE = 18;
+        METAL_CLAW = 19;
+        VICE_GRIP = 20;
+        FLAME_WHEEL = 21;
+        MEGAHORN = 22;
+        WING_ATTACK = 23;
+        FLAMETHROWER = 24;
+        SUCKER_PUNCH = 25;
+        DIG = 26;
+        LOW_KICK = 27;
+        CROSS_CHOP = 28;
+        PSYCHO_CUT = 29;
+        PSYBEAM = 30;
+        EARTHQUAKE = 31;
+        STONE_EDGE = 32;
+        ICE_PUNCH = 33;
+        HEART_STAMP = 34;
+        DISCHARGE = 35;
+        FLASH_CANNON = 36;
+        PECK = 37;
+        DRILL_PECK = 38;
+        ICE_BEAM = 39;
+        BLIZZARD = 40;
+        AIR_SLASH = 41;
+        HEAT_WAVE = 42;
+        TWINEEDLE = 43;
+        POISON_JAB = 44;
+        AERIAL_ACE = 45;
+        DRILL_RUN = 46;
+        PETAL_BLIZZARD = 47;
+        MEGA_DRAIN = 48;
+        BUG_BUZZ = 49;
+        POISON_FANG = 50;
+        NIGHT_SLASH = 51;
+        SLASH = 52;
+        BUBBLE_BEAM = 53;
+        SUBMISSION = 54;
+        KARATE_CHOP = 55;
+        LOW_SWEEP = 56;
+        AQUA_JET = 57;
+        AQUA_TAIL = 58;
+        SEED_BOMB = 59;
+        PSYSHOCK = 60;
+        ROCK_THROW = 61;
+        ANCIENT_POWER = 62;
+        ROCK_TOMB = 63;
+        ROCK_SLIDE = 64;
+        POWER_GEM = 65;
+        SHADOW_SNEAK = 66;
+        SHADOW_PUNCH = 67;
+        SHADOW_CLAW = 68;
+        OMINOUS_WIND = 69;
+        SHADOW_BALL = 70;
+        BULLET_PUNCH = 71;
+        MAGNET_BOMB = 72;
+        STEEL_WING = 73;
+        IRON_HEAD = 74;
+        PARABOLIC_CHARGE = 75;
+        SPARK = 76;
+        THUNDER_PUNCH = 77;
+        THUNDER = 78;
+        THUNDERBOLT = 79;
+        TWISTER = 80;
+        DRAGON_BREATH = 81;
+        DRAGON_PULSE = 82;
+        DRAGON_CLAW = 83;
+        DISARMING_VOICE = 84;
+        DRAINING_KISS = 85;
+        DAZZLING_GLEAM = 86;
+        MOONBLAST = 87;
+        PLAY_ROUGH = 88;
+        CROSS_POISON = 89;
+        SLUDGE_BOMB = 90;
+        SLUDGE_WAVE = 91;
+        GUNK_SHOT = 92;
+        MUD_SHOT = 93;
+        BONE_CLUB = 94;
+        BULLDOZE = 95;
+        MUD_BOMB = 96;
+        FURY_CUTTER = 97;
+        BUG_BITE = 98;
+        SIGNAL_BEAM = 99;
+        X_SCISSOR = 100;
+        FLAME_CHARGE = 101;
+        FLAME_BURST = 102;
+        FIRE_BLAST = 103;
+        BRINE = 104;
+        WATER_PULSE = 105;
+        SCALD = 106;
+        HYDRO_PUMP = 107;
+        PSYCHIC = 108;
+        PSYSTRIKE = 109;
+        ICE_SHARD = 110;
+        ICY_WIND = 111;
+        FROST_BREATH = 112;
+        ABSORB = 113;
+        GIGA_DRAIN = 114;
+        FIRE_PUNCH = 115;
+        SOLAR_BEAM = 116;
+        LEAF_BLADE = 117;
+        POWER_WHIP = 118;
+        SPLASH = 119;
+        ACID = 120;
+        AIR_CUTTER = 121;
+        HURRICANE = 122;
+        BRICK_BREAK = 123;
+        CUT = 124;
+        SWIFT = 125;
+        HORN_ATTACK = 126;
+        STOMP = 127;
+        HEADBUTT = 128;
+        HYPER_FANG = 129;
+        SLAM = 130;
+        BODY_SLAM = 131;
+        REST = 132;
+        STRUGGLE = 133;
+        SCALD_BLASTOISE = 134;
+        HYDRO_PUMP_BLASTOISE = 135;
+        WRAP_GREEN = 136;
+        WRAP_PINK = 137;
+        FURY_CUTTER_FAST = 200;
+        BUG_BITE_FAST = 201;
+        BITE_FAST = 202;
+        SUCKER_PUNCH_FAST = 203;
+        DRAGON_BREATH_FAST = 204;
+        THUNDER_SHOCK_FAST = 205;
+        SPARK_FAST = 206;
+        LOW_KICK_FAST = 207;
+        KARATE_CHOP_FAST = 208;
+        EMBER_FAST = 209;
+        WING_ATTACK_FAST = 210;
+        PECK_FAST = 211;
+        LICK_FAST = 212;
+        SHADOW_CLAW_FAST = 213;
+        VINE_WHIP_FAST = 214;
+        RAZOR_LEAF_FAST = 215;
+        MUD_SHOT_FAST = 216;
+        ICE_SHARD_FAST = 217;
+        FROST_BREATH_FAST = 218;
+        QUICK_ATTACK_FAST = 219;
+        SCRATCH_FAST = 220;
+        TACKLE_FAST = 221;
+        POUND_FAST = 222;
+        CUT_FAST = 223;
+        POISON_JAB_FAST = 224;
+        ACID_FAST = 225;
+        PSYCHO_CUT_FAST = 226;
+        ROCK_THROW_FAST = 227;
+        METAL_CLAW_FAST = 228;
+        BULLET_PUNCH_FAST = 229;
+        WATER_GUN_FAST = 230;
+        SPLASH_FAST = 231;
+        WATER_GUN_FAST_BLASTOISE = 232;
+        MUD_SLAP_FAST = 233;
+        ZEN_HEADBUTT_FAST = 234;
+        CONFUSION_FAST = 235;
+        POISON_STING_FAST = 236;
+        BUBBLE_FAST = 237;
+        FEINT_ATTACK_FAST = 238;
+        STEEL_WING_FAST = 239;
+        FIRE_FANG_FAST = 240;
+        ROCK_SMASH_FAST = 241;
     }
-  }
 
-  message GetInventoryResponse {
-      optional bool success = 1;
-      optional InventoryDelta inventory_delta = 2;
-
-  }
-
-  message InventoryDelta {
-      optional int64 original_timestamp_ms = 1;
-      optional int64 new_timestamp_ms = 2;
-      repeated InventoryItem inventory_items = 3;
-  }
-
-  message InventoryItem {
-      optional int64 modified_timestamp_ms = 1;
-      optional int64 deleted_item_key = 2;
-      optional InventoryItemData inventory_item_data = 3;
-  }
-
-  message InventoryItemData {
-      optional PokemonData pokemon = 1;
-      optional Item item = 2;
-      optional PokedexEntry pokedex_entry = 3;
-      optional PlayerStats player_stats = 4;
-      optional PlayerCurrency player_currency = 5;
-      optional PlayerCamera player_camera = 6;
-      optional InventoryUpgrades inventory_upgrades = 7;
-      optional AppliedItems applied_items = 8;
-      optional EggIncubators egg_incubators = 9;
-      optional PokemonFamily pokemon_family = 10;
-  }
-
-  message PokemonData {
-      optional fixed64 id = 1;
-    	optional PokemonId pokemon_id = 2;
-    	optional int32 cp = 3;
-    	optional int32 stamina = 4;
-    	optional int32 stamina_max = 5;
-    	optional PokemonMove move_1 = 6;
-    	optional PokemonMove move_2 = 7;
-    	optional int32 deployed_fort_id = 8;
-    	optional string owner_name = 9;
-    	optional bool is_egg = 10;
-    	optional double egg_km_walked_target = 11;
-    	optional double egg_km_walked_start = 12;
-    	optional int32 origin = 14;
-    	optional float height_m = 15;
-    	optional float weight_kg = 16;
-    	optional int32 individual_attack = 17;
-    	optional int32 individual_defense = 18;
-    	optional int32 individual_stamina = 19;
-    	optional float cp_multiplier = 20;
-    	optional ItemId pokeball = 21;
-    	optional uint64 captured_cell_id = 22;
-    	optional int32 battles_attacked = 23;
-    	optional int32 battles_defended = 24;
-    	optional string egg_incubator_id = 25;
-    	optional uint64 creation_time_ms = 26;
-    	optional int32 num_upgrades = 27;
-    	optional float additional_cp_multiplier = 28;
-    	optional int32 favorite = 29;
-    	optional string nickname = 30;
-    	optional int32 from_fort = 31;
-  }
-
-  message Pokemon {
-      optional int32 id = 1;
-      optional PokemonId pokemon_type = 2;
-      optional int32 cp = 3;
-      optional int32 stamina = 4;
-      optional int32 stamina_max = 5;
-      optional PokemonMove move_1 = 6;
-      optional PokemonMove move_2 = 7;
-      optional int32 deployed_fort_id = 8;
-      optional string owner_name = 9;
-      optional bool is_egg = 10;
-      optional int32 egg_km_walked_target = 11;
-      optional int32 egg_km_walked_start = 12;
-      optional int32 origin = 14;
-      optional float height_m = 15;
-      optional float weight_kg = 16;
-      optional int32 individual_attack = 17;
-      optional int32 individual_defense = 18;
-      optional int32 individual_stamina = 19;
-      optional int32 cp_multiplier = 20;
-      optional int32 pokeball = 21;
-      optional uint64 captured_cell_id = 22;
-      optional int32 battles_attacked = 23;
-      optional int32 battles_defended = 24;
-      optional int32 egg_incubator_id = 25;
-      optional uint64 creation_time_ms = 26;
-      optional int32 num_upgrades = 27;
-      optional int32 additional_cp_multiplier = 28;
-      optional int32 favorite = 29;
-      optional string nickname = 30;
-      optional int32 from_fort = 31;
-
-  }
-  
-  enum TeamColor {
-    NEUTRAL = 0;
-    BLUE = 1;
-    RED = 2;
-    YELLOW = 3;
-  }
-
-  enum  PokemonMove {
-      MOVE_UNSET = 0;
-      THUNDER_SHOCK = 1;
-      QUICK_ATTACK = 2;
-      SCRATCH = 3;
-      EMBER = 4;
-      VINE_WHIP = 5;
-      TACKLE = 6;
-      RAZOR_LEAF = 7;
-      TAKE_DOWN = 8;
-      WATER_GUN = 9;
-      BITE = 10;
-      POUND = 11;
-      DOUBLE_SLAP = 12;
-      WRAP = 13;
-      HYPER_BEAM = 14;
-      LICK = 15;
-      DARK_PULSE = 16;
-      SMOG = 17;
-      SLUDGE = 18;
-      METAL_CLAW = 19;
-      VICE_GRIP = 20;
-      FLAME_WHEEL = 21;
-      MEGAHORN = 22;
-      WING_ATTACK = 23;
-      FLAMETHROWER = 24;
-      SUCKER_PUNCH = 25;
-      DIG = 26;
-      LOW_KICK = 27;
-      CROSS_CHOP = 28;
-      PSYCHO_CUT = 29;
-      PSYBEAM = 30;
-      EARTHQUAKE = 31;
-      STONE_EDGE = 32;
-      ICE_PUNCH = 33;
-      HEART_STAMP = 34;
-      DISCHARGE = 35;
-      FLASH_CANNON = 36;
-      PECK = 37;
-      DRILL_PECK = 38;
-      ICE_BEAM = 39;
-      BLIZZARD = 40;
-      AIR_SLASH = 41;
-      HEAT_WAVE = 42;
-      TWINEEDLE = 43;
-      POISON_JAB = 44;
-      AERIAL_ACE = 45;
-      DRILL_RUN = 46;
-      PETAL_BLIZZARD = 47;
-      MEGA_DRAIN = 48;
-      BUG_BUZZ = 49;
-      POISON_FANG = 50;
-      NIGHT_SLASH = 51;
-      SLASH = 52;
-      BUBBLE_BEAM = 53;
-      SUBMISSION = 54;
-      KARATE_CHOP = 55;
-      LOW_SWEEP = 56;
-      AQUA_JET = 57;
-      AQUA_TAIL = 58;
-      SEED_BOMB = 59;
-      PSYSHOCK = 60;
-      ROCK_THROW = 61;
-      ANCIENT_POWER = 62;
-      ROCK_TOMB = 63;
-      ROCK_SLIDE = 64;
-      POWER_GEM = 65;
-      SHADOW_SNEAK = 66;
-      SHADOW_PUNCH = 67;
-      SHADOW_CLAW = 68;
-      OMINOUS_WIND = 69;
-      SHADOW_BALL = 70;
-      BULLET_PUNCH = 71;
-      MAGNET_BOMB = 72;
-      STEEL_WING = 73;
-      IRON_HEAD = 74;
-      PARABOLIC_CHARGE = 75;
-      SPARK = 76;
-      THUNDER_PUNCH = 77;
-      THUNDER = 78;
-      THUNDERBOLT = 79;
-      TWISTER = 80;
-      DRAGON_BREATH = 81;
-      DRAGON_PULSE = 82;
-      DRAGON_CLAW = 83;
-      DISARMING_VOICE = 84;
-      DRAINING_KISS = 85;
-      DAZZLING_GLEAM = 86;
-      MOONBLAST = 87;
-      PLAY_ROUGH = 88;
-      CROSS_POISON = 89;
-      SLUDGE_BOMB = 90;
-      SLUDGE_WAVE = 91;
-      GUNK_SHOT = 92;
-      MUD_SHOT = 93;
-      BONE_CLUB = 94;
-      BULLDOZE = 95;
-      MUD_BOMB = 96;
-      FURY_CUTTER = 97;
-      BUG_BITE = 98;
-      SIGNAL_BEAM = 99;
-      X_SCISSOR = 100;
-      FLAME_CHARGE = 101;
-      FLAME_BURST = 102;
-      FIRE_BLAST = 103;
-      BRINE = 104;
-      WATER_PULSE = 105;
-      SCALD = 106;
-      HYDRO_PUMP = 107;
-      PSYCHIC = 108;
-      PSYSTRIKE = 109;
-      ICE_SHARD = 110;
-      ICY_WIND = 111;
-      FROST_BREATH = 112;
-      ABSORB = 113;
-      GIGA_DRAIN = 114;
-      FIRE_PUNCH = 115;
-      SOLAR_BEAM = 116;
-      LEAF_BLADE = 117;
-      POWER_WHIP = 118;
-      SPLASH = 119;
-      ACID = 120;
-      AIR_CUTTER = 121;
-      HURRICANE = 122;
-      BRICK_BREAK = 123;
-      CUT = 124;
-      SWIFT = 125;
-      HORN_ATTACK = 126;
-      STOMP = 127;
-      HEADBUTT = 128;
-      HYPER_FANG = 129;
-      SLAM = 130;
-      BODY_SLAM = 131;
-      REST = 132;
-      STRUGGLE = 133;
-      SCALD_BLASTOISE = 134;
-      HYDRO_PUMP_BLASTOISE = 135;
-      WRAP_GREEN = 136;
-      WRAP_PINK = 137;
-      FURY_CUTTER_FAST = 200;
-      BUG_BITE_FAST = 201;
-      BITE_FAST = 202;
-      SUCKER_PUNCH_FAST = 203;
-      DRAGON_BREATH_FAST = 204;
-      THUNDER_SHOCK_FAST = 205;
-      SPARK_FAST = 206;
-      LOW_KICK_FAST = 207;
-      KARATE_CHOP_FAST = 208;
-      EMBER_FAST = 209;
-      WING_ATTACK_FAST = 210;
-      PECK_FAST = 211;
-      LICK_FAST = 212;
-      SHADOW_CLAW_FAST = 213;
-      VINE_WHIP_FAST = 214;
-      RAZOR_LEAF_FAST = 215;
-      MUD_SHOT_FAST = 216;
-      ICE_SHARD_FAST = 217;
-      FROST_BREATH_FAST = 218;
-      QUICK_ATTACK_FAST = 219;
-      SCRATCH_FAST = 220;
-      TACKLE_FAST = 221;
-      POUND_FAST = 222;
-      CUT_FAST = 223;
-      POISON_JAB_FAST = 224;
-      ACID_FAST = 225;
-      PSYCHO_CUT_FAST = 226;
-      ROCK_THROW_FAST = 227;
-      METAL_CLAW_FAST = 228;
-      BULLET_PUNCH_FAST = 229;
-      WATER_GUN_FAST = 230;
-      SPLASH_FAST = 231;
-      WATER_GUN_FAST_BLASTOISE = 232;
-      MUD_SLAP_FAST = 233;
-      ZEN_HEADBUTT_FAST = 234;
-      CONFUSION_FAST = 235;
-      POISON_STING_FAST = 236;
-      BUBBLE_FAST = 237;
-      FEINT_ATTACK_FAST = 238;
-      STEEL_WING_FAST = 239;
-      FIRE_FANG_FAST = 240;
-      ROCK_SMASH_FAST = 241;
-  }
-
-  enum PokemonId {
-      MISSINGNO = 0;
-      BULBASAUR = 1;
-      IVYSAUR = 2;
-      VENUSAUR = 3;
-      CHARMENDER = 4;
-      CHARMELEON = 5;
-      CHARIZARD = 6;
-      SQUIRTLE = 7;
-      WARTORTLE = 8;
-      BLASTOISE = 9;
-      CATERPIE = 10;
-      METAPOD = 11;
-      BUTTERFREE = 12;
-      WEEDLE = 13;
-      KAKUNA = 14;
-      BEEDRILL = 15;
-      PIDGEY = 16;
-      PIDGEOTTO = 17;
-      PIDGEOT = 18;
-      RATTATA = 19;
-      RATICATE = 20;
-      SPEAROW = 21;
-      FEAROW = 22;
-      EKANS = 23;
-      ARBOK = 24;
-      PIKACHU = 25;
-      RAICHU = 26;
-      SANDSHREW = 27;
-      SANDLASH = 28;
-      NIDORAN_FEMALE = 29;
-      NIDORINA = 30;
-      NIDOQUEEN = 31;
-      NIDORAN_MALE = 32;
-      NIDORINO = 33;
-      NIDOKING = 34;
-      CLEFARY = 35;
-      CLEFABLE = 36;
-      VULPIX = 37;
-      NINETALES = 38;
-      JIGGLYPUFF = 39;
-      WIGGLYTUFF = 40;
-      ZUBAT = 41;
-      GOLBAT = 42;
-      ODDISH = 43;
-      GLOOM = 44;
-      VILEPLUME = 45;
-      PARAS = 46;
-      PARASECT = 47;
-      VENONAT = 48;
-      VENOMOTH = 49;
-      DIGLETT = 50;
-      DUGTRIO = 51;
-      MEOWTH = 52;
-      PERSIAN = 53;
-      PSYDUCK = 54;
-      GOLDUCK = 55;
-      MANKEY = 56;
-      PRIMEAPE = 57;
-      GROWLITHE = 58;
-      ARCANINE = 59;
-      POLIWAG = 60;
-      POLIWHIRL = 61;
-      POLIWRATH = 62;
-      ABRA = 63;
-      KADABRA = 64;
-      ALAKHAZAM = 65;
-      MACHOP = 66;
-      MACHOKE = 67;
-      MACHAMP = 68;
-      BELLSPROUT = 69;
-      WEEPINBELL = 70;
-      VICTREEBELL = 71;
-      TENTACOOL = 72;
-      TENTACRUEL = 73;
-      GEODUGE = 74;
-      GRAVELER = 75;
-      GOLEM = 76;
-      PONYTA = 77;
-      RAPIDASH = 78;
-      SLOWPOKE = 79;
-      SLOWBRO = 80;
-      MAGNEMITE = 81;
-      MAGNETON = 82;
-      FARFETCHD = 83;
-      DODUO = 84;
-      DODRIO = 85;
-      SEEL = 86;
-      DEWGONG = 87;
-      GRIMER = 88;
-      MUK = 89;
-      SHELLDER = 90;
-      CLOYSTER = 91;
-      GASTLY = 92;
-      HAUNTER = 93;
-      GENGAR = 94;
-      ONIX = 95;
-      DROWZEE = 96;
-      HYPNO = 97;
-      KRABBY = 98;
-      KINGLER = 99;
-      VOLTORB = 100;
-      ELECTRODE = 101;
-      EXEGGCUTE = 102;
-      EXEGGUTOR = 103;
-      CUBONE = 104;
-      MAROWAK = 105;
-      HITMONLEE = 106;
-      HITMONCHAN = 107;
-      LICKITUNG = 108;
-      KOFFING = 109;
-      WEEZING = 110;
-      RHYHORN = 111;
-      RHYDON = 112;
-      CHANSEY = 113;
-      TANGELA = 114;
-      KANGASKHAN = 115;
-      HORSEA = 116;
-      SEADRA = 117;
-      GOLDEEN = 118;
-      SEAKING = 119;
-      STARYU = 120;
-      STARMIE = 121;
-      MR_MIME = 122;
-      SCYTHER = 123;
-      JYNX = 124;
-      ELECTABUZZ = 125;
-      MAGMAR = 126;
-      PINSIR = 127;
-      TAUROS = 128;
-      MAGIKARP = 129;
-      GYARADOS = 130;
-      LAPRAS = 131;
-      DITTO = 132;
-      EEVEE = 133;
-      VAPOREON = 134;
-      JOLTEON = 135;
-      FLAREON = 136;
-      PORYGON = 137;
-      OMANYTE = 138;
-      OMASTAR = 139;
-      KABUTO = 140;
-      KABUTOPS = 141;
-      AERODACTYL = 142;
-      SNORLAX = 143;
-      ARTICUNO = 144;
-      ZAPDOS = 145;
-      MOLTRES = 146;
-      DRATINI = 147;
-      DRAGONAIR = 148;
-      DRAGONITE = 149;
-      MEWTWO = 150;
-      MEW = 151;
-  }
-
-  message Item {
-      optional ItemType item = 1;
-      optional int32 count = 2;
-      optional bool unseen = 3;
-  }
-
-  enum ItemType {
-      ITEM_TYPE_NONE = 0;
-      ITEM_TYPE_POKEBALL = 1;
-      ITEM_TYPE_POTION = 2;
-      ITEM_TYPE_REVIVE = 3;
-      ITEM_TYPE_MAP = 4;
-      ITEM_TYPE_BATTLE = 5;
-      ITEM_TYPE_FOOD = 6;
-      ITEM_TYPE_CAMERA = 7;
-      ITEM_TYPE_DISK = 8;
-      ITEM_TYPE_INCUBATOR = 9;
-      ITEM_TYPE_INCENSE = 10;
-      ITEM_TYPE_XP_BOOST = 11;
-      ITEM_TYPE_INVENTORY_UPGRADE = 12;
-  }
-
-  message PokedexEntry {
-      optional int32 pokedex_entry_number = 1;
-      optional int32 times_encountered = 2;
-      optional int32 times_captured = 3;
-      optional int32 evolution_stone_pieces = 4;
-      optional int32 evolution_stones = 5;
-  }
-
-  message PlayerStats {
-      optional int32 level = 1;
-      optional int64 experience = 2;
-      optional int64 prev_level_xp = 3;
-      optional int64 next_level_xp = 4;
-      optional float km_walked = 5;
-      optional int32 pokemons_encountered = 6;
-      optional int32 unique_pokedex_entries = 7;
-      optional int32 pokemons_captured = 8;
-      optional int32 evolutions = 9;
-      optional int32 poke_stop_visits = 10;
-      optional int32 pokeballs_thrown = 11;
-      optional int32 eggs_hatched = 12;
-      optional int32 big_magikarp_caught = 13;
-      optional int32 battle_attack_won = 14;
-      optional int32 battle_attack_total = 15;
-      optional int32 battle_defended_won = 16;
-      optional int32 battle_training_won = 17;
-      optional int32 battle_training_total = 18;
-      optional int32 prestige_raised_total = 19;
-      optional int32 prestige_dropped_total = 20;
-      optional int32 pokemon_deployed = 21;
-      optional bytes pokemon_caught_by_type = 22; // TODO: repeated PokemonType ??
-      optional int32 small_rattata_caught = 23;
-  }
-
-  message PlayerCurrency {
-      optional int32 gems = 1;
-  }
-
-  message PlayerCamera {
-      optional bool is_default_camera = 1;
-  }
-
-  message InventoryUpgrades {
-      repeated InventoryUpgrade inventory_upgrades = 1;
-  }
-
-  message InventoryUpgrade {
-      optional ItemType item = 1;
-      optional InventoryUpgradeType upgrade_type = 2;
-      optional int32 additional_storage = 3;
-  }
-
-  enum InventoryUpgradeType {
-      UPGRADE_UNSET = 0;
-      INCREASE_ITEM_STORAGE = 1;
-      INCREASE_POKEMON_STORAGE = 2;
-  }
-
-  message AppliedItems {
-      optional AppliedItem item = 4;
-  }
-
-  message AppliedItem {
-      optional ItemId item_type = 1;
-      optional ItemType item_type_category = 2;
-      optional int64 expire_ms = 3;
-      optional int64 applied_ms = 4;
-  }
-
-  enum ItemId {
-      ITEM_UNKNOWN = 0;
-      ITEM_POKE_BALL = 1;
-      ITEM_GREAT_BALL = 2;
-      ITEM_ULTRA_BALL = 3;
-      ITEM_MASTER_BALL = 4;
-      ITEM_POTION = 101;
-      ITEM_SUPER_POTION = 102;
-      ITEM_HYPER_POTION = 103;
-      ITEM_MAX_POTION = 104;
-      ITEM_REVIVE = 201;
-      ITEM_MAX_REVIVE = 202;
-      ITEM_LUCKY_EGG = 301;
-      ITEM_INCENSE_ORDINARY = 401;
-      ITEM_INCENSE_SPICY = 402;
-      ITEM_INCENSE_COOL = 403;
-      ITEM_INCENSE_FLORAL = 404;
-      ITEM_TROY_DISK = 501;
-      ITEM_X_ATTACK = 602;
-      ITEM_X_DEFENSE = 603;
-      ITEM_X_MIRACLE = 604;
-      ITEM_RAZZ_BERRY = 701;
-      ITEM_BLUK_BERRY = 702;
-      ITEM_NANAB_BERRY = 703;
-      ITEM_WEPAR_BERRY = 704;
-      ITEM_PINAP_BERRY = 705;
-      ITEM_SPECIAL_CAMERA = 801;
-      ITEM_INCUBATOR_BASIC_UNLIMITED = 901;
-      ITEM_INCUBATOR_BASIC = 902;
-      ITEM_POKEMON_STORAGE_UPGRADE = 1001;
-      ITEM_ITEM_STORAGE_UPGRADE = 1002;
-  }
-
-  message EggIncubators {
-      optional EggIncubator egg_incubator = 1;
-  }
-
-  message EggIncubator {
-      optional string item_id = 1;
-      optional ItemType item_type = 2;
-      optional EggIncubatorType incubator_type = 3;
-      optional int32 uses_remaining = 4;
-      optional int64 pokemon_id = 5; // TODO: Check if is PokemonType
-      optional double start_km_walked = 6;
-      optional double target_km_walked = 7;
-  }
-
-  enum EggIncubatorType {
-      INCUBATOR_UNSET = 0;
-      INCUBATOR_DISTANCE = 1;
-  }
-
-  message PokemonFamily {
-      optional PokemonFamilyId family_id = 1;
-      optional int32 candy = 2;
-  }
-
-  enum PokemonFamilyId {
-      FAMILY_UNSET = 0;
-      FAMILY_BULBASAUR = 1;
-      FAMILY_CHARMANDER = 4;
-      FAMILY_SQUIRTLE = 7;
-      FAMILY_CATERPIE = 10;
-      FAMILY_WEEDLE = 13;
-      FAMILY_PIDGEY = 16;
-      FAMILY_RATTATA = 19;
-      FAMILY_SPEAROW = 21;
-      FAMILY_EKANS = 23;
-      FAMILY_PIKACHU = 25;
-      FAMILY_SANDSHREW = 27;
-      FAMILY_NIDORAN = 29;
-      FAMILY_NIDORAN2 = 32;
-      FAMILY_CLEFAIRY = 35;
-      FAMILY_VULPIX = 37;
-      FAMILY_JIGGLYPUFF = 39;
-      FAMILY_ZUBAT = 41;
-      FAMILY_ODDISH = 43;
-      FAMILY_PARAS = 46;
-      FAMILY_VENONAT = 48;
-      FAMILY_DIGLETT = 50;
-      FAMILY_MEOWTH = 52;
-      FAMILY_PSYDUCK = 54;
-      FAMILY_MANKEY = 56;
-      FAMILY_GROWLITHE = 58;
-      FAMILY_POLIWAG = 60;
-      FAMILY_ABRA = 63;
-      FAMILY_MACHOP = 66;
-      FAMILY_BELLSPROUT = 69;
-      FAMILY_TENTACOOL = 72;
-      FAMILY_GEODUDE = 74;
-      FAMILY_PONYTA = 77;
-      FAMILY_SLOWPOKE = 79;
-      FAMILY_MAGNEMITE = 81;
-      FAMILY_FARFETCHD = 83;
-      FAMILY_DODUO = 84;
-      FAMILY_SEEL = 86;
-      FAMILY_GRIMER = 88;
-      FAMILY_SHELLDER = 90;
-      FAMILY_GASTLY = 92;
-      FAMILY_ONIX = 95;
-      FAMILY_DROWZEE = 96;
-      FAMILY_KRABBY = 98;
-      FAMILY_VOLTORB = 100;
-      FAMILY_EXEGGCUTE = 102;
-      FAMILY_CUBONE = 104;
-      FAMILY_HITMONLEE = 106;
-      FAMILY_HITMONCHAN = 107;
-      FAMILY_LICKITUNG = 108;
-      FAMILY_KOFFING = 109;
-      FAMILY_RHYHORN = 111;
-      FAMILY_CHANSEY = 113;
-      FAMILY_TANGELA = 114;
-      FAMILY_KANGASKHAN = 115;
-      FAMILY_HORSEA = 116;
-      FAMILY_GOLDEEN = 118;
-      FAMILY_STARYU = 120;
-      FAMILY_MR_MIME = 122;
-      FAMILY_SCYTHER = 123;
-      FAMILY_JYNX = 124;
-      FAMILY_ELECTABUZZ = 125;
-      FAMILY_MAGMAR = 126;
-      FAMILY_PINSIR = 127;
-      FAMILY_TAUROS = 128;
-      FAMILY_MAGIKARP = 129;
-      FAMILY_LAPRAS = 131;
-      FAMILY_DITTO = 132;
-      FAMILY_EEVEE = 133;
-      FAMILY_PORYGON = 137;
-      FAMILY_OMANYTE = 138;
-      FAMILY_KABUTO = 140;
-      FAMILY_AERODACTYL = 142;
-      FAMILY_SNORLAX = 143;
-      FAMILY_ARTICUNO = 144;
-      FAMILY_ZAPDOS = 145;
-      FAMILY_MOLTRES = 146;
-      FAMILY_DRATINI = 147;
-      FAMILY_MEWTWO = 150;
-      FAMILY_MEW = 151;
-  }
-
-  enum FortType {
-      GYM = 0;
-      CHECKPOINT = 1;
-  }
-
-  message CatchPokemonResponse {
-      required CatchStatus Status = 1;
-      optional double MissPercent = 2;
-      //optional uint64 CapturedPokemonId = 3;
-      //optional CaptureAward CaptureAward = 4;
-
-      enum CatchStatus {
-          CATCH_ERROR = 0;
-          CATCH_SUCCESS = 1;
-          CATCH_ESCAPE = 2;
-          CATCH_FLEE = 3;
-          CATCH_MISSED = 4;
-      }
-  }
-
-  enum ActivityType {
-      ACTIVITY_UNKNOWN = 0;
-      ACTIVITY_CATCH_POKEMON = 1;
-      ACTIVITY_CATCH_LEGEND_POKEMON = 2;
-      ACTIVITY_FLEE_POKEMON = 3;
-      ACTIVITY_DEFEAT_FORT = 4;
-      ACTIVITY_EVOLVE_POKEMON = 5;
-      ACTIVITY_HATCH_EGG = 6;
-      ACTIVITY_WALK_KM = 7;
-      ACTIVITY_POKEDEX_ENTRY_NEW = 8;
-      ACTIVITY_CATCH_FIRST_THROW = 9;
-      ACTIVITY_CATCH_NICE_THROW = 10;
-      ACTIVITY_CATCH_GREAT_THROW = 11;
-      ACTIVITY_CATCH_EXCELLENT_THROW = 12;
-      ACTIVITY_CATCH_CURVEBALL = 13;
-      ACTIVITY_CATCH_FIRST_CATCH_OF_DAY = 14;
-      ACTIVITY_CATCH_MILESTONE = 15;
-      ACTIVITY_TRAIN_POKEMON = 16;
-      ACTIVITY_SEARCH_FORT = 17;
-      ACTIVITY_RELEASE_POKEMON = 18;
-      ACTIVITY_HATCH_EGG_SMALL_BONUS = 19;
-      ACTIVITY_HATCH_EGG_MEDIUM_BONUS = 20;
-      ACTIVITY_HATCH_EGG_LARGE_BONUS = 21;
-      ACTIVITY_DEFEAT_GYM_DEFENDER = 22;
-      ACTIVITY_DEFEAT_GYM_LEADER = 23;
-  }
-
-  message CaptureAward {
-      repeated ActivityType ActivityType = 1 [packed=true];
-      repeated int32 XP = 2 [packed=true];
-      repeated int32 Candy = 3 [packed=true];
-      repeated int32 Stardust = 4 [packed=true];
-  }
-
-  message CaptureProbability {
-      repeated ItemId PokeballType = 1;
-      repeated float CaptureProbability = 2;
-      optional float ReticleDifficultySize = 12;
-  }
-
-  message EncounterResponse {
-      optional WildPokemonProto WildPokemon = 1;
-      optional Background EncounterBackground = 2;
-      optional Status EncounterStatus = 3;
-      //optional CaptureProbability EncounterCaptureProbability = 4;
-
-      enum Background {
-          PARK = 0;
-          DESERT = 1;
-      }
-
-      enum Status {
-          ENCOUNTER_ERROR = 0;
-          ENCOUNTER_SUCCESS = 1;
-          ENCOUNTER_NOT_FOUND = 2;
-          ENCOUNTER_CLOSED = 3;
-          ENCOUNTER_POKEMON_FLED = 4;
-          ENCOUNTER_NOT_IN_RANGE = 5;
-          ENCOUNTER_ALREADY_HAPPENED = 6;
-          POKEMON_INVENTORY_FULL = 7;
-      }
-  }
-
-  message FortSearchResponse {
-  	optional Result result = 1;
-  	repeated ItemAward items_awarded = 2;
-  	optional int32 gems_awarded = 3;
-  	optional PokemonData pokemon_data_egg = 4;
-  	optional int32 experience_awarded = 5;
-  	optional int64 cooldown_complete_timestamp_ms = 6;
-  	optional int32 chain_hack_sequence_number = 7;
-  
-  	enum Result {
-  		NO_RESULT_SET = 0;
-  		SUCCESS = 1;
-  		OUT_OF_RANGE = 2;
-  		IN_COOLDOWN_PERIOD = 3;
-  		INVENTORY_FULL = 4;
-	  }
-  }
-
-  message FortDetailsResponse {
-    optional string fort_id = 1;
-    optional TeamColor team_color = 2;
-    optional PokemonData pokemon_data = 3;
-    optional string name = 4;
-    repeated string image_urls = 5;
-    optional int32 fp = 6;
-    optional int32 stamina = 7;
-    optional int32 max_stamina = 8;
-    optional int32 type = 9;
-    optional double latitude = 10;
-    optional double longitude = 11;
-    optional string description = 12;
-    repeated FortModifier modifiers = 13;
-  }
-
-  message FortModifier {
-    optional ItemId item_id = 1;
-    optional int64 expiration_timestamp_ms = 2;
-    optional string deployer_player_codename = 3;
-  }
-
-  message RecycleInventoryItemResponse {
-      optional Result result = 1;
-      optional int32 new_count = 2;
-
-      enum Result {
-          UNSET = 0;
-          SUCCESS = 1;
-          ERROR_NOT_ENOUGH_COPIES = 2;
-          ERROR_CANNOT_RECYCLE_INCUBATORS = 3;
-      }
-  }
-
-  message ItemAward {
-	optional ItemId item_id = 1;
-	optional int32 item_count = 2;
-  }
-  
-  message ReleasePokemonResponse {
-    required ReleaseStatus Status = 1;
-    optional int32 CandyAwarded = 2;
-    enum ReleaseStatus {
-      UNSET = 0;
-      SUCCESS = 1;
-      POKEMON_DEPLOYED = 2;
-      FAILED = 3;
-      ERROR_POKEMON_IS_EGG = 4;
+    enum PokemonId {
+        MISSINGNO = 0;
+        BULBASAUR = 1;
+        IVYSAUR = 2;
+        VENUSAUR = 3;
+        CHARMENDER = 4;
+        CHARMELEON = 5;
+        CHARIZARD = 6;
+        SQUIRTLE = 7;
+        WARTORTLE = 8;
+        BLASTOISE = 9;
+        CATERPIE = 10;
+        METAPOD = 11;
+        BUTTERFREE = 12;
+        WEEDLE = 13;
+        KAKUNA = 14;
+        BEEDRILL = 15;
+        PIDGEY = 16;
+        PIDGEOTTO = 17;
+        PIDGEOT = 18;
+        RATTATA = 19;
+        RATICATE = 20;
+        SPEAROW = 21;
+        FEAROW = 22;
+        EKANS = 23;
+        ARBOK = 24;
+        PIKACHU = 25;
+        RAICHU = 26;
+        SANDSHREW = 27;
+        SANDLASH = 28;
+        NIDORAN_FEMALE = 29;
+        NIDORINA = 30;
+        NIDOQUEEN = 31;
+        NIDORAN_MALE = 32;
+        NIDORINO = 33;
+        NIDOKING = 34;
+        CLEFARY = 35;
+        CLEFABLE = 36;
+        VULPIX = 37;
+        NINETALES = 38;
+        JIGGLYPUFF = 39;
+        WIGGLYTUFF = 40;
+        ZUBAT = 41;
+        GOLBAT = 42;
+        ODDISH = 43;
+        GLOOM = 44;
+        VILEPLUME = 45;
+        PARAS = 46;
+        PARASECT = 47;
+        VENONAT = 48;
+        VENOMOTH = 49;
+        DIGLETT = 50;
+        DUGTRIO = 51;
+        MEOWTH = 52;
+        PERSIAN = 53;
+        PSYDUCK = 54;
+        GOLDUCK = 55;
+        MANKEY = 56;
+        PRIMEAPE = 57;
+        GROWLITHE = 58;
+        ARCANINE = 59;
+        POLIWAG = 60;
+        POLIWHIRL = 61;
+        POLIWRATH = 62;
+        ABRA = 63;
+        KADABRA = 64;
+        ALAKHAZAM = 65;
+        MACHOP = 66;
+        MACHOKE = 67;
+        MACHAMP = 68;
+        BELLSPROUT = 69;
+        WEEPINBELL = 70;
+        VICTREEBELL = 71;
+        TENTACOOL = 72;
+        TENTACRUEL = 73;
+        GEODUGE = 74;
+        GRAVELER = 75;
+        GOLEM = 76;
+        PONYTA = 77;
+        RAPIDASH = 78;
+        SLOWPOKE = 79;
+        SLOWBRO = 80;
+        MAGNEMITE = 81;
+        MAGNETON = 82;
+        FARFETCHD = 83;
+        DODUO = 84;
+        DODRIO = 85;
+        SEEL = 86;
+        DEWGONG = 87;
+        GRIMER = 88;
+        MUK = 89;
+        SHELLDER = 90;
+        CLOYSTER = 91;
+        GASTLY = 92;
+        HAUNTER = 93;
+        GENGAR = 94;
+        ONIX = 95;
+        DROWZEE = 96;
+        HYPNO = 97;
+        KRABBY = 98;
+        KINGLER = 99;
+        VOLTORB = 100;
+        ELECTRODE = 101;
+        EXEGGCUTE = 102;
+        EXEGGUTOR = 103;
+        CUBONE = 104;
+        MAROWAK = 105;
+        HITMONLEE = 106;
+        HITMONCHAN = 107;
+        LICKITUNG = 108;
+        KOFFING = 109;
+        WEEZING = 110;
+        RHYHORN = 111;
+        RHYDON = 112;
+        CHANSEY = 113;
+        TANGELA = 114;
+        KANGASKHAN = 115;
+        HORSEA = 116;
+        SEADRA = 117;
+        GOLDEEN = 118;
+        SEAKING = 119;
+        STARYU = 120;
+        STARMIE = 121;
+        MR_MIME = 122;
+        SCYTHER = 123;
+        JYNX = 124;
+        ELECTABUZZ = 125;
+        MAGMAR = 126;
+        PINSIR = 127;
+        TAUROS = 128;
+        MAGIKARP = 129;
+        GYARADOS = 130;
+        LAPRAS = 131;
+        DITTO = 132;
+        EEVEE = 133;
+        VAPOREON = 134;
+        JOLTEON = 135;
+        FLAREON = 136;
+        PORYGON = 137;
+        OMANYTE = 138;
+        OMASTAR = 139;
+        KABUTO = 140;
+        KABUTOPS = 141;
+        AERODACTYL = 142;
+        SNORLAX = 143;
+        ARTICUNO = 144;
+        ZAPDOS = 145;
+        MOLTRES = 146;
+        DRATINI = 147;
+        DRAGONAIR = 148;
+        DRAGONITE = 149;
+        MEWTWO = 150;
+        MEW = 151;
     }
-  }
- 
-  message EvolvePokemonResponse 
-  {
-    optional EvolvePokemonStatus Result = 1;
-    optional Pokemon EvolvedPokemon = 2;
-    optional int32 ExpAwarded = 3;
-    optional int32 CandyAwarded = 4;
 
-  	enum EvolvePokemonStatus {
-  		POKEMON_EVOLVED_UNSET = 0;
-  		POKEMON_EVOLVED_SUCCESS = 1;
-  		FAILED_POKEMON_MISSING = 2;
-  		FAILED_INSUFFICIENT_RESOURCES = 3;
-  		FAILED_POKEMON_CANNOT_EVOLVE = 4;
-  		FAILED_POKEMON_IS_DEPLOYED = 5;
-  	}
-  } 
-  
-  message TransferPokemonResponse {
-    optional int32 Status = 1;
-    optional int32 CandyAwarded = 2;
-  }
+    message Item {
+        optional ItemId item = 1;
+        optional int32 count = 2;
+        optional bool unseen = 3;
+    }
+
+    enum ItemType {
+        ITEM_TYPE_NONE = 0;
+        ITEM_TYPE_POKEBALL = 1;
+        ITEM_TYPE_POTION = 2;
+        ITEM_TYPE_REVIVE = 3;
+        ITEM_TYPE_MAP = 4;
+        ITEM_TYPE_BATTLE = 5;
+        ITEM_TYPE_FOOD = 6;
+        ITEM_TYPE_CAMERA = 7;
+        ITEM_TYPE_DISK = 8;
+        ITEM_TYPE_INCUBATOR = 9;
+        ITEM_TYPE_INCENSE = 10;
+        ITEM_TYPE_XP_BOOST = 11;
+        ITEM_TYPE_INVENTORY_UPGRADE = 12;
+    }
+
+    message PokedexEntry {
+        optional int32 pokedex_entry_number = 1;
+        optional int32 times_encountered = 2;
+        optional int32 times_captured = 3;
+        optional int32 evolution_stone_pieces = 4;
+        optional int32 evolution_stones = 5;
+    }
+
+    message PlayerStats {
+        optional int32 level = 1;
+        optional int64 experience = 2;
+        optional int64 prev_level_xp = 3;
+        optional int64 next_level_xp = 4;
+        optional float km_walked = 5;
+        optional int32 pokemons_encountered = 6;
+        optional int32 unique_pokedex_entries = 7;
+        optional int32 pokemons_captured = 8;
+        optional int32 evolutions = 9;
+        optional int32 poke_stop_visits = 10;
+        optional int32 pokeballs_thrown = 11;
+        optional int32 eggs_hatched = 12;
+        optional int32 big_magikarp_caught = 13;
+        optional int32 battle_attack_won = 14;
+        optional int32 battle_attack_total = 15;
+        optional int32 battle_defended_won = 16;
+        optional int32 battle_training_won = 17;
+        optional int32 battle_training_total = 18;
+        optional int32 prestige_raised_total = 19;
+        optional int32 prestige_dropped_total = 20;
+        optional int32 pokemon_deployed = 21;
+        optional bytes pokemon_caught_by_type = 22; // TODO: repeated PokemonType ??
+        optional int32 small_rattata_caught = 23;
+    }
+
+    message PlayerCurrency {
+        optional int32 gems = 1;
+    }
+
+    message PlayerCamera {
+        optional bool is_default_camera = 1;
+    }
+
+    message InventoryUpgrades {
+        repeated InventoryUpgrade inventory_upgrades = 1;
+    }
+
+    message InventoryUpgrade {
+        optional ItemType item = 1;
+        optional InventoryUpgradeType upgrade_type = 2;
+        optional int32 additional_storage = 3;
+    }
+
+    enum InventoryUpgradeType {
+        UPGRADE_UNSET = 0;
+        INCREASE_ITEM_STORAGE = 1;
+        INCREASE_POKEMON_STORAGE = 2;
+    }
+
+    message AppliedItems {
+        optional AppliedItem item = 4;
+    }
+
+    message AppliedItem {
+        optional ItemId item_type = 1;
+        optional ItemType item_type_category = 2;
+        optional int64 expire_ms = 3;
+        optional int64 applied_ms = 4;
+    }
+
+    enum ItemId {
+        ITEM_UNKNOWN = 0;
+        ITEM_POKE_BALL = 1;
+        ITEM_GREAT_BALL = 2;
+        ITEM_ULTRA_BALL = 3;
+        ITEM_MASTER_BALL = 4;
+        ITEM_POTION = 101;
+        ITEM_SUPER_POTION = 102;
+        ITEM_HYPER_POTION = 103;
+        ITEM_MAX_POTION = 104;
+        ITEM_REVIVE = 201;
+        ITEM_MAX_REVIVE = 202;
+        ITEM_LUCKY_EGG = 301;
+        ITEM_INCENSE_ORDINARY = 401;
+        ITEM_INCENSE_SPICY = 402;
+        ITEM_INCENSE_COOL = 403;
+        ITEM_INCENSE_FLORAL = 404;
+        ITEM_TROY_DISK = 501;
+        ITEM_X_ATTACK = 602;
+        ITEM_X_DEFENSE = 603;
+        ITEM_X_MIRACLE = 604;
+        ITEM_RAZZ_BERRY = 701;
+        ITEM_BLUK_BERRY = 702;
+        ITEM_NANAB_BERRY = 703;
+        ITEM_WEPAR_BERRY = 704;
+        ITEM_PINAP_BERRY = 705;
+        ITEM_SPECIAL_CAMERA = 801;
+        ITEM_INCUBATOR_BASIC_UNLIMITED = 901;
+        ITEM_INCUBATOR_BASIC = 902;
+        ITEM_POKEMON_STORAGE_UPGRADE = 1001;
+        ITEM_ITEM_STORAGE_UPGRADE = 1002;
+    }
+
+    message EggIncubators {
+        optional EggIncubator egg_incubator = 1;
+    }
+
+    message EggIncubator {
+        optional string item_id = 1;
+        optional ItemType item_type = 2;
+        optional EggIncubatorType incubator_type = 3;
+        optional int32 uses_remaining = 4;
+        optional int64 pokemon_id = 5; // TODO: Check if is PokemonType
+        optional double start_km_walked = 6;
+        optional double target_km_walked = 7;
+    }
+
+    enum EggIncubatorType {
+        INCUBATOR_UNSET = 0;
+        INCUBATOR_DISTANCE = 1;
+    }
+
+    message PokemonFamily {
+        optional PokemonFamilyId family_id = 1;
+        optional int32 candy = 2;
+    }
+
+    enum PokemonFamilyId {
+        FAMILY_UNSET = 0;
+        FAMILY_BULBASAUR = 1;
+        FAMILY_CHARMANDER = 4;
+        FAMILY_SQUIRTLE = 7;
+        FAMILY_CATERPIE = 10;
+        FAMILY_WEEDLE = 13;
+        FAMILY_PIDGEY = 16;
+        FAMILY_RATTATA = 19;
+        FAMILY_SPEAROW = 21;
+        FAMILY_EKANS = 23;
+        FAMILY_PIKACHU = 25;
+        FAMILY_SANDSHREW = 27;
+        FAMILY_NIDORAN = 29;
+        FAMILY_NIDORAN2 = 32;
+        FAMILY_CLEFAIRY = 35;
+        FAMILY_VULPIX = 37;
+        FAMILY_JIGGLYPUFF = 39;
+        FAMILY_ZUBAT = 41;
+        FAMILY_ODDISH = 43;
+        FAMILY_PARAS = 46;
+        FAMILY_VENONAT = 48;
+        FAMILY_DIGLETT = 50;
+        FAMILY_MEOWTH = 52;
+        FAMILY_PSYDUCK = 54;
+        FAMILY_MANKEY = 56;
+        FAMILY_GROWLITHE = 58;
+        FAMILY_POLIWAG = 60;
+        FAMILY_ABRA = 63;
+        FAMILY_MACHOP = 66;
+        FAMILY_BELLSPROUT = 69;
+        FAMILY_TENTACOOL = 72;
+        FAMILY_GEODUDE = 74;
+        FAMILY_PONYTA = 77;
+        FAMILY_SLOWPOKE = 79;
+        FAMILY_MAGNEMITE = 81;
+        FAMILY_FARFETCHD = 83;
+        FAMILY_DODUO = 84;
+        FAMILY_SEEL = 86;
+        FAMILY_GRIMER = 88;
+        FAMILY_SHELLDER = 90;
+        FAMILY_GASTLY = 92;
+        FAMILY_ONIX = 95;
+        FAMILY_DROWZEE = 96;
+        FAMILY_KRABBY = 98;
+        FAMILY_VOLTORB = 100;
+        FAMILY_EXEGGCUTE = 102;
+        FAMILY_CUBONE = 104;
+        FAMILY_HITMONLEE = 106;
+        FAMILY_HITMONCHAN = 107;
+        FAMILY_LICKITUNG = 108;
+        FAMILY_KOFFING = 109;
+        FAMILY_RHYHORN = 111;
+        FAMILY_CHANSEY = 113;
+        FAMILY_TANGELA = 114;
+        FAMILY_KANGASKHAN = 115;
+        FAMILY_HORSEA = 116;
+        FAMILY_GOLDEEN = 118;
+        FAMILY_STARYU = 120;
+        FAMILY_MR_MIME = 122;
+        FAMILY_SCYTHER = 123;
+        FAMILY_JYNX = 124;
+        FAMILY_ELECTABUZZ = 125;
+        FAMILY_MAGMAR = 126;
+        FAMILY_PINSIR = 127;
+        FAMILY_TAUROS = 128;
+        FAMILY_MAGIKARP = 129;
+        FAMILY_LAPRAS = 131;
+        FAMILY_DITTO = 132;
+        FAMILY_EEVEE = 133;
+        FAMILY_PORYGON = 137;
+        FAMILY_OMANYTE = 138;
+        FAMILY_KABUTO = 140;
+        FAMILY_AERODACTYL = 142;
+        FAMILY_SNORLAX = 143;
+        FAMILY_ARTICUNO = 144;
+        FAMILY_ZAPDOS = 145;
+        FAMILY_MOLTRES = 146;
+        FAMILY_DRATINI = 147;
+        FAMILY_MEWTWO = 150;
+        FAMILY_MEW = 151;
+    }
+
+    enum FortType {
+        GYM = 0;
+        CHECKPOINT = 1;
+    }
+
+    message CatchPokemonResponse {
+        required CatchStatus Status = 1;
+        optional double MissPercent = 2;
+        optional fixed64 CapturedPokemonId = 3;
+        optional CaptureAward CaptureAward = 4;
+
+        enum CatchStatus {
+            CATCH_ERROR = 0;
+            CATCH_SUCCESS = 1;
+            CATCH_ESCAPE = 2;
+            CATCH_FLEE = 3;
+            CATCH_MISSED = 4;
+        }
+    }
+
+    enum ActivityType {
+        ACTIVITY_UNKNOWN = 0;
+        ACTIVITY_CATCH_POKEMON = 1;
+        ACTIVITY_CATCH_LEGEND_POKEMON = 2;
+        ACTIVITY_FLEE_POKEMON = 3;
+        ACTIVITY_DEFEAT_FORT = 4;
+        ACTIVITY_EVOLVE_POKEMON = 5;
+        ACTIVITY_HATCH_EGG = 6;
+        ACTIVITY_WALK_KM = 7;
+        ACTIVITY_POKEDEX_ENTRY_NEW = 8;
+        ACTIVITY_CATCH_FIRST_THROW = 9;
+        ACTIVITY_CATCH_NICE_THROW = 10;
+        ACTIVITY_CATCH_GREAT_THROW = 11;
+        ACTIVITY_CATCH_EXCELLENT_THROW = 12;
+        ACTIVITY_CATCH_CURVEBALL = 13;
+        ACTIVITY_CATCH_FIRST_CATCH_OF_DAY = 14;
+        ACTIVITY_CATCH_MILESTONE = 15;
+        ACTIVITY_TRAIN_POKEMON = 16;
+        ACTIVITY_SEARCH_FORT = 17;
+        ACTIVITY_RELEASE_POKEMON = 18;
+        ACTIVITY_HATCH_EGG_SMALL_BONUS = 19;
+        ACTIVITY_HATCH_EGG_MEDIUM_BONUS = 20;
+        ACTIVITY_HATCH_EGG_LARGE_BONUS = 21;
+        ACTIVITY_DEFEAT_GYM_DEFENDER = 22;
+        ACTIVITY_DEFEAT_GYM_LEADER = 23;
+    }
+
+    message CaptureAward {
+        repeated ActivityType ActivityType = 1 [packed = true];
+        repeated int32 XP = 2 [packed = true];
+        repeated int32 Candy = 3 [packed = true];
+        repeated int32 Stardust = 4 [packed = true];
+    }
+
+    message CaptureProbability {
+        repeated ItemId PokeballType = 1;
+        repeated float CaptureProbability = 2;
+        optional float ReticleDifficultySize = 12;
+    }
+
+    message EncounterResponse {
+        optional WildPokemonProto WildPokemon = 1;
+        optional Background EncounterBackground = 2;
+        optional Status EncounterStatus = 3;
+        //optional CaptureProbability EncounterCaptureProbability = 4;
+
+        enum Background {
+            PARK = 0;
+            DESERT = 1;
+        }
+
+        enum Status {
+            ENCOUNTER_ERROR = 0;
+            ENCOUNTER_SUCCESS = 1;
+            ENCOUNTER_NOT_FOUND = 2;
+            ENCOUNTER_CLOSED = 3;
+            ENCOUNTER_POKEMON_FLED = 4;
+            ENCOUNTER_NOT_IN_RANGE = 5;
+            ENCOUNTER_ALREADY_HAPPENED = 6;
+            POKEMON_INVENTORY_FULL = 7;
+        }
+    }
+
+    message FortSearchResponse {
+        optional Result result = 1;
+        repeated ItemAward items_awarded = 2;
+        optional int32 gems_awarded = 3;
+        optional PokemonData pokemon_data_egg = 4;
+        optional int32 experience_awarded = 5;
+        optional int64 cooldown_complete_timestamp_ms = 6;
+        optional int32 chain_hack_sequence_number = 7;
+
+        enum Result {
+            NO_RESULT_SET = 0;
+            SUCCESS = 1;
+            OUT_OF_RANGE = 2;
+            IN_COOLDOWN_PERIOD = 3;
+            INVENTORY_FULL = 4;
+        }
+    }
+
+    message FortDetailsResponse {
+        optional string fort_id = 1;
+        optional TeamColor team_color = 2;
+        optional PokemonData pokemon_data = 3;
+        optional string name = 4;
+        repeated string image_urls = 5;
+        optional int32 fp = 6;
+        optional int32 stamina = 7;
+        optional int32 max_stamina = 8;
+        optional int32 type = 9;
+        optional double latitude = 10;
+        optional double longitude = 11;
+        optional string description = 12;
+        repeated FortModifier modifiers = 13;
+    }
+
+    message FortModifier {
+        optional ItemId item_id = 1;
+        optional int64 expiration_timestamp_ms = 2;
+        optional string deployer_player_codename = 3;
+    }
+
+    message RecycleInventoryItemResponse {
+        optional Result result = 1;
+        optional int32 new_count = 2;
+
+        enum Result {
+            UNSET = 0;
+            SUCCESS = 1;
+            ERROR_NOT_ENOUGH_COPIES = 2;
+            ERROR_CANNOT_RECYCLE_INCUBATORS = 3;
+        }
+    }
+
+    message ItemAward {
+        optional ItemId item_id = 1;
+        optional int32 item_count = 2;
+    }
+
+    message ReleasePokemonResponse {
+        required ReleaseStatus Status = 1;
+        optional int32 CandyAwarded = 2;
+        enum ReleaseStatus {
+            UNSET = 0;
+            SUCCESS = 1;
+            POKEMON_DEPLOYED = 2;
+            FAILED = 3;
+            ERROR_POKEMON_IS_EGG = 4;
+        }
+    }
+
+    message EvolvePokemonResponse {
+        optional EvolvePokemonStatus Result = 1;
+        optional Pokemon EvolvedPokemon = 2;
+        optional int32 ExpAwarded = 3;
+        optional int32 CandyAwarded = 4;
+
+        enum EvolvePokemonStatus {
+            POKEMON_EVOLVED_UNSET = 0;
+            POKEMON_EVOLVED_SUCCESS = 1;
+            FAILED_POKEMON_MISSING = 2;
+            FAILED_INSUFFICIENT_RESOURCES = 3;
+            FAILED_POKEMON_CANNOT_EVOLVE = 4;
+            FAILED_POKEMON_IS_DEPLOYED = 5;
+        }
+    }
+
+    message TransferPokemonResponse {
+        optional int32 Status = 1;
+        optional int32 CandyAwarded = 2;
+    }
+
+    message PlayerUpdateResponse {
+        repeated WildPokemonProto WildPokemon = 1;
+        repeated PokemonFortProto Forts = 2;
+        optional int32 NearbyForts = 3;
+    }
 }

@@ -126,12 +126,12 @@ function Pokeio() {
       {
         return callback(new Error('Error'));
       }
-      
+
       if (response === undefined || body === undefined) {
         console.error('[!] RPC Server offline');
         return callback(new Error('RPC Server offline'));
       }
-      
+
       var f_ret;
       try {
         f_ret = ResponseEnvelop.decode(body);

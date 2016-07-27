@@ -89,15 +89,15 @@ function Pokeio() {
     }
   };
 
-  function api_req(access_token, req, callback) {
-    self.GetApiEndpoint(access_token, function(err, apiEndpoint) {
+  function api_req(accessToken, req, callback) {
+    self.GetApiEndpoint(accessToken, function(err, apiEndpoint) {
       if (err) {
         return callback(err);
       }
       // Auth
       var auth = new RequestEnvelop.AuthInfo({
         provider: self.playerInfo.provider,
-        token: new RequestEnvelop.AuthInfo.JWT(access_token, 59)
+        token: new RequestEnvelop.AuthInfo.JWT(accessToken, 59)
       });
 
       var f_req = new RequestEnvelop({
@@ -150,7 +150,7 @@ function Pokeio() {
         if (f_ret) {
           return callback(null, f_ret);
         } else {
-          api_req(access_token, req, callback);
+          api_req(accessToken, req, callback);
         }
       });
     });

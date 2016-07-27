@@ -233,6 +233,22 @@ function Pokeio() {
     });
   };
 
+  self.GetPokemon = function(accessToken, callback) {
+    self.GetInventory(accessToken, function(err, inventory) {
+      if (err) throw err;
+
+      var pokemon = [];
+
+      inventory.inventory_delta.inventory_items.forEach(function(item) {
+        if (item.inventory_item_data.pokemon) {
+          pokemon.push(item.inventory_item_data.pokemon);
+        }
+      });
+
+      callback(null, pokemon);
+    });
+  };
+
   // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
   self.Heartbeat = function (accessToken, callback) {
     var nullbytes = new Array(21);

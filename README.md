@@ -11,6 +11,18 @@ var Pokeio = require('pokemon-go-node-api')
 ```
 Check [example.js](./example.js) for the result showed in the demo or check the documentation below.
 
+For an alternative Example checkout out [botTick.js](./botTick.js) 
+  * Update [config.json](./config.json) with your preferences
+    * Blacklist pokemon you dont want to catch, Takes pokedex Id;
+    * moveAround: should the bot move around
+    * canUseGreatBalls:  should the bot use greatballs,
+    * removeDupePokemon: should the bot get rid of duplicate pokemons,
+    * dupeLimit: if removeDupePokemon is true, how many dupes of each pokemon do you want to keep, 
+  * Example features:
+    * catchWildPokemons
+    * moveAround
+    * spinPokestops
+
 ## Demo:
 ![alt tag](http://cl.arm4x.net/poke3.png)
 

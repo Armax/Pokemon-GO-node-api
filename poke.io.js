@@ -616,6 +616,35 @@ function Pokeio() {
 
   };
 
+  self.UseItemXpBoost = function (itemId, count, callback) {
+
+    var useItemXpBoostMessage = new RequestEnvelop.UseItemXpBoostMessage({
+      'item_id': itemId,
+    });
+
+    var req = new RequestEnvelop.Requests(139, useItemXpBoostMessage.encode().toBuffer());
+
+    var _self$playerInfo3 = self.playerInfo;
+    var apiEndpoint = _self$playerInfo3.apiEndpoint;
+    var accessToken = _self$playerInfo3.accessToken;
+
+    api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+
+      if (err) {
+        return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
+      }
+      var dErr, response;
+      try {
+        response = ResponseEnvelop.UseItemXpBoostResponse.decode(f_ret.payload[0]);
+      } catch (err) {
+        dErr = err;
+      }
+      callback(err, response);
+    });
+  };
+
   self.GetLocationCoords = function () {
     var _self$playerInfo5 = self.playerInfo;
     var latitude = _self$playerInfo5.latitude;
@@ -671,7 +700,7 @@ function Pokeio() {
         }
 
         callback(null, self.GetLocationCoords());
-            }]));
+      }]));
     }
   };
 }

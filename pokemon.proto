@@ -70,9 +70,13 @@ message RequestEnvelop {
     required string item_id = 1;
     required uint64 PokemonId = 2;
 	}
+  
   message GetHatchedEggsMessage {
   // nothin..
   }
+  message UseItemXpBoostMessage {
+		required int32 item_id = 1;
+	}
 
   message EncounterMessage {
     repeated fixed64 encounter_id = 1;
@@ -1147,6 +1151,20 @@ message ResponseEnvelop {
     repeated int32 experience_awarded = 3;
     repeated int32 candy_awarded = 4;
     repeated int32 stardust_awarded = 5;
+  }
+  
+  message UseItemXpBoostResponse {
+    required XpBoostStatus Status = 1;
+    optional AppliedItems applied_items = 2;
+
+    enum XpBoostStatus {
+      UNSET = 0;
+      SUCCESS = 1;
+      ERROR_INVALID_ITEM_TYPE = 2;
+      ERROR_XP_BOOST_ALREADY_ACTIVE = 3;
+      ERROR_NO_ITEMS_REMAINING = 4;
+      ERROR_LOCATION_UNSET = 5;
+    }
   }
   
 }

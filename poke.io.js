@@ -530,6 +530,35 @@ function Pokeio() {
 
   };
 
+  self.LevelUpRewards = function (level, callback) {
+
+    var levelUpRewards = new RequestEnvelop.LevelUpRewardsMessage({
+      'level': level
+    });
+    var req = new RequestEnvelop.Requests(128, levelUpRewards.encode().toBuffer());
+
+    var _self$playerInfo3 = self.playerInfo;
+    var apiEndpoint = _self$playerInfo3.apiEndpoint;
+    var accessToken = _self$playerInfo3.accessToken;
+
+    api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+      if (err) {
+        return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
+      }
+
+      var dErr, response;
+      try {
+        response = ResponseEnvelop.LevelUpRewardsResponse.decode(f_ret.payload[0]);
+      } catch (err) {
+        dErr = err;
+      }
+      callback(err, response);
+    });
+
+  };
+
 
   self.GetLocationCoords = function () {
     var _self$playerInfo5 = self.playerInfo;

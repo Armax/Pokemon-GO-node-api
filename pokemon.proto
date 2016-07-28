@@ -61,6 +61,10 @@ message RequestEnvelop {
   message TransferPokemonMessage {
     required fixed64 PokemonId = 1;
   }
+  
+  message LevelUpRewardsMessage {
+		required int32 level = 1;
+	}
 
   message EncounterMessage {
     repeated fixed64 encounter_id = 1;
@@ -1100,4 +1104,17 @@ message ResponseEnvelop {
     optional int32 Status = 1;
     optional int32 CandyAwarded = 2;
   }
+  
+  message LevelUpRewardsResponse {
+    required RewardStatus Status = 1;
+    repeated ItemAward items_awarded = 2;
+    repeated ItemId items_unlocked = 4;
+
+    enum RewardStatus {
+      UNSET = 0;
+      SUCCESS = 1;
+      AWARDED_ALREADY = 2;
+    }
+  }
+  
 }

@@ -65,6 +65,14 @@ message RequestEnvelop {
   message LevelUpRewardsMessage {
 		required int32 level = 1;
 	}
+  
+  message UseItemEggIncubatorMessage {
+    required string item_id = 1;
+    required uint64 PokemonId = 2;
+	}
+  message GetHatchedEggsMessage {
+  // nothin..
+  }
 
   message EncounterMessage {
     repeated fixed64 encounter_id = 1;
@@ -1115,6 +1123,30 @@ message ResponseEnvelop {
       SUCCESS = 1;
       AWARDED_ALREADY = 2;
     }
+  }
+  
+  message UseItemEggIncubatorResponse {
+    required IncubatorStatus Status = 1;
+    required EggIncubator egg_incubator = 2;
+
+    enum IncubatorStatus {
+      UNSET = 0;
+      SUCCESS = 1;
+      ERROR_INCUBATOR_NOT_FOUND = 2;
+      ERROR_POKEMON_EGG_NOT_FOUND = 3;
+      ERROR_POKEMON_ID_NOT_EGG = 4;
+      ERROR_INCUBATOR_ALREADY_IN_USE = 5;
+      ERROR_POKEMON_ALREADY_INCUBATING = 6;
+      ERROR_INCUBATOR_NO_USES_REMAINING = 7;
+    }
+  }
+  
+  message GetHatchedEggsResponse {
+    required bool success = 1;
+    repeated uint64 pokemon_id = 2 [packed=true];
+    repeated int32 experience_awarded = 3;
+    repeated int32 candy_awarded = 4;
+    repeated int32 stardust_awarded = 5;
   }
   
 }

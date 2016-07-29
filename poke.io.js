@@ -127,12 +127,12 @@ function Pokeio() {
       {
         return callback(new Error('Error'));
       }
-      
+
       if (response === undefined || body === undefined) {
         console.error('[!] RPC Server offline');
         return callback(new Error('RPC Server offline'));
       }
-      
+
       var f_ret;
       try {
         f_ret = ResponseEnvelop.decode(body);
@@ -224,9 +224,16 @@ function Pokeio() {
     api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function (err, f_ret) {
       if (err) {
         return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
       }
-      var inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[0]);
-      return callback(null, inventory);
+
+      try {
+        var inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[0]);
+        return callback(null, inventory);
+      } catch (err) {
+        callback(err, null);
+      }
     });
   };
 
@@ -235,14 +242,17 @@ function Pokeio() {
     api_req(self.playerInfo.apiEndpoint, self.playerInfo.accessToken, req, function (err, f_ret) {
       if (err) {
         return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
       }
 
-      var profile = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile;
-
-      if (profile.username) {
-        self.DebugPrint('[i] Logged in!');
+      try {
+        var profile = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile;
+        if (profile.username) {
+          self.DebugPrint('[i] Logged in!');
+        }
+        callback(null, profile);
       }
-      callback(null, profile);
     });
   };
 
@@ -278,8 +288,12 @@ function Pokeio() {
         return callback('No result');
       }
 
-      var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
-      callback(null, heartbeat);
+      try {
+        var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
+        callback(null, heartbeat);
+      } catch (err) {
+        callback(err, null);
+      }
     });
   };
 
@@ -485,8 +499,12 @@ function Pokeio() {
         return callback('No result');
       }
 
-      var dropItemResponse = ResponseEnvelop.RecycleInventoryItemResponse.decode(f_ret.payload[0]);
-      callback(null, dropItemResponse);
+      try {
+        var dropItemResponse = ResponseEnvelop.RecycleInventoryItemResponse.decode(f_ret.payload[0]);
+        callback(null, dropItemResponse);
+      } catch (err) {
+        callback(err, null);
+      }
     });
   };
 

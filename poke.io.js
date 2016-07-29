@@ -517,7 +517,54 @@ function Pokeio() {
     });
 
   };
+  
+  self.GetHatchedEggs = function (callback) {
+    var getHatchedEggs = new RequestEnvelop.GetHatchedEggsMessage({});
+    var req = new RequestEnvelop.Requests(126, getHatchedEggs.encode().toBuffer());
 
+    var _self$playerInfo3 = self.playerInfo;
+    var apiEndpoint = _self$playerInfo3.apiEndpoint;
+    var accessToken = _self$playerInfo3.accessToken;
+
+    api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+      if (err) {
+        return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
+      }
+      try {
+        var getHatchedEggsResponse = ResponseEnvelop.GetHatchedEggsResponse.decode(f_ret.payload[0]);
+        callback(null, getHatchedEggsResponse);
+      } catch (err) {
+        callback(err, null);
+      }
+    });
+
+  };
+
+  self.CheckAwardedBadges = function (callback) {
+    var checkAwardedBadgesMessage = new RequestEnvelop.CheckAwardedBadgesMessage({});
+    var req = new RequestEnvelop.Requests(129, checkAwardedBadgesMessage.encode().toBuffer());
+
+    var _self$playerInfo3 = self.playerInfo;
+    var apiEndpoint = _self$playerInfo3.apiEndpoint;
+    var accessToken = _self$playerInfo3.accessToken;
+
+    api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+      if (err) {
+        return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
+      }
+      try {
+        var checkAwardedBadgesResponse = ResponseEnvelop.CheckAwardedBadgesResponse.decode(f_ret.payload[0]);
+        callback(null, checkAwardedBadgesResponse);
+      } catch (err) {
+        callback(err, null);
+      }
+    });
+
+  };
 
   self.GetLocationCoords = function () {
     var _self$playerInfo5 = self.playerInfo;

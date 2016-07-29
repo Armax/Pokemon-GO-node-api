@@ -246,7 +246,6 @@ function Pokeio() {
     });
   };
 
-  // IN DEVELPOMENT, YES WE KNOW IS NOT WORKING ATM
   self.Heartbeat = function (callback) {
     var _self$playerInfo2 = self.playerInfo;
     var apiEndpoint = _self$playerInfo2.apiEndpoint;
@@ -269,16 +268,31 @@ function Pokeio() {
       'long': self.playerInfo.longitude
     });
 
-    var req = [new RequestEnvelop.Requests(106, walkData.encode().toBuffer()), new RequestEnvelop.Requests(126), new RequestEnvelop.Requests(4, new RequestEnvelop.Unknown3(Date.now().toString()).encode().toBuffer()), new RequestEnvelop.Requests(129), new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3('05daf51635c82611d1aac95c0b051d3ec088a930').encode().toBuffer())];
+    var req = [
+      new RequestEnvelop.Requests(106, walkData.encode().toBuffer()),
+      new RequestEnvelop.Requests(126),
+      new RequestEnvelop.Requests(4, new RequestEnvelop.Unknown3(Date.now().toString()).encode().toBuffer()),
+      new RequestEnvelop.Requests(129),
+      new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3('05daf51635c82611d1aac95c0b051d3ec088a930').encode().toBuffer())
+    ];
 
     api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
       if (err) {
         return callback(err);
-      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+      } else if (!f_ret || !f_ret.payload) {
         return callback('No result');
+      } else if (f_ret.payload.length < 5) {
+        return callback('Unexpected result item count (was: ' + f_ret.payload.length + ' but expected: 5');
       }
 
-      var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
+      var heartbeat = {};
+      
+      heartbeat.MapObjects = ResponseEnvelop.GetMapObjectsPayload.decode(f_ret.payload[0]);
+      heartbeat.HatchedEggs = ResponseEnvelop.GetHatchedEggsPayload.decode(f_ret.payload[1]);
+      heartbeat.Inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[2]);
+      heartbeat.AwardedBadges = ResponseEnvelop.CheckAwardedBadgesResponse.decode(f_ret.payload[3]);
+      heartbeat.Settings = ResponseEnvelop.DownloadSettingsResponse.decode(f_ret.payload[4]);
+      
       callback(null, heartbeat);
     });
   };

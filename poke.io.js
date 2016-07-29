@@ -250,9 +250,10 @@ function Pokeio() {
 
       callback(dErr, response);
 
-      if (response.username) {
-        self.DebugPrint('[i] Logged in!');
-      }
+      if (response)
+        if (response.username) {
+          self.DebugPrint('[i] Logged in!');
+        }
 
     });
   };

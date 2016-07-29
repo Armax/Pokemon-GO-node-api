@@ -224,8 +224,13 @@ function Pokeio() {
       if (err) {
         return callback(err);
       }
-      var inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[0]);
-      return callback(null, inventory);
+      var dErr, inventory;
+      try {
+        inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[0]);
+      } catch (err) {
+        dErr = err;
+      }
+      callback(dErr, inventory);
     });
   };
 
@@ -236,12 +241,19 @@ function Pokeio() {
         return callback(err);
       }
 
-      var profile = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile;
+      var dErr, response;
+      try {
+        response = ResponseEnvelop.ProfilePayload.decode(f_ret.payload[0]).profile;
+      } catch (err) {
+        dErr = err;
+      }
 
-      if (profile.username) {
+      callback(dErr, response);
+
+      if (response.username) {
         self.DebugPrint('[i] Logged in!');
       }
-      callback(null, profile);
+
     });
   };
 
@@ -277,8 +289,14 @@ function Pokeio() {
         return callback('No result');
       }
 
-      var heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
-      callback(null, heartbeat);
+      var dErr, heartbeat;
+      try {
+        heartbeat = ResponseEnvelop.HeartbeatPayload.decode(f_ret.payload[0]);
+      } catch (err) {
+        dErr = err;
+      }
+      callback(dErr, heartbeat);
+
     });
   };
 
@@ -315,7 +333,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
     });
   };
 
@@ -344,7 +362,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
     });
   };
 
@@ -372,7 +390,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
     });
   };
 
@@ -400,7 +418,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
     });
   };
 
@@ -435,7 +453,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
 
     });
   };
@@ -469,7 +487,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
 
     });
   };
@@ -495,8 +513,14 @@ function Pokeio() {
         return callback('No result');
       }
 
-      var dropItemResponse = ResponseEnvelop.RecycleInventoryItemResponse.decode(f_ret.payload[0]);
-      callback(null, dropItemResponse);
+      var dErr, response;
+      try {
+        response = ResponseEnvelop.RecycleInventoryItemResponse.decode(f_ret.payload[0]);
+      } catch (err) {
+        dErr = err;
+      }
+      callback(dErr, response);
+
     });
   };
 
@@ -525,7 +549,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
     });
 
   };
@@ -554,7 +578,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
     });
 
   };
@@ -584,7 +608,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
     });
 
   };
@@ -611,7 +635,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
     });
 
   };
@@ -641,7 +665,7 @@ function Pokeio() {
       } catch (err) {
         dErr = err;
       }
-      callback(err, response);
+      callback(dErr, response);
     });
   };
 

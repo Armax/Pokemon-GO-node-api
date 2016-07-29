@@ -117,7 +117,7 @@ message ResponseEnvelop {
   optional int64 unknown2 = 2;
   optional string api_url = 3;
   optional Unknown6 unknown6 = 6;
-  optional Unknown7 unknown7 = 7;
+  optional AuthTicket auth_ticket = 7;
   repeated bytes payload = 100;
 
   message Unknown6 {
@@ -129,12 +129,12 @@ message ResponseEnvelop {
     }
 
   }
-
-  message Unknown7 {
-    optional bytes unknown71 = 1;
-    optional int64 unknown72 = 2;
-    optional bytes unknown73 = 3;
-  }
+  
+  message AuthTicket {
+		optional bytes start = 1;
+		optional uint64 expire_timestamp_ms = 2;
+		optional bytes end = 3;
+	}
 
   message HeartbeatPayload {
     repeated ClientMapCell cells = 1;

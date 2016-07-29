@@ -53,11 +53,11 @@ message RequestEnvelop {
     required double spin_modifier = 6;
     required double normalized_hit_position = 7;
    }
-   
+
   message EvolvePokemonMessage {
     required fixed64 PokemonId = 1;
   }
-  
+
   message TransferPokemonMessage {
     required fixed64 PokemonId = 1;
   }
@@ -89,7 +89,7 @@ message RequestEnvelop {
       required int32 item_id = 1;
       required int32 count = 2;
   }
-  
+
   message ReleasePokemonMessage {
     optional fixed64 pokemon_id = 1;
     repeated fixed64 pokemon_ids = 2;
@@ -350,7 +350,7 @@ message ResponseEnvelop {
       optional int32 from_fort = 31;
 
   }
-  
+
   enum TeamColor {
     NEUTRAL = 0;
     BLUE = 1;
@@ -697,7 +697,7 @@ message ResponseEnvelop {
   }
 
   message Item {
-      optional ItemType item = 1;
+      optional ItemId item = 1;
       optional int32 count = 2;
       optional bool unseen = 3;
   }
@@ -933,7 +933,7 @@ message ResponseEnvelop {
   }
 
   message CatchPokemonResponse {
-      required CatchStatus Status = 1;
+      optional CatchStatus Status = 1;
       optional double MissPercent = 2;
       //optional uint64 CapturedPokemonId = 3;
       //optional CaptureAward CaptureAward = 4;
@@ -1018,7 +1018,7 @@ message ResponseEnvelop {
   	optional int32 experience_awarded = 5;
   	optional int64 cooldown_complete_timestamp_ms = 6;
   	optional int32 chain_hack_sequence_number = 7;
-  
+
   	enum Result {
   		NO_RESULT_SET = 0;
   		SUCCESS = 1;
@@ -1066,7 +1066,7 @@ message ResponseEnvelop {
 	optional ItemId item_id = 1;
 	optional int32 item_count = 2;
   }
-  
+
   message ReleasePokemonResponse {
     required ReleaseStatus Status = 1;
     optional int32 CandyAwarded = 2;
@@ -1078,8 +1078,8 @@ message ResponseEnvelop {
       ERROR_POKEMON_IS_EGG = 4;
     }
   }
- 
-  message EvolvePokemonResponse 
+
+  message EvolvePokemonResponse
   {
     optional EvolvePokemonStatus Result = 1;
     optional Pokemon EvolvedPokemon = 2;
@@ -1094,8 +1094,8 @@ message ResponseEnvelop {
   		FAILED_POKEMON_CANNOT_EVOLVE = 4;
   		FAILED_POKEMON_IS_DEPLOYED = 5;
   	}
-  } 
-  
+  }
+
   message TransferPokemonResponse {
     optional int32 Status = 1;
     optional int32 CandyAwarded = 2;

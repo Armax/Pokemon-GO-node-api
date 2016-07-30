@@ -1,5 +1,5 @@
 # Poke.io
-Pokemon GO api node.js library, still WIP<br>
+Pokemon GO api node.js library, still WIP, we have a dev channel on discord: https://discord.gg/W9CZTgn (is for dev only don't ask for support here)<br>
 Check 'example.js' for examples
 
 ## Installation & Usage:

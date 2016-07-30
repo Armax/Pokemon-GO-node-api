@@ -24,7 +24,7 @@ test('poke.io.SetLocation - name', function(t) {
 
     var location = {
         type: 'name',
-        name: 'times squere'
+        name: 'Times square'
     };
 
     pokeio.SetLocation(location, function(err, coords) {

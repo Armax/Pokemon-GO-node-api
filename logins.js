@@ -4,6 +4,9 @@ var request = require('request');
 var jar = request.jar();
 request = request.defaults({ jar: jar })
 
+var GoogleOAuth = require('gpsoauthnode');
+var googleAuth = new GoogleOAuth();
+
 var login_url = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize';
 var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
 
@@ -108,9 +111,9 @@ module.exports = {
         });
     },
     GoogleAccount: function (user, pass, self, callback) {
-        self.google.login(user, pass, android_id, function (err, data) {
+        googleAuth.login(user, pass, android_id, function (err, data) {
             if (data) {
-                self.google.oauth(user, data.masterToken, data.androidId, oauth_service, app, client_sig, function (err, data) {
+                googleAuth.oauth(user, data.masterToken, data.androidId, oauth_service, app, client_sig, function (err, data) {
                     if (err) {
                         return callback(err, null);
                     }

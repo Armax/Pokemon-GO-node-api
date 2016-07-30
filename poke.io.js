@@ -15,7 +15,6 @@ var request = require('request');
 var geocoder = require('geocoder');
 var events = require('events');
 var ProtoBuf = require('protobufjs');
-var GoogleOAuth = require('gpsoauthnode');
 var fs = require('fs');
 var s2 = require('s2geometry-node');
 

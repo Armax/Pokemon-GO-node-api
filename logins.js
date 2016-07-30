@@ -17,7 +17,7 @@ var app = 'com.nianticlabs.pokemongo';
 var client_sig = '321187995bc7cdc2b5fc91b11a96e2baa8602c62';
 
 module.exports = {
-    PokemonClub: function (user, pass, self, callback) {
+    PokemonClub: function (user, pass, callback) {
         var options = {
             url: login_url,
             headers: {
@@ -102,7 +102,6 @@ module.exports = {
                         return callback(new Error('Login failed'), null);
                     }
 
-                    self.DebugPrint('[i] Session token: ' + token);
                     callback(null, token);
                 });
 
@@ -110,7 +109,7 @@ module.exports = {
 
         });
     },
-    GoogleAccount: function (user, pass, self, callback) {
+    GoogleAccount: function (user, pass, callback) {
         googleAuth.login(user, pass, android_id, function (err, data) {
             if (data) {
                 googleAuth.oauth(user, data.masterToken, data.androidId, oauth_service, app, client_sig, function (err, data) {

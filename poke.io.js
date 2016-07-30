@@ -175,7 +175,7 @@ function Pokeio() {
   self.GetAccessToken = function (user, pass, callback) {
     self.DebugPrint('[i] Logging with user: ' + user);
     if (self.playerInfo.provider === 'ptc') {
-      Logins.PokemonClub(user, pass, self, function (err, token) {
+      Logins.PokemonClub(user, pass, function (err, token) {
         if (err) {
           return callback(err);
         }
@@ -185,7 +185,7 @@ function Pokeio() {
         callback(null, token);
       });
     } else {
-      Logins.GoogleAccount(user, pass, self, function (err, token) {
+      Logins.GoogleAccount(user, pass, function (err, token) {
         if (err) {
           return callback(err);
         }

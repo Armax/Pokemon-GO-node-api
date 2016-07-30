@@ -1,5 +1,9 @@
 'use strict';
 
+var request = require('request');
+var jar = request.jar();
+request = request.defaults({ jar: jar })
+
 var login_url = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize';
 var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
 
@@ -18,7 +22,7 @@ module.exports = {
             }
         };
 
-        self.request.get(options, function (err, response, body) {
+        request.get(options, function (err, response, body) {
             var data;
 
             if (err) {
@@ -51,7 +55,7 @@ module.exports = {
                 }
             };
 
-            self.request.post(options, function (err, response, body) {
+            request.post(options, function (err, response, body) {
                 //Parse body if any exists, callback with errors if any.
                 if(err) {
                     return callback(err, null);
@@ -80,7 +84,7 @@ module.exports = {
                     }
                 };
 
-                self.request.post(options, function (err, response, body) {
+                request.post(options, function (err, response, body) {
                     var token;
 
                     if(err) {

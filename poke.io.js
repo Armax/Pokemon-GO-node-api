@@ -63,12 +63,6 @@ function getNeighbors(lat, lng) {
 function Pokeio() {
   var self = this;
   self.events = new EventEmitter();
-  self.j = request.jar();
-  self.request = request.defaults({
-    jar: self.j
-  });
-
-  self.google = new GoogleOAuth();
 
   self.pokemonlist = pokemonlist.pokemon;
 
@@ -122,7 +116,7 @@ function Pokeio() {
       }
     };
 
-    self.request.post(options, function (err, response, body) {
+    request.post(options, function (err, response, body) {
       if (err)
       {
         return callback(new Error('Error'));

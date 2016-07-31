@@ -15,7 +15,6 @@ var request = require('request');
 var geocoder = require('geocoder');
 var events = require('events');
 var ProtoBuf = require('protobufjs');
-var GoogleOAuth = require('gpsoauthnode');
 var fs = require('fs');
 var s2 = require('s2geometry-node');
 
@@ -63,12 +62,6 @@ function getNeighbors(lat, lng) {
 function Pokeio() {
   var self = this;
   self.events = new EventEmitter();
-  self.j = request.jar();
-  self.request = request.defaults({
-    jar: self.j
-  });
-
-  self.google = new GoogleOAuth();
 
   self.pokemonlist = pokemonlist.pokemon;
 
@@ -122,7 +115,7 @@ function Pokeio() {
       }
     };
 
-    self.request.post(options, function (err, response, body) {
+    request.post(options, function (err, response, body) {
       if (err)
       {
         return callback(new Error('Error'));
@@ -182,7 +175,7 @@ function Pokeio() {
   self.GetAccessToken = function (user, pass, callback) {
     self.DebugPrint('[i] Logging with user: ' + user);
     if (self.playerInfo.provider === 'ptc') {
-      Logins.PokemonClub(user, pass, self, function (err, token) {
+      Logins.PokemonClub(user, pass, function (err, token) {
         if (err) {
           return callback(err);
         }
@@ -192,7 +185,7 @@ function Pokeio() {
         callback(null, token);
       });
     } else {
-      Logins.GoogleAccount(user, pass, self, function (err, token) {
+      Logins.GoogleAccount(user, pass, function (err, token) {
         if (err) {
           return callback(err);
         }

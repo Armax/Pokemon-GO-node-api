@@ -1,5 +1,12 @@
 'use strict';
 
+var request = require('request');
+var jar = request.jar();
+request = request.defaults({ jar: jar })
+
+var GoogleOAuth = require('gpsoauthnode');
+var googleAuth = new GoogleOAuth();
+
 var login_url = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize';
 var login_oauth = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
 
@@ -10,7 +17,7 @@ var app = 'com.nianticlabs.pokemongo';
 var client_sig = '321187995bc7cdc2b5fc91b11a96e2baa8602c62';
 
 module.exports = {
-    PokemonClub: function (user, pass, self, callback) {
+    PokemonClub: function (user, pass, callback) {
         var options = {
             url: login_url,
             headers: {
@@ -18,7 +25,7 @@ module.exports = {
             }
         };
 
-        self.request.get(options, function (err, response, body) {
+        request.get(options, function (err, response, body) {
             var data;
 
             if (err) {
@@ -51,7 +58,7 @@ module.exports = {
                 }
             };
 
-            self.request.post(options, function (err, response, body) {
+            request.post(options, function (err, response, body) {
                 //Parse body if any exists, callback with errors if any.
                 if(err) {
                     return callback(err, null);
@@ -80,7 +87,7 @@ module.exports = {
                     }
                 };
 
-                self.request.post(options, function (err, response, body) {
+                request.post(options, function (err, response, body) {
                     var token;
 
                     if(err) {
@@ -95,7 +102,6 @@ module.exports = {
                         return callback(new Error('Login failed'), null);
                     }
 
-                    self.DebugPrint('[i] Session token: ' + token);
                     callback(null, token);
                 });
 
@@ -103,10 +109,10 @@ module.exports = {
 
         });
     },
-    GoogleAccount: function (user, pass, self, callback) {
-        self.google.login(user, pass, android_id, function (err, data) {
+    GoogleAccount: function (user, pass, callback) {
+        googleAuth.login(user, pass, android_id, function (err, data) {
             if (data) {
-                self.google.oauth(user, data.masterToken, data.androidId, oauth_service, app, client_sig, function (err, data) {
+                googleAuth.oauth(user, data.masterToken, data.androidId, oauth_service, app, client_sig, function (err, data) {
                     if (err) {
                         return callback(err, null);
                     }

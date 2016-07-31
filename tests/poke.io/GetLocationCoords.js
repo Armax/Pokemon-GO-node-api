@@ -5,8 +5,8 @@ var test = require('tape');
 var Pokeio = require('../../poke.io.js');
 var pokeio = new Pokeio.Pokeio();
 
-var latitude = 40.4731191;
-var longitude = -77.31329079999999;
+var latitude = 40.759011;
+var longitude = -73.9844722;
 
 pokeio.playerInfo.latitude = latitude;
 pokeio.playerInfo.longitude = longitude;

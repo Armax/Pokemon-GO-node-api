@@ -52,11 +52,13 @@ a.init(username, password, location, provider, function(err) {
                     console.log(err);
                 }
 
-                for (var i = hb.cells.length - 1; i >= 0; i--) {
-                    if(hb.cells[i].NearbyPokemon[0]) {
+                var mapObjs = hb.MapObjects;
+
+                for (var i = mapObjs.cells.length - 1; i >= 0; i--) {
+                    if(mapObjs.cells[i].NearbyPokemon[0]) {
                         //console.log(a.pokemonlist[0])
-                        var pokemon = a.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1];
-                        console.log('1[+] There is a ' + pokemon.name + ' at ' + hb.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters');
+                        var pokemon = a.pokemonlist[parseInt(mapObjs.cells[i].NearbyPokemon[0].PokedexNumber)-1];
+                        console.log('1[+] There is a ' + pokemon.name + ' at ' + mapObjs.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters');
                     }
                 }
 
@@ -93,19 +95,21 @@ b.init(username1, password1, location1, provider1, function(err) {
                     console.log(err);
                 }
 
-                for (var i = hb.cells.length - 1; i >= 0; i--) {
-                    if(hb.cells[i].NearbyPokemon[0]) {
+                var mapObjs = hb.MapObjects;
+
+                for (var i = mapObjs.cells.length - 1; i >= 0; i--) {
+                    if(mapObjs.cells[i].NearbyPokemon[0]) {
                         //console.log(a.pokemonlist[0])
-                        var pokemon = b.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1];
-                        console.log('[+] There is a ' + pokemon.name + ' at ' + hb.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters');
+                        var pokemon = a.pokemonlist[parseInt(mapObjs.cells[i].NearbyPokemon[0].PokedexNumber)-1];
+                        console.log('1[+] There is a ' + pokemon.name + ' at ' + mapObjs.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters');
                     }
                 }
 
                 // Show MapPokemons (catchable) & catch
-                for (i = hb.cells.length - 1; i >= 0; i--) {
-                    for (var j = hb.cells[i].MapPokemon.length - 1; j >= 0; j--)
+                for (i = mapObjs.cells.length - 1; i >= 0; i--) {
+                    for (var j = mapObjs.cells[i].MapPokemon.length - 1; j >= 0; j--)
                     {   // use async lib with each or eachSeries should be better :)
-                        var currentPokemon = hb.cells[i].MapPokemon[j];
+                        var currentPokemon = mapObjs.cells[i].MapPokemon[j];
 
                         (function(currentPokemon) {
                             var pokedexInfo = b.pokemonlist[parseInt(currentPokemon.PokedexTypeId)-1];

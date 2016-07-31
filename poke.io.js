@@ -208,8 +208,13 @@ function Pokeio() {
             if (err) {
                 return callback(err);
             }
-            var inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[0]);
-            return callback(null, inventory);
+            try{
+                var inventory = ResponseEnvelop.GetInventoryResponse.decode(f_ret.payload[0]);
+                return callback(null, inventory);
+            }catch(e)
+            {
+                return callback(e, null);
+            }
         });
     };
 

@@ -325,7 +325,7 @@ message ResponseEnvelop {
       optional int32 stamina_max = 5;
       optional PokemonMove move_1 = 6;
       optional PokemonMove move_2 = 7;
-      optional int32 deployed_fort_id = 8;
+      optional string deployed_fort_id = 8;
       optional string owner_name = 9;
       optional bool is_egg = 10;
       optional int32 egg_km_walked_target = 11;

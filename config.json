@@ -1,0 +1,59 @@
+{
+    "version": "0.2.0",
+    "blackList": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        20,
+        19,
+        21,
+        22,
+        23,
+        27,
+        41,
+        43,
+        46,
+        60,
+        70,
+        72,
+        81,
+        84,
+        127,
+        32,
+        48,
+        52,
+        54,
+        56,
+        60,
+        77,
+        114,
+        29,
+        100,
+        50,
+        98
+    ],
+    "locations": {
+        "centralParkNyc": {
+            "type": "coords",
+            "coords": {
+                "latitude": 40.783709738228154,
+                "longitude": -73.96558284759521,
+                "altitude": 0
+            }
+        }
+    },
+    "user1": {
+        "username": "username1",
+        "password": "password1",
+        "provider": "google"
+    },
+    "moveAround": true,
+    "canUseGreatBalls": false,
+    "removeDupePokemon": false,
+    "dupeLimit": 2
+}

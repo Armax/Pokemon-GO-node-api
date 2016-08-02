@@ -821,7 +821,7 @@ message ResponseEnvelop {
   }
 
   message EggIncubators {
-      optional EggIncubator egg_incubator = 1;
+      repeated EggIncubator egg_incubator = 1;
   }
 
   message EggIncubator {

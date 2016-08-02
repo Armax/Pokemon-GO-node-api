@@ -61,6 +61,22 @@ message RequestEnvelop {
   message TransferPokemonMessage {
     required fixed64 PokemonId = 1;
   }
+  
+  message LevelUpRewardsMessage {
+		required int32 level = 1;
+	}
+  
+  message UseItemEggIncubatorMessage {
+    required string item_id = 1;
+    required uint64 PokemonId = 2;
+	}
+  
+  message GetHatchedEggsMessage {
+  // nothin..
+  }
+  message UseItemXpBoostMessage {
+		required int32 item_id = 1;
+	}
 
   message EncounterMessage {
     repeated fixed64 encounter_id = 1;
@@ -101,7 +117,7 @@ message ResponseEnvelop {
   optional int64 unknown2 = 2;
   optional string api_url = 3;
   optional Unknown6 unknown6 = 6;
-  optional Unknown7 unknown7 = 7;
+  optional AuthTicket auth_ticket = 7;
   repeated bytes payload = 100;
 
   message Unknown6 {
@@ -113,12 +129,12 @@ message ResponseEnvelop {
     }
 
   }
-
-  message Unknown7 {
-    optional bytes unknown71 = 1;
-    optional int64 unknown72 = 2;
-    optional bytes unknown73 = 3;
-  }
+  
+  message AuthTicket {
+		optional bytes start = 1;
+		optional uint64 expire_timestamp_ms = 2;
+		optional bytes end = 3;
+	}
 
   message HeartbeatPayload {
     repeated ClientMapCell cells = 1;
@@ -200,14 +216,14 @@ message ResponseEnvelop {
     optional int32 TimeTillHiddenMs = 11;
 
     message Pokemon {
-        optional uint64 Id = 1;
-        optional int32 PokemonId = 2;
-        optional int32 cp = 3;
+      optional uint64 Id = 1;
+      optional PokemonId PokemonId = 2;
+      optional int32 cp = 3;
     }
   }
 
   message NearbyPokemonProto {
-    optional int32 PokedexNumber = 1;
+    optional PokemonId PokedexNumber = 1;
     optional float DistanceMeters = 2;
     optional fixed64 EncounterId = 3;
   }
@@ -231,15 +247,15 @@ message ResponseEnvelop {
     repeated Currency currency = 14;
 
     message AvatarDetails {
-        optional int32 skin = 2;
-        optional int32 hair = 3;
-        optional int32 tshirt = 4;
-        optional int32 trousers = 5;
-        optional int32 cap = 6;
-        optional int32 boots = 7;
-        optional int32 gender = 8;
-        optional int32 eyes = 9;
-        optional int32 backpack = 10;
+      optional int32 skin = 2;
+      optional int32 hair = 3;
+      optional int32 tshirt = 4;
+      optional int32 trousers = 5;
+      optional int32 cap = 6;
+      optional int32 boots = 7;
+      optional int32 gender = 8;
+      optional int32 eyes = 9;
+      optional int32 backpack = 10;
     }
 
     message DailyBonus {
@@ -254,101 +270,99 @@ message ResponseEnvelop {
   }
 
   message GetInventoryResponse {
-      optional bool success = 1;
-      optional InventoryDelta inventory_delta = 2;
-
+    optional bool success = 1;
+    optional InventoryDelta inventory_delta = 2;
   }
 
   message InventoryDelta {
-      optional int64 original_timestamp_ms = 1;
-      optional int64 new_timestamp_ms = 2;
-      repeated InventoryItem inventory_items = 3;
+    optional int64 original_timestamp_ms = 1;
+    optional int64 new_timestamp_ms = 2;
+    repeated InventoryItem inventory_items = 3;
   }
 
   message InventoryItem {
-      optional int64 modified_timestamp_ms = 1;
-      optional int64 deleted_item_key = 2;
-      optional InventoryItemData inventory_item_data = 3;
+    optional int64 modified_timestamp_ms = 1;
+    optional int64 deleted_item_key = 2;
+    optional InventoryItemData inventory_item_data = 3;
   }
 
   message InventoryItemData {
-      optional PokemonData pokemon = 1;
-      optional Item item = 2;
-      optional PokedexEntry pokedex_entry = 3;
-      optional PlayerStats player_stats = 4;
-      optional PlayerCurrency player_currency = 5;
-      optional PlayerCamera player_camera = 6;
-      optional InventoryUpgrades inventory_upgrades = 7;
-      optional AppliedItems applied_items = 8;
-      optional EggIncubators egg_incubators = 9;
-      optional PokemonFamily pokemon_family = 10;
+    optional PokemonData pokemon = 1;
+    optional Item item = 2;
+    optional PokedexEntry pokedex_entry = 3;
+    optional PlayerStats player_stats = 4;
+    optional PlayerCurrency player_currency = 5;
+    optional PlayerCamera player_camera = 6;
+    optional InventoryUpgrades inventory_upgrades = 7;
+    optional AppliedItems applied_items = 8;
+    optional EggIncubators egg_incubators = 9;
+    optional PokemonFamily pokemon_family = 10;
   }
 
   message PokemonData {
-      optional fixed64 id = 1;
-    	optional PokemonId pokemon_id = 2;
-    	optional int32 cp = 3;
-    	optional int32 stamina = 4;
-    	optional int32 stamina_max = 5;
-    	optional PokemonMove move_1 = 6;
-    	optional PokemonMove move_2 = 7;
-    	optional string deployed_fort_id = 8;
-    	optional string owner_name = 9;
-    	optional bool is_egg = 10;
-    	optional double egg_km_walked_target = 11;
-    	optional double egg_km_walked_start = 12;
-    	optional int32 origin = 14;
-    	optional float height_m = 15;
-    	optional float weight_kg = 16;
-    	optional int32 individual_attack = 17;
-    	optional int32 individual_defense = 18;
-    	optional int32 individual_stamina = 19;
-    	optional float cp_multiplier = 20;
-    	optional ItemId pokeball = 21;
-    	optional uint64 captured_cell_id = 22;
-    	optional int32 battles_attacked = 23;
-    	optional int32 battles_defended = 24;
-    	optional string egg_incubator_id = 25;
-    	optional uint64 creation_time_ms = 26;
-    	optional int32 num_upgrades = 27;
-    	optional float additional_cp_multiplier = 28;
-    	optional int32 favorite = 29;
-    	optional string nickname = 30;
-    	optional int32 from_fort = 31;
+    optional fixed64 id = 1;
+    optional PokemonId pokemon_id = 2;
+    optional int32 cp = 3;
+    optional int32 stamina = 4;
+    optional int32 stamina_max = 5;
+    optional PokemonMove move_1 = 6;
+    optional PokemonMove move_2 = 7;
+    optional string deployed_fort_id = 8;
+    optional string owner_name = 9;
+    optional bool is_egg = 10;
+    optional double egg_km_walked_target = 11;
+    optional double egg_km_walked_start = 12;
+    optional int32 origin = 14;
+    optional float height_m = 15;
+    optional float weight_kg = 16;
+    optional int32 individual_attack = 17;
+    optional int32 individual_defense = 18;
+    optional int32 individual_stamina = 19;
+    optional float cp_multiplier = 20;
+    optional ItemId pokeball = 21;
+    optional uint64 captured_cell_id = 22;
+    optional int32 battles_attacked = 23;
+    optional int32 battles_defended = 24;
+    optional string egg_incubator_id = 25;
+    optional uint64 creation_time_ms = 26;
+    optional int32 num_upgrades = 27;
+    optional float additional_cp_multiplier = 28;
+    optional int32 favorite = 29;
+    optional string nickname = 30;
+    optional int32 from_fort = 31;
   }
 
   message Pokemon {
-      optional int32 id = 1;
-      optional PokemonId pokemon_type = 2;
-      optional int32 cp = 3;
-      optional int32 stamina = 4;
-      optional int32 stamina_max = 5;
-      optional PokemonMove move_1 = 6;
-      optional PokemonMove move_2 = 7;
-      optional int32 deployed_fort_id = 8;
-      optional string owner_name = 9;
-      optional bool is_egg = 10;
-      optional int32 egg_km_walked_target = 11;
-      optional int32 egg_km_walked_start = 12;
-      optional int32 origin = 14;
-      optional float height_m = 15;
-      optional float weight_kg = 16;
-      optional int32 individual_attack = 17;
-      optional int32 individual_defense = 18;
-      optional int32 individual_stamina = 19;
-      optional int32 cp_multiplier = 20;
-      optional int32 pokeball = 21;
-      optional uint64 captured_cell_id = 22;
-      optional int32 battles_attacked = 23;
-      optional int32 battles_defended = 24;
-      optional int32 egg_incubator_id = 25;
-      optional uint64 creation_time_ms = 26;
-      optional int32 num_upgrades = 27;
-      optional int32 additional_cp_multiplier = 28;
-      optional int32 favorite = 29;
-      optional string nickname = 30;
-      optional int32 from_fort = 31;
-
+    optional int32 id = 1;
+    optional PokemonId pokemon_type = 2;
+    optional int32 cp = 3;
+    optional int32 stamina = 4;
+    optional int32 stamina_max = 5;
+    optional PokemonMove move_1 = 6;
+    optional PokemonMove move_2 = 7;
+    optional int32 deployed_fort_id = 8;
+    optional string owner_name = 9;
+    optional bool is_egg = 10;
+    optional int32 egg_km_walked_target = 11;
+    optional int32 egg_km_walked_start = 12;
+    optional int32 origin = 14;
+    optional float height_m = 15;
+    optional float weight_kg = 16;
+    optional int32 individual_attack = 17;
+    optional int32 individual_defense = 18;
+    optional int32 individual_stamina = 19;
+    optional int32 cp_multiplier = 20;
+    optional int32 pokeball = 21;
+    optional uint64 captured_cell_id = 22;
+    optional int32 battles_attacked = 23;
+    optional int32 battles_defended = 24;
+    optional int32 egg_incubator_id = 25;
+    optional uint64 creation_time_ms = 26;
+    optional int32 num_upgrades = 27;
+    optional int32 additional_cp_multiplier = 28;
+    optional int32 favorite = 29;
+    optional string nickname = 30;
+    optional int32 from_fort = 31;
   }
   
   enum TeamColor {
@@ -697,7 +711,7 @@ message ResponseEnvelop {
   }
 
   message Item {
-      optional ItemType item = 1;
+      optional ItemId item_id = 1;
       optional int32 count = 2;
       optional bool unseen = 3;
   }
@@ -1051,20 +1065,20 @@ message ResponseEnvelop {
   }
 
   message RecycleInventoryItemResponse {
-      optional Result result = 1;
-      optional int32 new_count = 2;
+    optional Result result = 1;
+    optional int32 new_count = 2;
 
-      enum Result {
-          UNSET = 0;
-          SUCCESS = 1;
-          ERROR_NOT_ENOUGH_COPIES = 2;
-          ERROR_CANNOT_RECYCLE_INCUBATORS = 3;
-      }
+    enum Result {
+      UNSET = 0;
+      SUCCESS = 1;
+      ERROR_NOT_ENOUGH_COPIES = 2;
+      ERROR_CANNOT_RECYCLE_INCUBATORS = 3;
+    }
   }
 
   message ItemAward {
-	optional ItemId item_id = 1;
-	optional int32 item_count = 2;
+    optional ItemId item_id = 1;
+    optional int32 item_count = 2;
   }
   
   message ReleasePokemonResponse {
@@ -1100,4 +1114,55 @@ message ResponseEnvelop {
     optional int32 Status = 1;
     optional int32 CandyAwarded = 2;
   }
+  
+  message LevelUpRewardsResponse {
+    required RewardStatus Status = 1;
+    repeated ItemAward items_awarded = 2;
+    repeated ItemId items_unlocked = 4;
+
+    enum RewardStatus {
+      UNSET = 0;
+      SUCCESS = 1;
+      AWARDED_ALREADY = 2;
+    }
+  }
+  
+  message UseItemEggIncubatorResponse {
+    required IncubatorStatus Status = 1;
+    required EggIncubator egg_incubator = 2;
+
+    enum IncubatorStatus {
+      UNSET = 0;
+      SUCCESS = 1;
+      ERROR_INCUBATOR_NOT_FOUND = 2;
+      ERROR_POKEMON_EGG_NOT_FOUND = 3;
+      ERROR_POKEMON_ID_NOT_EGG = 4;
+      ERROR_INCUBATOR_ALREADY_IN_USE = 5;
+      ERROR_POKEMON_ALREADY_INCUBATING = 6;
+      ERROR_INCUBATOR_NO_USES_REMAINING = 7;
+    }
+  }
+  
+  message GetHatchedEggsResponse {
+    required bool success = 1;
+    repeated uint64 pokemon_id = 2 [packed=true];
+    repeated int32 experience_awarded = 3;
+    repeated int32 candy_awarded = 4;
+    repeated int32 stardust_awarded = 5;
+  }
+  
+  message UseItemXpBoostResponse {
+    required XpBoostStatus Status = 1;
+    optional AppliedItems applied_items = 2;
+
+    enum XpBoostStatus {
+      UNSET = 0;
+      SUCCESS = 1;
+      ERROR_INVALID_ITEM_TYPE = 2;
+      ERROR_XP_BOOST_ALREADY_ACTIVE = 3;
+      ERROR_NO_ITEMS_REMAINING = 4;
+      ERROR_LOCATION_UNSET = 5;
+    }
+  }
+  
 }

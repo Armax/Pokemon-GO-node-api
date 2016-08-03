@@ -5,8 +5,8 @@ var test = require('tape');
 var Pokeio = require('../../poke.io.js');
 var pokeio = new Pokeio.Pokeio();
 
-var latitude = 40.4731191;
-var longitude = -77.31329079999999;
+var latitude = 40.759011;
+var longitude = -73.9844722;
 
 test('poke.io.SetLocation - fail to set type', function(t) {
     t.plan(2);
@@ -24,7 +24,7 @@ test('poke.io.SetLocation - name', function(t) {
 
     var location = {
         type: 'name',
-        name: 'your mom'
+        name: 'Times square'
     };
 
     pokeio.SetLocation(location, function(err, coords) {

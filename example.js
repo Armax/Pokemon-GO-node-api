@@ -3,8 +3,8 @@
 var PokemonGO = require('./poke.io.js');
 
 // using var so you can login with multiple users
-var a = new PokemonGO.Pokeio()
-var b = new PokemonGO.Pokeio()
+var a = new PokemonGO.Pokeio();
+var b = new PokemonGO.Pokeio();
 
 //Set environment variables or replace placeholder text
 var location = {
@@ -55,8 +55,8 @@ a.init(username, password, location, provider, function(err) {
                 for (var i = hb.cells.length - 1; i >= 0; i--) {
                     if(hb.cells[i].NearbyPokemon[0]) {
                         //console.log(a.pokemonlist[0])
-                        var pokemon = a.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1]
-                        console.log('1[+] There is a ' + pokemon.name + ' at ' + hb.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters')
+                        var pokemon = a.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1];
+                        console.log('1[+] There is a ' + pokemon.name + ' at ' + hb.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters');
                     }
                 }
 
@@ -96,27 +96,32 @@ b.init(username1, password1, location1, provider1, function(err) {
                 for (var i = hb.cells.length - 1; i >= 0; i--) {
                     if(hb.cells[i].NearbyPokemon[0]) {
                         //console.log(a.pokemonlist[0])
-                        var pokemon = b.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1]
-                        console.log('[+] There is a ' + pokemon.name + ' at ' + hb.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters')
+                        var pokemon = b.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1];
+                        console.log('[+] There is a ' + pokemon.name + ' at ' + hb.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters');
                     }
                 }
 
-                // Show WildPokemons (catchable) & catch
-                for (var j = hb.cells[i].WildPokemon.length - 1; j >= 0; j--)
-                {   // use async lib with each or eachSeries should be better :)
-                    var currentPokemon = hb.cells[i].WildPokemon[j];
-                    var pokedexInfo = b.pokemonlist[parseInt(currentPokemon.pokemon.PokemonId)-1]
-                    console.log('[+] There is a ' + pokedexInfo.name + ' near!! I can try to catch it!');
-                    
-                    Pokeio.EncounterPokemon(currentPokemon, function(suc, dat) {
-                        console.log('Encountering pokemon ' + pokedexInfo.name + '...');
-                        Pokeio.CatchPokemon(currentPokemon, 1, 1.950, 1, 1, function(xsuc, xdat) {
-                            var status = ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch'];
-                            console.log(status[xdat.Status]);
-                        });
-                    });
-                }
+                // Show MapPokemons (catchable) & catch
+                for (i = hb.cells.length - 1; i >= 0; i--) {
+                    for (var j = hb.cells[i].MapPokemon.length - 1; j >= 0; j--)
+                    {   // use async lib with each or eachSeries should be better :)
+                        var currentPokemon = hb.cells[i].MapPokemon[j];
 
+                        (function(currentPokemon) {
+                            var pokedexInfo = b.pokemonlist[parseInt(currentPokemon.PokedexTypeId)-1];
+                            console.log('[+] There is a ' + pokedexInfo.name + ' near!! I can try to catch it!');
+
+                            b.EncounterPokemon(currentPokemon, function(suc, dat) {
+                                console.log('Encountering pokemon ' + pokedexInfo.name + '...');
+                                b.CatchPokemon(currentPokemon, 1, 1.950, 1, 1, function(xsuc, xdat) {
+                                    var status = ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch'];
+                                    console.log(status[xdat.Status]);
+                                });
+                            });
+                        })(currentPokemon);
+
+                    }
+                    }
             });
         }, 5000);
 

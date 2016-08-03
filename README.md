@@ -1,5 +1,5 @@
 # Poke.io
-Pokemon GO api node.js library, still WIP<br>
+Pokemon GO api node.js library, still WIP, we have a dev channel on discord: https://discord.gg/W9CZTgn (is for dev only don't ask for support here)<br>
 Check 'example.js' for examples
 
 ## Installation & Usage:
@@ -97,9 +97,10 @@ Accepts raw coordinates or location name based on the type property.
   * `location {Object}`
     * `type {String}` One of ['name', 'coords']
     * `name {String}` Address for lookup using the google maps api.
-    * `latitude {Number}`
-    * `longitude {Number}`
-    * `altitude {Number}`
+    * `coords {object}`
+        * `latitude {Number}`
+        * `longitude {Number}`
+        * `altitude {Number}`
   * `callback {Function(error, coordinates)}`
     * `error {Error}`
     * `coordinates {Object}`

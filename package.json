@@ -12,7 +12,7 @@
     "istanbul": "^0.4.4",
     "protobufjs": "^5.0.1",
     "request": "^2.73.0",
-    "s2geometry-node": "^1.3.0",
+    "s2-geometry": "https://github.com/coolaj86/s2-geometry-javascript.git",
     "tape": "^4.6.0"
   },
   "scripts": {

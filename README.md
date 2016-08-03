@@ -107,6 +107,21 @@ Accepts raw coordinates or location name based on the type property.
       * `longitude {Number}`
       * `altitude {Number}`
 
+### Pokeio.serialize(pokeioInstance)
+
+Will serialize the instance to JSON (same as calling `.toJSON()` on the instance).
+
+This includes the login session information, current location, etc.
+
+### Pokeio.deserialize(pokeioJson)
+
+Will deserialize the JSON object to create a new `Pokeio` instance.
+
+The created instance will already be logged in and have a location set
+(if the serialized version was logged in).
+
+You can reusea and repurpose an existing instance by calling `.fromJSON` on that instance.
+
 ## Thanks to:
 Python demo: [tejado](https://github.com/tejado/pokemongo-api-demo) <br>
 

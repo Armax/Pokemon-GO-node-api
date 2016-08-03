@@ -413,7 +413,7 @@ function Pokeio() {
     };
 }
 
-Pokeio.prototype.serialize = function () {
+Pokeio.prototype.toJSON = Pokeio.prototype.serialize = function () {
     var self = this;
     var json = {
       username: self.playerInfo.username
@@ -432,10 +432,10 @@ Pokeio.prototype.serialize = function () {
     return json;
 };
 module.exports.serialize = Pokeio.serialize = function (pokeio) {
-    return pokeio.serialize();
+    return pokeio.toJSON();
 };
 
-Pokeio.prototype.deserialize = function (opts) {
+Pokeio.prototype.fromJSON = Pokeio.prototype.deserialize = function (opts) {
     var self = this;
     self.playerInfo.username = opts.username || 'johndoe';
     self.playerInfo.password = opts.password || 'secret';
@@ -456,7 +456,7 @@ Pokeio.prototype.deserialize = function (opts) {
 
 module.exports.deserialize = Pokeio.deserialize = function (opts) {
     var pokeio = new Pokeio();
-    pokeio.deserialize(opts);
+    pokeio.fromJSON(opts);
     return pokeio;
 };
 

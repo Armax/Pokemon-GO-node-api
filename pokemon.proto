@@ -53,24 +53,29 @@ message RequestEnvelop {
     required double spin_modifier = 6;
     required double normalized_hit_position = 7;
    }
-   
+
+  message NicknamePokemonMessage {
+    required fixed64 pokemon_id = 1;
+    required string nickname = 2;
+  }
+
   message EvolvePokemonMessage {
     required fixed64 PokemonId = 1;
   }
-  
+
   message TransferPokemonMessage {
     required fixed64 PokemonId = 1;
   }
-  
+
   message LevelUpRewardsMessage {
 		required int32 level = 1;
 	}
-  
+
   message UseItemEggIncubatorMessage {
     required string item_id = 1;
     required uint64 PokemonId = 2;
 	}
-  
+
   message GetHatchedEggsMessage {
   // nothin..
   }
@@ -105,7 +110,7 @@ message RequestEnvelop {
       required int32 item_id = 1;
       required int32 count = 2;
   }
-  
+
   message ReleasePokemonMessage {
     optional fixed64 pokemon_id = 1;
     repeated fixed64 pokemon_ids = 2;
@@ -129,7 +134,7 @@ message ResponseEnvelop {
     }
 
   }
-  
+
   message AuthTicket {
 		optional bytes start = 1;
 		optional uint64 expire_timestamp_ms = 2;
@@ -364,7 +369,7 @@ message ResponseEnvelop {
     optional string nickname = 30;
     optional int32 from_fort = 31;
   }
-  
+
   enum TeamColor {
     NEUTRAL = 0;
     BLUE = 1;
@@ -961,6 +966,18 @@ message ResponseEnvelop {
       }
   }
 
+  message NicknamePokemonResponse {
+      required NicknameStatus Status = 1;
+
+      enum NicknameStatus {
+          UNSET = 0;
+          SUCCESS = 1;
+          ERROR_INVALID_NICKNAME = 2;
+          ERROR_POKEMON_NOT_FOUND = 3;
+          ERROR_POKEMON_IS_EGG = 4;
+      }
+  }
+
   enum ActivityType {
       ACTIVITY_UNKNOWN = 0;
       ACTIVITY_CATCH_POKEMON = 1;
@@ -1032,7 +1049,7 @@ message ResponseEnvelop {
   	optional int32 experience_awarded = 5;
   	optional int64 cooldown_complete_timestamp_ms = 6;
   	optional int32 chain_hack_sequence_number = 7;
-  
+
   	enum Result {
   		NO_RESULT_SET = 0;
   		SUCCESS = 1;
@@ -1080,7 +1097,7 @@ message ResponseEnvelop {
     optional ItemId item_id = 1;
     optional int32 item_count = 2;
   }
-  
+
   message ReleasePokemonResponse {
     required ReleaseStatus Status = 1;
     optional int32 CandyAwarded = 2;
@@ -1092,8 +1109,8 @@ message ResponseEnvelop {
       ERROR_POKEMON_IS_EGG = 4;
     }
   }
- 
-  message EvolvePokemonResponse 
+
+  message EvolvePokemonResponse
   {
     optional EvolvePokemonStatus Result = 1;
     optional Pokemon EvolvedPokemon = 2;
@@ -1108,13 +1125,13 @@ message ResponseEnvelop {
   		FAILED_POKEMON_CANNOT_EVOLVE = 4;
   		FAILED_POKEMON_IS_DEPLOYED = 5;
   	}
-  } 
-  
+  }
+
   message TransferPokemonResponse {
     optional int32 Status = 1;
     optional int32 CandyAwarded = 2;
   }
-  
+
   message LevelUpRewardsResponse {
     required RewardStatus Status = 1;
     repeated ItemAward items_awarded = 2;
@@ -1126,7 +1143,7 @@ message ResponseEnvelop {
       AWARDED_ALREADY = 2;
     }
   }
-  
+
   message UseItemEggIncubatorResponse {
     required IncubatorStatus Status = 1;
     required EggIncubator egg_incubator = 2;
@@ -1142,7 +1159,7 @@ message ResponseEnvelop {
       ERROR_INCUBATOR_NO_USES_REMAINING = 7;
     }
   }
-  
+
   message GetHatchedEggsResponse {
     required bool success = 1;
     repeated uint64 pokemon_id = 2 [packed=true];
@@ -1150,7 +1167,7 @@ message ResponseEnvelop {
     repeated int32 candy_awarded = 4;
     repeated int32 stardust_awarded = 5;
   }
-  
+
   message UseItemXpBoostResponse {
     required XpBoostStatus Status = 1;
     optional AppliedItems applied_items = 2;
@@ -1164,5 +1181,5 @@ message ResponseEnvelop {
       ERROR_LOCATION_UNSET = 5;
     }
   }
-  
+
 }

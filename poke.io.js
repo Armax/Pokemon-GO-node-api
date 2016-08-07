@@ -337,7 +337,7 @@ function Pokeio() {
       'long': self.playerInfo.longitude
     });
 
-    var req = [new RequestEnvelop.Requests(106, walkData.encode().toBuffer())];
+    var req = [new RequestEnvelop.Requests(106, walkData.encode().toBuffer()), new RequestEnvelop.Requests(126), new RequestEnvelop.Requests(4, new RequestEnvelop.Unknown3(Date.now().toString()).encode().toBuffer()), new RequestEnvelop.Requests(129), new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3('54b359c97e46900f87211ef6e6dd0b7f2a3ea1f5').encode().toBuffer())];
 
     api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
       if (err) {

@@ -337,7 +337,7 @@ function Pokeio() {
       'long': self.playerInfo.longitude
     });
 
-    var req = [new RequestEnvelop.Requests(106, walkData.encode().toBuffer())];
+    var req = [new RequestEnvelop.Requests(106, walkData.encode().toBuffer()), new RequestEnvelop.Requests(126), new RequestEnvelop.Requests(4, new RequestEnvelop.Unknown3(Date.now().toString()).encode().toBuffer()), new RequestEnvelop.Requests(129), new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3('54b359c97e46900f87211ef6e6dd0b7f2a3ea1f5').encode().toBuffer())];
 
     api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
       if (err) {
@@ -513,6 +513,36 @@ function Pokeio() {
       callback(dErr, response);
 
     });
+  };
+
+  self.RenamePokemon = function(pokemonId, nickname, callback) {
+    var renamePokemonMessage = new RequestEnvelop.NicknamePokemonMessage({
+        'pokemon_id': pokemonId,
+        'nickname': nickname,
+    });
+
+    var req = new RequestEnvelop.Requests(149, renamePokemonMessage.encode().toBuffer());
+
+    var _self$playerInfo3 = self.playerInfo;
+    var apiEndpoint = _self$playerInfo3.apiEndpoint;
+    var accessToken = _self$playerInfo3.accessToken;
+
+    api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+      if (err) {
+        return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
+      }
+
+      var dErr, response;
+      try {
+        response = ResponseEnvelop.NicknamePokemonResponse.decode(f_ret.payload[0]);
+      } catch (err) {
+        dErr = err;
+      }
+      callback(dErr, response);
+    });
+
   };
 
   self.EncounterPokemon = function (catchablePokemon, callback) {

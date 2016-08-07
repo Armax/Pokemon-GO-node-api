@@ -165,7 +165,6 @@ function Pokeio() {
         provider_status: 3,
         location_type: 1
       });
-      console.log(signature)
 
       var iv = crypto.randomBytes(32);
 

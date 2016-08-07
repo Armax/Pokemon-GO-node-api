@@ -84,7 +84,8 @@ function Pokeio() {
     altitude: 0,
     locationName: '',
     provider: '',
-    apiEndpoint: ''
+    apiEndpoint: '',
+    device_info: null
   };
 
   self.DebugPrint = function (str) {
@@ -139,6 +140,30 @@ function Pokeio() {
         var reqHash = pogoSignature.utils.hashRequest(authTicketEncoded, request.encode().toBuffer()).toString();
         var hash = require('long').fromString(reqHash, true, 10);
         signature.request_hash.push(hash);
+      });
+      
+      // Simulate real device
+      signature.device_info = new Signature.DeviceInfo({
+        device_id: self.playerInfo.device_info.device_id,
+        android_board_name: self.playerInfo.device_info.android_board_name,
+        android_bootloader: self.playerInfo.device_info.android_bootloader,
+        device_brand: self.playerInfo.device_info.device_brand,
+        device_model: self.playerInfo.device_info.device_model,
+        device_model_identifier: self.playerInfo.device_info.device_model_identifier,
+        device_model_boot: self.playerInfo.device_info.device_model_boot,
+        hardware_manufacturer: self.playerInfo.device_info.hardware_manufacturer,
+        hardware_model: self.playerInfo.device_info.hardware_model,
+        firmware_brand: self.playerInfo.device_info.firmware_brand,
+        firmware_tags: self.playerInfo.device_info.firmware_tags,
+        firmware_type: self.playerInfo.device_info.firmware_type,
+        firmware_fingerprint: self.playerInfo.device_info.firmware_fingerprint
+      });
+
+      signature.location_fix = new Signature.LocationFix({
+        provider: "network",
+        timestamp_since_start: (new Date().getTime() - self.playerInfo.initTime),
+        provider_status: 3,
+        location_type: 1
       });
 
       var iv = crypto.randomBytes(32);
@@ -814,6 +839,13 @@ function Pokeio() {
       }]));
     }
   };
+
+  // Set device info for uk6
+  self.SetDeviceInfo = function(devInfo)
+  {
+    self.playerInfo.device_info = devInfo;
+  }
+
 }
 
 module.exports = new Pokeio();

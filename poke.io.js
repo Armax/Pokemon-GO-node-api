@@ -143,21 +143,24 @@ function Pokeio() {
       });
       
       // Simulate real device
-      signature.device_info = new Signature.DeviceInfo({
-        device_id: self.playerInfo.device_info.device_id,
-        android_board_name: self.playerInfo.device_info.android_board_name,
-        android_bootloader: self.playerInfo.device_info.android_bootloader,
-        device_brand: self.playerInfo.device_info.device_brand,
-        device_model: self.playerInfo.device_info.device_model,
-        device_model_identifier: self.playerInfo.device_info.device_model_identifier,
-        device_model_boot: self.playerInfo.device_info.device_model_boot,
-        hardware_manufacturer: self.playerInfo.device_info.hardware_manufacturer,
-        hardware_model: self.playerInfo.device_info.hardware_model,
-        firmware_brand: self.playerInfo.device_info.firmware_brand,
-        firmware_tags: self.playerInfo.device_info.firmware_tags,
-        firmware_type: self.playerInfo.device_info.firmware_type,
-        firmware_fingerprint: self.playerInfo.device_info.firmware_fingerprint
-      });
+      // add  condition
+      if( self.playerInfo.device_info !== null ) {
+          signature.device_info = new Signature.DeviceInfo({
+            device_id: self.playerInfo.device_info.device_id,
+            android_board_name: self.playerInfo.device_info.android_board_name,
+            android_bootloader: self.playerInfo.device_info.android_bootloader,
+            device_brand: self.playerInfo.device_info.device_brand,
+            device_model: self.playerInfo.device_info.device_model,
+            device_model_identifier: self.playerInfo.device_info.device_model_identifier,
+            device_model_boot: self.playerInfo.device_info.device_model_boot,
+            hardware_manufacturer: self.playerInfo.device_info.hardware_manufacturer,
+            hardware_model: self.playerInfo.device_info.hardware_model,
+            firmware_brand: self.playerInfo.device_info.firmware_brand,
+            firmware_tags: self.playerInfo.device_info.firmware_tags,
+            firmware_type: self.playerInfo.device_info.firmware_type,
+            firmware_fingerprint: self.playerInfo.device_info.firmware_fingerprint
+          });
+     }
 
       signature.location_fix = new Signature.LocationFix({
         provider: "network",

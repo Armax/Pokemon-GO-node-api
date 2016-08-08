@@ -118,6 +118,10 @@ message RequestEnvelop {
     optional fixed64 pokemon_id = 1;
     repeated fixed64 pokemon_ids = 2;
   }
+
+  message ActionLogMessage {
+  	// No message needed.
+  }
 }
 
 message ResponseEnvelop {
@@ -1126,6 +1130,51 @@ message ResponseEnvelop {
     optional int32 CandyAwarded = 2;
   }
 
+  message ActionLogResponse {
+  	required Result result = 1;
+  	repeated ActionLogEntry log_entries = 2;
+
+  	enum Result {
+  		UNSET = 0;
+  		SUCCESS = 1;
+  	}
+  }
+
+  message ActionLogEntry {
+  	required int64 timestamp_ms = 1;
+  	optional bool sfida = 2;
+
+  	oneof Action {
+  		CatchPokemonLogEntry catch_pokemon = 3;
+  		FortSearchLogEntry fort_search = 4;
+  	}
+  }
+
+  message CatchPokemonLogEntry {
+  	required Result result = 1;
+  	required PokemonId pokemon_id = 2;
+  	required int32 combat_points = 3;
+  	//required uint64 pokemon_data_id = 4;
+
+  	enum Result {
+  		UNSET = 0;
+  		POKEMON_CAPTURED = 1;
+  		POKEMON_FLED = 2;
+  	}
+  }
+
+  message FortSearchLogEntry {
+  	required Result result = 1;
+  	optional string fort_id = 2;
+  	repeated ItemAward items = 3;
+  	optional int32 eggs = 4;
+
+  	enum Result {
+  		UNSET = 0;
+  		SUCCESS = 1;
+  	}
+  }
+
   message LevelUpRewardsResponse {
     required RewardStatus Status = 1;
     repeated ItemAward items_awarded = 2;
@@ -1175,7 +1224,6 @@ message ResponseEnvelop {
       ERROR_LOCATION_UNSET = 5;
     }
   }
-
 }
 
 message Signature {

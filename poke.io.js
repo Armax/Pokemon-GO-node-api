@@ -35,6 +35,7 @@ var RequestEnvelop = pokemonProto.RequestEnvelop;
 var ResponseEnvelop = pokemonProto.ResponseEnvelop;
 var Signature = pokemonProto.Signature;
 var pokemonlist = JSON.parse(fs.readFileSync(__dirname + '/pokemons.json', 'utf8'));
+var itemlist = JSON.parse(fs.readFileSync(__dirname + '/items.json', 'utf8'));
 
 var EventEmitter = events.EventEmitter;
 
@@ -75,6 +76,7 @@ function Pokeio() {
   self.google = new GoogleOAuth();
 
   self.pokemonlist = pokemonlist.pokemon;
+  self.itemlist = itemlist.items;
 
   self.playerInfo = {
     accessToken: '',
@@ -141,7 +143,7 @@ function Pokeio() {
         var hash = require('long').fromString(reqHash, true, 10);
         signature.request_hash.push(hash);
       });
-      
+
       // Simulate real device
       signature.device_info = new Signature.DeviceInfo({
         device_id: self.playerInfo.device_info.device_id,
@@ -331,11 +333,34 @@ function Pokeio() {
 
       callback(dErr, response);
 
-      if (response)
-      if (response.username) {
+      if (response && response.username) {
         self.DebugPrint('[i] Logged in!');
       }
 
+    });
+  };
+
+  self.GetJournal = function (callback) {
+    var req = new RequestEnvelop.Requests(801);
+
+    var _self$playerInfo6 = self.playerInfo;
+    var apiEndpoint = _self$playerInfo6.apiEndpoint;
+    var accessToken = _self$playerInfo6.accessToken;
+
+    api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+      if (err) {
+        return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
+      }
+
+      var dErr, journal;
+      try {
+        journal = ResponseEnvelop.ActionLogResponse.decode(f_ret.payload[0]);
+      } catch (err) {
+        dErr = err;
+      }
+      callback(dErr, journal);
     });
   };
 
@@ -542,8 +567,8 @@ function Pokeio() {
 
   self.RenamePokemon = function(pokemonId, nickname, callback) {
     var renamePokemonMessage = new RequestEnvelop.NicknamePokemonMessage({
-        'pokemon_id': pokemonId,
-        'nickname': nickname,
+      'pokemon_id': pokemonId,
+      'nickname': nickname,
     });
 
     var req = new RequestEnvelop.Requests(149, renamePokemonMessage.encode().toBuffer());
@@ -841,10 +866,9 @@ function Pokeio() {
   };
 
   // Set device info for uk6
-  self.SetDeviceInfo = function(devInfo)
-  {
+  self.SetDeviceInfo = function(devInfo) {
     self.playerInfo.device_info = devInfo;
-  }
+  };
 
 }
 

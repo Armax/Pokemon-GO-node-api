@@ -641,7 +641,7 @@ function Pokeio() {
 
 
   self.ReleasePokemon = function (pokemon, callback) {
-    console.log(pokemon.toString());
+    //console.log(pokemon.toString());
     var releasePokemon = new RequestEnvelop.ReleasePokemonMessage({
       'pokemon_id': pokemon.toString()
     });

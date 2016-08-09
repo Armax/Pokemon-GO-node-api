@@ -106,7 +106,16 @@ function Pokeio() {
     if( self.TicketExpired() )
     {
       self.playerInfo.authTicket = null;
-      self.GetApiEndpoint(function(){
+      var loc = {
+          type: 'coords',
+          coords:
+          {
+            latitude: self.playerInfo.latitude,
+            longitude: self.playerInfo.longitude,
+            altitude: self.playerInfo.altitude
+          }
+      };
+      self.init(self.playerInfo.username, self.playerInfo.password, self.playerInfo.provider, loc, function(){
         // renew auth_ticket and retry the request
         api_req(api_endpoint, access_token, req, callback);
       });
@@ -245,6 +254,8 @@ function Pokeio() {
       return callback(new Error('Invalid provider'));
     }
 
+    self.playerInfo.username = username;
+    self.playerInfo.password = password;
     self.playerInfo.initTime = new Date().getTime();
 
     // set provider
@@ -864,7 +875,7 @@ function Pokeio() {
 
     var now = Date.now();
     var diff = self.playerInfo.authTicket.expire_timestamp_ms - now;
-    
+
     return (diff < 5000); // if reamining time is less than 5 second, it is expired
   }
 

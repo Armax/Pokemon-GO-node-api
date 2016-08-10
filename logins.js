@@ -117,5 +117,13 @@ module.exports = {
         return callback(err, null);
       }
     });
+  },
+  GoogleAuthorizationCode: function (authCode, self, callback) {
+    self.oauth2Client.getToken(authCode, function (err, tokens) {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, tokens)
+    })
   }
 };

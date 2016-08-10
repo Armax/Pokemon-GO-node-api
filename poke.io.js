@@ -43,8 +43,8 @@ var EventEmitter = events.EventEmitter;
 var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
 
 var client_id = '848232511240-73ri3t7plvk96pj4f85uj8otdat2alem.apps.googleusercontent.com';
-var client_secret = 'NCjF1TLi2CcY6t5mt0ZveuL7'
-var redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
+var client_secret = 'NCjF1TLi2CcY6t5mt0ZveuL7';
+var redirect_uri = 'urn:ietf:wg:oauth:2.0:oob';
 
 function GetCoords(self) {
   var _self$playerInfo = self.playerInfo;
@@ -80,7 +80,7 @@ function Pokeio() {
   });
 
   self.google = new GoogleOAuth();
-  self.oauth2Client = new OAuth2(client_id, client_secret, redirect_uri)
+  self.oauth2Client = new OAuth2(client_id, client_secret, redirect_uri);
 
   self.pokemonlist = pokemonlist.pokemon;
 
@@ -272,7 +272,7 @@ function Pokeio() {
 
   self.initWithGoogleAuthCode = function (authCode, location, callback) {
     self.playerInfo.initTime = new Date().getTime();
-    self.playerInfo.provider = 'google'
+    self.playerInfo.provider = 'google';
 
     self.SetLocation(location, function (err, loc) {
       if (err) {

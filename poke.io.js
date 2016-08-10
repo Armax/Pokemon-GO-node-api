@@ -849,6 +849,44 @@ function Pokeio() {
   {
     self.playerInfo.device_info = devInfo;
   }
+  
+  /**
+     *
+     * @param {string} device_id
+     * @param {string} android_board_name
+     * @param {string} android_bootloader
+     * @param {string} device_brand
+     * @param {string} device_model
+     * @param {string} device_model_identifier
+     * @param {string} device_model_boot
+     * @param {string} hardware_manufacturer
+     * @param {string} hardware_model
+     * @param {string} firmware_brand
+     * @param {string} firmware_tags
+     * @param {string} firmware_type
+     * @param {string} firmware_fingerprint
+     * @constructor
+     */
+  self.SetDeviceInfoAndroidWrapper = function(device_id , android_board_name, android_bootloader, device_brand, device_model, device_model_identifier,
+                                                device_model_boot, hardware_manufacturer, hardware_model, firmware_brand, firmware_tags, firmware_type,
+                                                firmware_fingerprint)
+  {
+      self.playerInfo.device_info = new Signature.DeviceInfo({
+          device_id: device_id || '',
+          android_board_name: android_board_name || '',
+          android_bootloader: android_bootloader || '',
+          device_brand: device_brand || '',
+          device_model: device_model || '',
+          device_model_identifier: device_model_identifier || '',
+          device_model_boot: device_model_boot || '',
+          hardware_manufacturer: hardware_manufacturer || '',
+          hardware_model: hardware_model || '',
+          firmware_brand: firmware_brand || '',
+          firmware_tags: firmware_tags || '',
+          firmware_type: firmware_type || '',
+          firmware_fingerprint: firmware_fingerprint || ''
+      });
+  }
 
 }
 

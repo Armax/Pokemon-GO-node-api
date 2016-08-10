@@ -56,7 +56,7 @@ a.init(username, password, location, provider, function(err) {
                     if(hb.cells[i].NearbyPokemon[0]) {
                         //console.log(a.pokemonlist[0])
                         var pokemon = a.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1];
-                        console.log('1[+] There is a ' + pokemon.name + ' at ' + hb.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters');
+                        console.log('1[+] There is a ' + pokemon.name + ' near.');
                     }
                 }
 
@@ -97,7 +97,7 @@ b.init(username1, password1, location1, provider1, function(err) {
                     if(hb.cells[i].NearbyPokemon[0]) {
                         //console.log(a.pokemonlist[0])
                         var pokemon = b.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1];
-                        console.log('[+] There is a ' + pokemon.name + ' at ' + hb.cells[i].NearbyPokemon[0].DistanceMeters.toString() + ' meters');
+                        console.log('[+] There is a ' + pokemon.name + ' near.');
                     }
                 }
 

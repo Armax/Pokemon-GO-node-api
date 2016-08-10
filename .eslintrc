@@ -2,7 +2,7 @@
   "rules": {
     "indent": [
       1,
-      4,
+      2,
       {"SwitchCase": 1}
     ],
     "quotes": [

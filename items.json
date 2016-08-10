@@ -1,0 +1,154 @@
+{
+    "items": [
+        {
+            "id": 0,
+            "name": "Egg",
+            "img": "http://www.serebii.net/pokemongo/items/egg.png"
+        },
+        {
+            "id": 1,
+            "name": "Pokeball",
+            "img": "http://www.serebii.net/pokemongo/items/20pokeballs.png"
+        },
+        {
+            "id": 2,
+            "name": "Greatball",
+            "img": "http://www.serebii.net/pokemongo/items/greatball.png"
+        },
+        {
+            "id": 3,
+            "name": "Ultraball",
+            "img": "http://www.serebii.net/pokemongo/items/ultraball.png"
+        },
+        {
+            "id": 4,
+            "name": "Masterball",
+            "img": "http://101pokemongo.com/w/images/e/ee/Master_Ball.png"
+        },
+        {
+            "id": 101,
+            "name": "Potion",
+            "img": "http://www.serebii.net/pokemongo/items/potion.png"
+        },
+        {
+            "id": 102,
+            "name": "Super Potion",
+            "img": "http://www.serebii.net/pokemongo/items/superpotion.png"
+        },
+        {
+            "id": 103,
+            "name": "Hyper Potion",
+            "img": "http://www.serebii.net/pokemongo/items/hyperpotion.png"
+        },
+        {
+            "id": 104,
+            "name": "Max Potion",
+            "img": "http://www.serebii.net/pokemongo/items/maxpotion.png"
+        },
+        {
+            "id": 201,
+            "name": "Revive",
+            "img": "http://www.serebii.net/pokemongo/items/revive.png"
+        },
+        {
+            "id": 202,
+            "name": "Max Revive",
+            "img": "http://www.serebii.net/pokemongo/items/maxrevive.png"
+        },
+        {
+            "id": 301,
+            "name": "Lucky Egg",
+            "img": "http://www.serebii.net/pokemongo/items/luckyegg.png"
+        },
+        {
+            "id": 401,
+            "name": "Incense",
+            "img": "http://www.serebii.net/pokemongo/items/incense.png"
+        },
+        {
+            "id": 402,
+            "name": "Spicy Incense",
+            "img": "http://www.serebii.net/pokemongo/items/incense.png"
+        },
+        {
+            "id": 403,
+            "name": "Cool Incense",
+            "img": "http://www.serebii.net/pokemongo/items/incense.png"
+        },
+        {
+            "id": 404,
+            "name": "Floral Incense",
+            "img": "http://www.serebii.net/pokemongo/items/incense.png"
+        },
+        {
+            "id": 501,
+            "name": "Lure Module",
+            "img": "http://www.serebii.net/pokemongo/items/luremodule.png"
+        },
+        {
+            "id": 602,
+            "name": "X Attack",
+            "img": "http://www.serebii.net/pokemongo/stardust.png"
+        },
+        {
+            "id": 603,
+            "name": "X Defense",
+            "img": "http://www.serebii.net/pokemongo/stardust.png"
+        },
+        {
+            "id": 604,
+            "name": "X Miracle",
+            "img": "http://www.serebii.net/pokemongo/stardust.png"
+        },
+        {
+            "id": 701,
+            "name": "Razz Berry",
+            "img": "http://www.serebii.net/pokemongo/items/razzberry.png"
+        },
+        {
+            "id": 702,
+            "name": "Bluk Berry",
+            "img": "http://www.serebii.net/pokemongo/items/razzberry.png"
+        },
+        {
+            "id": 703,
+            "name": "Nanab Berry",
+            "img": "http://www.serebii.net/pokemongo/items/razzberry.png"
+        },
+        {
+            "id": 704,
+            "name": "Wepar Berry",
+            "img": "http://www.serebii.net/pokemongo/items/razzberry.png"
+        },
+        {
+            "id": 705,
+            "name": "Pinap Berry",
+            "img": "http://www.serebii.net/pokemongo/items/razzberry.png"
+        },
+        {
+            "id": 801,
+            "name": "Special Camera",
+            "img": "http://www.serebii.net/pokemongo/items/camera.png"
+        },
+        {
+            "id": 901,
+            "name": "Incubator (Unlimited)",
+            "img": "http://www.serebii.net/pokemongo/items/eggincubator.png"
+        },
+        {
+            "id": 902,
+            "name": "Incubator",
+            "img": "http://www.serebii.net/pokemongo/items/eggincubator.png"
+        },
+        {
+            "id": 1001,
+            "name": "Pokemon Storage Upgrade",
+            "img": "http://www.serebii.net/pokemongo/items/storageupgrade.png"
+        },
+        {
+            "id": 1002,
+            "name": "Item Storage Upgrade",
+            "img": "http://www.serebii.net/pokemongo/items/bagupgrade.png"
+        }
+    ]
+}

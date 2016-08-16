@@ -728,7 +728,7 @@ function Pokeio() {
 
     var levelUpRewards = new RequestEnvelop.UseItemEggIncubatorMessage({
       'item_id': item_id,
-      'pokemonId': pokemonId
+      'PokemonId': pokemonId
     });
     var req = new RequestEnvelop.Requests(140, levelUpRewards.encode().toBuffer());
 

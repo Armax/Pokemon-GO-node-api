@@ -123,6 +123,25 @@ The created instance will already be logged in and have a location set
 
 You can reusea and repurpose an existing instance by calling `.fromJSON` on that instance.
 
+### Pokeio.RenamePokemon(id, name, callback)
+
+Sets the nickname of a pokemon
+
+**Parameters**
+  * `id {Object]` The pokemon id to change
+  * `name {String}` The new nickname
+  * `callback {Function(error, status)}`
+    * `error {Error}`
+    * `status {Number}`
+
+The status can eather of:
+  * `UNSET = 0`
+  * `SUCCESS = 1`
+  * `ERROR_INVALID_NICKNAME = 2`
+  * `ERROR_POKEMON_NOT_FOUND = 3`
+  * `ERROR_POKEMON_IS_EGG = 4`
+
+
 ## Thanks to:
 Python demo: [tejado](https://github.com/tejado/pokemongo-api-demo) <br>
 

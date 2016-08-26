@@ -11,15 +11,18 @@ function _toConsumableArray(arr) {
   }
 }
 
+var crypto = require('crypto');
 var request = require('request');
 var geocoder = require('geocoder');
 var events = require('events');
 var ProtoBuf = require('protobufjs');
 var GoogleOAuth = require('gpsoauthnode');
 var fs = require('fs');
-var s2 = require('s2geometry-node');
+var S2 = require('s2-geometry').S2;
 
 var Logins = require('./logins');
+
+var pogoSignature = require('node-pogo-signature');
 
 var builder = ProtoBuf.loadProtoFile('pokemon.proto');
 if (builder === null) {
@@ -30,7 +33,9 @@ var pokemonProto = builder.build();
 
 var RequestEnvelop = pokemonProto.RequestEnvelop;
 var ResponseEnvelop = pokemonProto.ResponseEnvelop;
+var Signature = pokemonProto.Signature;
 var pokemonlist = JSON.parse(fs.readFileSync(__dirname + '/pokemons.json', 'utf8'));
+var itemlist = JSON.parse(fs.readFileSync(__dirname + '/items.json', 'utf8'));
 
 var EventEmitter = events.EventEmitter;
 
@@ -45,17 +50,18 @@ function GetCoords(self) {
 }
 
 function getNeighbors(lat, lng) {
-  var origin = new s2.S2CellId(new s2.S2LatLng(lat, lng)).parent(15);
-  var walk = [origin.id()];
+  var level = 15;
+  var origin = S2.latLngToKey(lat, lng, level);
+  var walk = [ S2.keyToId(origin) ];
   // 10 before and 10 after
-  var next = origin.next();
-  var prev = origin.prev();
+  var next = S2.nextKey(origin);
+  var prev = S2.prevKey(origin);
   for (var i = 0; i < 10; i++) {
     // in range(10):
-    walk.push(prev.id());
-    walk.push(next.id());
-    next = next.next();
-    prev = prev.prev();
+    walk.push(S2.toId(prev));
+    walk.push(S2.toId(next));
+    next = S2.nextKey(next);
+    prev = S2.prevKey(prev);
   }
   return walk;
 }
@@ -71,6 +77,7 @@ function Pokeio() {
   self.google = new GoogleOAuth();
 
   self.pokemonlist = pokemonlist.pokemon;
+  self.itemlist = itemlist.items;
 
   self.playerInfo = {
     accessToken: '',
@@ -80,7 +87,8 @@ function Pokeio() {
     altitude: 0,
     locationName: '',
     provider: '',
-    apiEndpoint: ''
+    apiEndpoint: '',
+    device_info: null
   };
 
   self.DebugPrint = function (str) {
@@ -92,10 +100,13 @@ function Pokeio() {
 
   function api_req(api_endpoint, access_token, req, callback) {
     // Auth
-    var auth = new RequestEnvelop.AuthInfo({
+    var authInfo = new RequestEnvelop.AuthInfo({
       provider: self.playerInfo.provider,
       token: new RequestEnvelop.AuthInfo.JWT(access_token, 59)
     });
+
+
+    //console.log(req);
 
     var f_req = new RequestEnvelop({
       unknown1: 2,
@@ -107,54 +118,130 @@ function Pokeio() {
       longitude: self.playerInfo.longitude,
       altitude: self.playerInfo.altitude,
 
-      auth: auth,
       unknown12: 989
     });
 
-    var protobuf = f_req.encode().toBuffer();
+    if (self.playerInfo.authTicket) {
+      f_req.auth_ticket = self.playerInfo.authTicket;
 
-    var options = {
-      url: api_endpoint,
-      body: protobuf,
-      encoding: null,
-      headers: {
-        'User-Agent': 'Niantic App'
-      }
-    };
+      var lat = self.playerInfo.latitude, lng = self.playerInfo.longitude, alt = self.playerInfo.altitude;
+      var authTicketEncoded = self.playerInfo.authTicket.encode().toBuffer();
 
-    self.request.post(options, function (err, response, body) {
-      if (err) {
-        return callback(new Error('Error'));
-      }
+      var signature = new Signature({
+        location_hash1: pogoSignature.utils.hashLocation1(authTicketEncoded, lat, lng, alt).toNumber(),
+        location_hash2: pogoSignature.utils.hashLocation2(lat, lng, alt).toNumber(),
+        unk22: crypto.randomBytes(32),
+        timestamp: new Date().getTime(),
+        timestamp_since_start: (new Date().getTime() - self.playerInfo.initTime),
+      });
 
-      if (response === undefined || body === undefined) {
-        console.error('[!] RPC Server offline');
-        return callback(new Error('RPC Server offline'));
+      if (!Array.isArray(req)) {
+        req = [req];
       }
 
-      var f_ret;
-      try {
-        f_ret = ResponseEnvelop.decode(body);
-      } catch (e) {
-        if (e.decoded) {
-          // Truncated
-          console.warn(e);
-          f_ret = e.decoded; // Decoded message with missing required fields
+      req.forEach(function(request) {
+        var reqHash = pogoSignature.utils.hashRequest(authTicketEncoded, request.encode().toBuffer()).toString();
+        var hash = require('long').fromString(reqHash, true, 10);
+        signature.request_hash.push(hash);
+      });
+
+      // Simulate real device
+      // add  condition
+      if( self.playerInfo.device_info !== null ) {
+          signature.device_info = new Signature.DeviceInfo({
+            device_id: self.playerInfo.device_info.device_id,
+            android_board_name: self.playerInfo.device_info.android_board_name,
+            android_bootloader: self.playerInfo.device_info.android_bootloader,
+            device_brand: self.playerInfo.device_info.device_brand,
+            device_model: self.playerInfo.device_info.device_model,
+            device_model_identifier: self.playerInfo.device_info.device_model_identifier,
+            device_model_boot: self.playerInfo.device_info.device_model_boot,
+            hardware_manufacturer: self.playerInfo.device_info.hardware_manufacturer,
+            hardware_model: self.playerInfo.device_info.hardware_model,
+            firmware_brand: self.playerInfo.device_info.firmware_brand,
+            firmware_tags: self.playerInfo.device_info.firmware_tags,
+            firmware_type: self.playerInfo.device_info.firmware_type,
+            firmware_fingerprint: self.playerInfo.device_info.firmware_fingerprint
+          });
+     }
+
+      signature.location_fix = new Signature.LocationFix({
+        provider: "network",
+        timestamp_since_start: (new Date().getTime() - self.playerInfo.initTime),
+        provider_status: 3,
+        location_type: 1
+      });
+
+      var iv = crypto.randomBytes(32);
+
+      pogoSignature.encrypt(signature.encode().toBuffer(), iv, function(err, signatureEnc) {
+        f_req.unknown6 = new RequestEnvelop.Unknown6({
+          unknown1: 6,
+          unknown2: new RequestEnvelop.Unknown6.Unknown2({
+            unknown1: signatureEnc
+          })
+        });
+        compiledProtobuf(f_req);
+      });
+
+    } else {
+      f_req.auth = authInfo;
+      compiledProtobuf(f_req);
+    }
+
+    function compiledProtobuf(protobuf) {
+      //console.log(JSON.stringify(protobuf))
+      protobuf = f_req.encode().toBuffer();
+
+      var options = {
+        url: api_endpoint,
+        body: protobuf,
+        encoding: null,
+        headers: {
+          'User-Agent': 'Niantic App'
         }
-      }
+      };
 
-      if (f_ret) {
-        return callback(null, f_ret);
-      } else {
-        api_req(api_endpoint, access_token, req, callback);
-      }
-    });
+      self.request.post(options, function (err, response, body) {
+        if (err) {
+          return callback(new Error('Error'));
+        }
+
+        if (response === undefined || body === undefined) {
+          console.error('[!] RPC Server offline');
+          return callback(new Error('RPC Server offline'));
+        }
+
+        var f_ret;
+        try {
+          f_ret = ResponseEnvelop.decode(body);
+        } catch (e) {
+          if (e.decoded) {
+            // Truncated
+            console.warn(e);
+            f_ret = e.decoded; // Decoded message with missing required fields
+          }
+        }
+
+        if (f_ret) {
+          if (f_ret.auth_ticket) {
+            self.playerInfo.authTicket = f_ret.auth_ticket;
+          }
+          return callback(null, f_ret);
+        } else {
+          api_req(api_endpoint, access_token, req, callback);
+        }
+      });
+    }
   }
 
   self.init = function (username, password, location, provider, callback) {
     if (provider !== 'ptc' && provider !== 'google') {
       return callback(new Error('Invalid provider'));
     }
+
+    self.playerInfo.initTime = new Date().getTime();
+
     // set provider
     self.playerInfo.provider = provider;
     // Updating location
@@ -250,11 +337,34 @@ function Pokeio() {
 
       callback(dErr, response);
 
-      if (response)
-        if (response.username) {
-          self.DebugPrint('[i] Logged in!');
-        }
+      if (response && response.username) {
+        self.DebugPrint('[i] Logged in!');
+      }
 
+    });
+  };
+
+  self.GetJournal = function (callback) {
+    var req = new RequestEnvelop.Requests(801);
+
+    var _self$playerInfo6 = self.playerInfo;
+    var apiEndpoint = _self$playerInfo6.apiEndpoint;
+    var accessToken = _self$playerInfo6.accessToken;
+
+    api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+      if (err) {
+        return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
+      }
+
+      var dErr, journal;
+      try {
+        journal = ResponseEnvelop.ActionLogResponse.decode(f_ret.payload[0]);
+      } catch (err) {
+        dErr = err;
+      }
+      callback(dErr, journal);
     });
   };
 
@@ -281,7 +391,7 @@ function Pokeio() {
       'long': self.playerInfo.longitude
     });
 
-    var req = [new RequestEnvelop.Requests(106, walkData.encode().toBuffer()), new RequestEnvelop.Requests(126), new RequestEnvelop.Requests(4, new RequestEnvelop.Unknown3(Date.now().toString()).encode().toBuffer()), new RequestEnvelop.Requests(129), new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3('05daf51635c82611d1aac95c0b051d3ec088a930').encode().toBuffer())];
+    var req = [new RequestEnvelop.Requests(106, walkData.encode().toBuffer()), new RequestEnvelop.Requests(126), new RequestEnvelop.Requests(4, new RequestEnvelop.Unknown3(Date.now().toString()).encode().toBuffer()), new RequestEnvelop.Requests(129), new RequestEnvelop.Requests(5, new RequestEnvelop.Unknown3('54b359c97e46900f87211ef6e6dd0b7f2a3ea1f5').encode().toBuffer())];
 
     api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
       if (err) {
@@ -308,7 +418,7 @@ function Pokeio() {
       }
 
       callback(null, data.results[0].formatted_address);
-        }]));
+    }]));
   };
 
   // Still WIP
@@ -459,6 +569,36 @@ function Pokeio() {
     });
   };
 
+  self.RenamePokemon = function(pokemonId, nickname, callback) {
+    var renamePokemonMessage = new RequestEnvelop.NicknamePokemonMessage({
+      'pokemon_id': pokemonId,
+      'nickname': nickname,
+    });
+
+    var req = new RequestEnvelop.Requests(149, renamePokemonMessage.encode().toBuffer());
+
+    var _self$playerInfo3 = self.playerInfo;
+    var apiEndpoint = _self$playerInfo3.apiEndpoint;
+    var accessToken = _self$playerInfo3.accessToken;
+
+    api_req(apiEndpoint, accessToken, req, function (err, f_ret) {
+      if (err) {
+        return callback(err);
+      } else if (!f_ret || !f_ret.payload || !f_ret.payload[0]) {
+        return callback('No result');
+      }
+
+      var dErr, response;
+      try {
+        response = ResponseEnvelop.NicknamePokemonResponse.decode(f_ret.payload[0]);
+      } catch (err) {
+        dErr = err;
+      }
+      callback(dErr, response);
+    });
+
+  };
+
   self.EncounterPokemon = function (catchablePokemon, callback) {
     var _self$playerInfo4 = self.playerInfo;
     var apiEndpoint = _self$playerInfo4.apiEndpoint;
@@ -588,7 +728,7 @@ function Pokeio() {
 
     var levelUpRewards = new RequestEnvelop.UseItemEggIncubatorMessage({
       'item_id': item_id,
-      'pokemonId': pokemonId
+      'PokemonId': pokemonId
     });
     var req = new RequestEnvelop.Requests(140, levelUpRewards.encode().toBuffer());
 
@@ -728,6 +868,12 @@ function Pokeio() {
       }]));
     }
   };
+
+  // Set device info for uk6
+  self.SetDeviceInfo = function(devInfo) {
+    self.playerInfo.device_info = devInfo;
+  };
+
 }
 
 Pokeio.prototype.toJSON = Pokeio.prototype.serialize = function () {

@@ -1,6 +1,6 @@
 {
   "name": "pokemon-go-node-api",
-  "version": "1.3.1",
+  "version": "1.3.5",
   "description": "Pokemon GO node.js module",
   "author": "Arm4x",
   "license": "MIT",
@@ -10,9 +10,11 @@
     "geocoder": "^0.2.2",
     "gpsoauthnode": "^0.0.5",
     "istanbul": "^0.4.4",
+    "long": "^3.2.0",
+    "node-pogo-signature": "^2.0.0",
     "protobufjs": "^5.0.1",
     "request": "^2.73.0",
-    "s2geometry-node": "^1.3.0",
+    "s2-geometry": "^1.2.7",
     "tape": "^4.6.0"
   },
   "scripts": {

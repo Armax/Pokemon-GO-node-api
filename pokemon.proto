@@ -227,14 +227,8 @@ message ResponseEnvelop {
     optional double Latitude = 3;
     optional double Longitude = 4;
     optional string SpawnPointId = 5;
-    optional Pokemon pokemon = 7;
+    optional PokemonData pokemon = 7;
     optional int32 TimeTillHiddenMs = 11;
-
-    message Pokemon {
-      optional uint64 Id = 1;
-      optional PokemonId PokemonId = 2;
-      optional int32 cp = 3;
-    }
   }
 
   message NearbyPokemonProto {

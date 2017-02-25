@@ -115,7 +115,10 @@ b.init(username1, password1, location1, provider1, function(err) {
                                 console.log('Encountering pokemon ' + pokedexInfo.name + '...');
                                 b.CatchPokemon(currentPokemon, 1, 1.950, 1, 1, function(xsuc, xdat) {
                                     var status = ['Unexpected error', 'Successful catch', 'Catch Escape', 'Catch Flee', 'Missed Catch'];
-                                    console.log(status[xdat.Status]);
+                                    if(xdat)
+                                        console.log(status[xdat.Status]);
+                                    else
+                                        console.log('Error in catching Pokemon: ' + xsuc);
                                 });
                             });
                         })(currentPokemon);

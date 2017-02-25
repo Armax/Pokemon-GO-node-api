@@ -91,6 +91,63 @@ function Pokeio() {
     device_info: null
   };
 
+  self.queue = {
+    line: [],
+    timeouts: {
+      heartbeat: -1,
+      normal: -1
+    },
+    in_progress: false,
+    add: function(options, requestType, callback) {
+      var t = requestType == 'heartbeat'? self.queue.timeouts.heartbeat: self.queue.timeouts.normal;
+      // check if queue has been disabled
+      if (t < 0) {
+        self.request.post(options, callback);
+        return;
+      }
+
+      // if in progress add request to queue
+      if (self.queue.in_progress) {
+        self.queue.line.push({
+          options: options,
+          callback: callback,
+          type: requestType
+        });
+        return;
+      }
+
+      // startup queue
+      self.queue.in_progress = true;
+
+      var doNext = function (opt, type, cb) {
+        self.request.post(opt, function (err, response, body) {
+          cb(err, response, body);
+          var timeout = type == 'heartbeat'? self.queue.timeouts.heartbeat: self.queue.timeouts.normal;
+
+          setTimeout(function() {
+            if (self.queue.line.length == 0) {
+              self.queue.in_progress = false;
+              return;
+            }
+            var next = self.queue.line.shift();
+            doNext(next.options, next.type, next.callback);
+          }, timeout);
+        });
+      };
+      doNext(options, requestType, callback);
+    }
+  };
+
+  self.SetThrottle = function(normal, heartbeat, cb) {
+    if (self.queue.in_progress) {
+      if (typeof cb === 'function') cb('cant set throttle, queue is busy');
+      return;
+    }
+    self.queue.timeouts.normal = normal;
+    self.queue.timeouts.heartbeat = heartbeat;
+    if (typeof cb === 'function') cb();
+  };
+
   self.DebugPrint = function (str) {
     if (self.playerInfo.debug === true) {
       //self.events.emit('debug',str)
@@ -98,7 +155,9 @@ function Pokeio() {
     }
   };
 
-  function api_req(api_endpoint, access_token, req, callback) {
+  function api_req(api_endpoint, access_token, req, callback, requestType) {
+    if (!requestType) requestType = 'normal';
+
     // Auth
     var authInfo = new RequestEnvelop.AuthInfo({
       provider: self.playerInfo.provider,
@@ -202,7 +261,7 @@ function Pokeio() {
         }
       };
 
-      self.request.post(options, function (err, response, body) {
+      self.queue.add(options, requestType, function (err, response, body) {
         if (err) {
           return callback(new Error('Error'));
         }
@@ -408,7 +467,7 @@ function Pokeio() {
       }
       callback(dErr, heartbeat);
 
-    });
+    }, 'heartbeat');
   };
 
   self.GetLocation = function (callback) {

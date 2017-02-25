@@ -17,6 +17,8 @@ var geocoder = require('geocoder');
 var events = require('events');
 var ProtoBuf = require('protobufjs');
 var GoogleOAuth = require('gpsoauthnode');
+var googleapis = require('googleapis');
+var OAuth2 = googleapis.auth.OAuth2;
 var fs = require('fs');
 var S2 = require('s2-geometry').S2;
 
@@ -40,6 +42,10 @@ var itemlist = JSON.parse(fs.readFileSync(__dirname + '/items.json', 'utf8'));
 var EventEmitter = events.EventEmitter;
 
 var api_url = 'https://pgorelease.nianticlabs.com/plfe/rpc';
+
+var client_id = '848232511240-73ri3t7plvk96pj4f85uj8otdat2alem.apps.googleusercontent.com';
+var client_secret = 'NCjF1TLi2CcY6t5mt0ZveuL7';
+var redirect_uri = 'urn:ietf:wg:oauth:2.0:oob';
 
 function GetCoords(self) {
   var _self$playerInfo = self.playerInfo;
@@ -75,6 +81,7 @@ function Pokeio() {
   });
 
   self.google = new GoogleOAuth();
+  self.oauth2Client = new OAuth2(client_id, client_secret, redirect_uri);
 
   self.pokemonlist = pokemonlist.pokemon;
   self.itemlist = itemlist.items;
@@ -206,22 +213,22 @@ function Pokeio() {
 
       // Simulate real device
       // add  condition
-      if( self.playerInfo.device_info !== null ) {
-          signature.device_info = new Signature.DeviceInfo({
-            device_id: self.playerInfo.device_info.device_id,
-            android_board_name: self.playerInfo.device_info.android_board_name,
-            android_bootloader: self.playerInfo.device_info.android_bootloader,
-            device_brand: self.playerInfo.device_info.device_brand,
-            device_model: self.playerInfo.device_info.device_model,
-            device_model_identifier: self.playerInfo.device_info.device_model_identifier,
-            device_model_boot: self.playerInfo.device_info.device_model_boot,
-            hardware_manufacturer: self.playerInfo.device_info.hardware_manufacturer,
-            hardware_model: self.playerInfo.device_info.hardware_model,
-            firmware_brand: self.playerInfo.device_info.firmware_brand,
-            firmware_tags: self.playerInfo.device_info.firmware_tags,
-            firmware_type: self.playerInfo.device_info.firmware_type,
-            firmware_fingerprint: self.playerInfo.device_info.firmware_fingerprint
-          });
+      if(self.playerInfo.device_info !== null) {
+        signature.device_info = new Signature.DeviceInfo({
+          device_id: self.playerInfo.device_info.device_id,
+          android_board_name: self.playerInfo.device_info.android_board_name,
+          android_bootloader: self.playerInfo.device_info.android_bootloader,
+          device_brand: self.playerInfo.device_info.device_brand,
+          device_model: self.playerInfo.device_info.device_model,
+          device_model_identifier: self.playerInfo.device_info.device_model_identifier,
+          device_model_boot: self.playerInfo.device_info.device_model_boot,
+          hardware_manufacturer: self.playerInfo.device_info.hardware_manufacturer,
+          hardware_model: self.playerInfo.device_info.hardware_model,
+          firmware_brand: self.playerInfo.device_info.firmware_brand,
+          firmware_tags: self.playerInfo.device_info.firmware_tags,
+          firmware_type: self.playerInfo.device_info.firmware_type,
+          firmware_fingerprint: self.playerInfo.device_info.firmware_fingerprint
+        });
      }
 
       signature.location_fix = new Signature.LocationFix({
@@ -324,6 +331,30 @@ function Pokeio() {
     });
   };
 
+  self.initWithGoogleAuthCode = function (authCode, location, callback) {
+    self.playerInfo.initTime = new Date().getTime();
+    self.playerInfo.provider = 'google';
+
+    self.SetLocation(location, function (err, loc) {
+      if (err) {
+        return callback(err, null);
+      }
+
+      self.GetAccessTokenFromAuthCode(authCode, function (err, token) {
+        if (err) {
+          return callback(err, null);
+        }
+
+        self.GetApiEndpoint(function (err, api_endpoint) {
+          if (err) {
+            return callback(err, null);
+          }
+          callback(null);
+        });
+      });
+    });
+  };
+
   self.GetAccessToken = function (user, pass, callback) {
     self.DebugPrint('[i] Logging with user: ' + user);
     if (self.playerInfo.provider === 'ptc') {
@@ -348,6 +379,19 @@ function Pokeio() {
       });
     }
   };
+
+  self.GetAccessTokenFromAuthCode = function (authCode, callback) {
+    self.DebugPrint('[i] Logging with authorizationCode');
+    Logins.GoogleAuthorizationCode(authCode, self, function (err, tokens) {
+      if (err) {
+        return callback(err, null);
+      }
+
+      self.playerInfo.accessToken = tokens.id_token;
+      self.DebugPrint('[i] Received Google access token!');
+      callback(null, tokens);
+    })
+  }
 
   self.GetApiEndpoint = function (callback) {
     var req = [new RequestEnvelop.Requests(2), new RequestEnvelop.Requests(126), new RequestEnvelop.Requests(4), new RequestEnvelop.Requests(129), new RequestEnvelop.Requests(5)];

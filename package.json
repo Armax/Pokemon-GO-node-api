@@ -8,6 +8,7 @@
   "dependencies": {
     "events": "^1.1.1",
     "geocoder": "^0.2.2",
+    "googleapis": "^12.2.0",
     "gpsoauthnode": "^0.0.5",
     "istanbul": "^0.4.4",
     "long": "^3.2.0",

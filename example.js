@@ -1,6 +1,7 @@
 'use strict';
 
 var PokemonGO = require('./poke.io.js');
+var config = require('./config');
 
 // using var so you can login with multiple users
 var a = new PokemonGO.Pokeio();
@@ -9,7 +10,7 @@ var b = new PokemonGO.Pokeio();
 //Set environment variables or replace placeholder text
 var location = {
     type: 'name',
-    name: process.env.PGO_LOCATION || 'Times Square'
+    name: process.env.PGO_LOCATION || config.location
 };
 
 var location1 = {
@@ -17,9 +18,9 @@ var location1 = {
     name: process.env.PGO_LOCATION || 'Times Square'
 };
 
-var username = process.env.PGO_USERNAME || 'USER';
-var password = process.env.PGO_PASSWORD || 'PASS';
-var provider = process.env.PGO_PROVIDER || 'google';
+var username = process.env.PGO_USERNAME || config.username;
+var password = process.env.PGO_PASSWORD || config.password;
+var provider = process.env.PGO_PROVIDER || config.provider;
 
 var username1 = process.env.PGO_USERNAME || 'USER';
 var password1 = process.env.PGO_PASSWORD || 'PASS';

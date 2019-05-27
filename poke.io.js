@@ -895,6 +895,10 @@ function Pokeio() {
       geocoder.geocode(locationName, function (err, data) {
         if (err || data.status === 'ZERO_RESULTS') {
           return callback(new Error('location not found'));
+        };
+          
+        if (data.status == 'REQUEST_DENIED'){
+            return callback(new Error(data.error_message))
         }
 
         var _data$results$0$geome = data.results[0].geometry.location;
